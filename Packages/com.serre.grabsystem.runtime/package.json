@@ -1,0 +1,15 @@
+{
+  "name": "com.serre.grabsystem.runtime",
+  "displayName": "GrabSystem Runtime",
+  "version": "0.1.0-alpha.1",
+  "unity": "2022.3",
+  "description": "Runtime components and editor support for GrabSystem.",
+  "author": {
+    "name": "Serre-XA",
+    "email": "133144046+Serre-XA@users.noreply.github.com"
+  },
+  "vpmDependencies": {
+    "com.vrchat.avatars": "3.10.x",
+    "nadena.dev.modular-avatar": ">=1.17.1 <2.0.0-a"
+  }
+}

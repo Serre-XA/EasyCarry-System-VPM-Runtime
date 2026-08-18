@@ -1,0 +1,2 @@
+This file identifies the GrabSystem asset root.
+Keep this file and its .meta file together when moving or packaging GrabSystem.

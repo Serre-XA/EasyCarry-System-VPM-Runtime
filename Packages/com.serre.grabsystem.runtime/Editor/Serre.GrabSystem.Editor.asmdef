@@ -1,6 +1,13 @@
 {
-    "name": "VRChatPackageTemplate.Editor",
-    "references": [],
+    "name": "Serre.GrabSystem.Editor",
+    "rootNamespace": "Serre.GrabSystem.Editor",
+    "references": [
+        "Serre.GrabSystem.Runtime",
+        "nadena.dev.modular-avatar.core",
+        "VRC.SDKBase",
+        "VRC.SDKBase.Editor.BuildPipeline",
+        "VRC.SDK3A"
+    ],
     "includePlatforms": [
         "Editor"
     ],
