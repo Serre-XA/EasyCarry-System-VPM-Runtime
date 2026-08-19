@@ -2,7 +2,7 @@
 
 ## 導入先
 
-`Assets/Serre/GrabSystem`
+`Assets/Serre/EasyCarrySystem`
 
 ## SDKバージョン
 
@@ -34,38 +34,38 @@ GUIDとスクリプトの重複を避けるため、書き出し先には現在�
 
 | スクリプト | 役割 |
 | --- | --- |
-| [`GrabSystemItemReference.cs`](Scripts/GrabSystemItemReference.cs) | 制御対象アイテムに付く設定保持コンポーネントです。生成されたEasyCarry Systemへの参照に加え、スロット番号、各装備位置、Contact、Bone Proxy、メニュー名、オプションなどの設定値を保持します。VRCのEditorOnlyコンポーネントとしてビルド時に除去されます。 |
-| [`GrabSystemGestureSettings.cs`](Scripts/GrabSystemGestureSettings.cs) | 左右の握り判定・トリガープル判定に使用するジェスチャー設定を保持します。共有`GestureChecker`に付与され、パラメータ初期値へ反映されます。こちらもビルド時に除去されます。 |
+| [`EasyCarrySystemItemReference.cs`](Runtime/EasyCarrySystemItemReference.cs) | 制御対象アイテムに付く設定保持コンポーネントです。生成されたEasyCarry Systemへの参照に加え、スロット番号、各装備位置、Contact、Bone Proxy、メニュー名、オプションなどの設定値を保持します。VRCのEditorOnlyコンポーネントとしてビルド時に除去されます。 |
+| [`EasyCarrySystemGestureSettings.cs`](Runtime/EasyCarrySystemGestureSettings.cs) | 左右の握り判定・トリガープル判定に使用するジェスチャー設定を保持します。共有`GestureChecker`に付与され、パラメータ初期値へ反映されます。こちらもビルド時に除去されます。 |
 
 ### Runtime / 共通Editor
 
 | スクリプト | 役割 |
 | --- | --- |
-| [`GrabSystemConstraintTargetsRuntimeEditor.cs`](Editor/GrabSystemConstraintTargetsRuntimeEditor.cs) | Runtime版の簡易Inspectorです。アイテムスロット変更、アイテムの当たり判定調整、手持ち位置の位置調整・反転コピー、装備位置リストの位置調整のみを公開します。Authoring版がある場合はAuthoring Inspectorが優先されます。 |
-| [`GrabSystemSlotEditorUtility.cs`](Editor/GrabSystemSlotEditorUtility.cs) | スロット選択UIと`GrabSystem_00`～`GrabSystem_15`のPrefab Variant交換を担当します。Item Referenceの保存値を新しいVariantへ適用し、対象アイテム上のConstraintを新しい`GI_Root`へ接続し直します。 |
-| [`GrabSystemAssetLocator.cs`](Editor/GrabSystemAssetLocator.cs) | `GrabSystemRootMarker.txt`のGUIDからEasyCarry Systemの配置先を解決します。`Assets`・`Packages`のどちらに配置しても、各アセットをルートからの相対パスで読み込めます。 |
-| [`GrabSystemEditorSharedUtility.cs`](Editor/GrabSystemEditorSharedUtility.cs) | セクション表示、階層検索、VRC Parent Constraint・Contact参照、装備位置リスト、ウェイト切り替え、Inspectorロック、ビルド前設定などの共通処理をまとめています。 |
-| [`GrabSystemGestureCheckerEditorUtility.cs`](Editor/GrabSystemGestureCheckerEditorUtility.cs) | アバター内の共有`GestureChecker`を検索・生成し、ジェスチャー設定をModular Avatar Parametersの初期値へ反映します。複数生成や参照不整合の検証も担当します。 |
-| [`GrabSystemGestureCheckerLifecycle.cs`](Editor/GrabSystemGestureCheckerLifecycle.cs) | Play Mode開始時に`GestureChecker`が不足していないか確認します。不足時は確認ダイアログを表示し、生成するかPlay Modeを中止します。 |
-| [`GrabSystemAvatarBuildProcessor.cs`](Editor/GrabSystemAvatarBuildProcessor.cs) | VRCSDKのアバタービルド前処理です。保存設定の適用、`GestureChecker`の存在確認、対象アイテム内の不正なMA Bone Proxyと追従用Constraintの検証、装備位置設定のAP_00への正規化、Editor用コンポーネントの除去を行います。問題がある場合はビルドを停止します。 |
+| [`EasyCarrySystemItemReferenceRuntimeEditor.cs`](Editor/EasyCarrySystemItemReferenceRuntimeEditor.cs) | Runtime版の簡易Inspectorです。アイテムスロット変更、アイテムの当たり判定調整、手持ち位置の位置調整・反転コピー、装備位置リストの位置調整のみを公開します。Authoring版がある場合はAuthoring Inspectorが優先されます。 |
+| [`EasyCarrySystemSlotEditorUtility.cs`](Editor/EasyCarrySystemSlotEditorUtility.cs) | スロット選択UIと`EasyCarrySystem_00`～`EasyCarrySystem_15`のPrefab Variant交換を担当します。Item Referenceの保存値を新しいVariantへ適用し、対象アイテム上のConstraintを新しい`CI_Root`へ接続し直します。 |
+| [`EasyCarrySystemAssetLocator.cs`](Editor/EasyCarrySystemAssetLocator.cs) | `EasyCarrySystemRootMarker.txt`のGUIDからEasyCarry Systemの配置先を解決します。`Assets`・`Packages`のどちらに配置しても、各アセットをルートからの相対パスで読み込めます。 |
+| [`EasyCarrySystemEditorSharedUtility.cs`](Editor/EasyCarrySystemEditorSharedUtility.cs) | セクション表示、階層検索、VRC Parent Constraint・Contact参照、装備位置リスト、ウェイト切り替え、Inspectorロック、ビルド前設定などの共通処理をまとめています。 |
+| [`EasyCarrySystemGestureCheckerEditorUtility.cs`](Editor/EasyCarrySystemGestureCheckerEditorUtility.cs) | アバター内の共有`GestureChecker`を検索・生成し、ジェスチャー設定をModular Avatar Parametersの初期値へ反映します。複数生成や参照不整合の検証も担当します。 |
+| [`EasyCarrySystemGestureCheckerLifecycle.cs`](Editor/EasyCarrySystemGestureCheckerLifecycle.cs) | Play Mode開始時に`GestureChecker`が不足していないか確認します。不足時は確認ダイアログを表示し、生成するかPlay Modeを中止します。 |
+| [`EasyCarrySystemAvatarBuildProcessor.cs`](Editor/EasyCarrySystemAvatarBuildProcessor.cs) | VRCSDKのアバタービルド前処理です。保存設定の適用、`GestureChecker`の存在確認、対象アイテム内の不正なMA Bone Proxyと追従用Constraintの検証、装備位置設定のAP_00への正規化、Editor用コンポーネントの除去を行います。問題がある場合はビルドを停止します。 |
 
 ### Authoring専用Editor
 
 | スクリプト | 役割 |
 | --- | --- |
-| [`GrabSystemSetupMenu.cs`](Editor/Authoring/GrabSystemSetupMenu.cs) | Hierarchyの右クリックメニューに`EasyCarry System/Setup`を追加し、選択オブジェクトのセットアップを開始します。 |
-| [`GrabSystemSetupEditorUtility.cs`](Editor/Authoring/GrabSystemSetupEditorUtility.cs) | 未使用スロットの選択、Prefab Variantの生成、対象アイテムへのItem ReferenceとVRC Constraintの追加、共有`GestureChecker`の用意を行います。生成EasyCarry Systemが削除された場合は、Inspectorの生成ボタンから同じ処理を再実行します。 |
-| [`GrabSystemConstraintTargetsEditor.cs`](Editor/Authoring/GrabSystemConstraintTargetsEditor.cs) | Authoring版のフルInspectorです。位置・Contact・接続方法・ジェスチャー・装備時オプション・メニュー表示名・装備位置リストの追加、削除、並び替えを編集します。Scene上の調整用ハンドルとInspectorロックも管理します。 |
-| [`GrabSystemComponentClipboardEditorUtility.cs`](Editor/Authoring/GrabSystemComponentClipboardEditorUtility.cs) | `GrabSystemItemReference`のコンテキストメニューへ設定値のCopy/Pasteを追加します。貼り付け先のスロット番号を維持したまま、位置やContactなどのAuthoring設定を複製します。 |
-| [`GrabSystemGestureSettingsAuthoringEditor.cs`](Editor/Authoring/GrabSystemGestureSettingsAuthoringEditor.cs) | `GestureChecker`単体を選択した場合のジェスチャー設定Inspectorを提供し、設定変更をパラメータ初期値へ反映します。 |
-| [`GrabSystemRuntimePackageExporter.cs`](Editor/Authoring/GrabSystemRuntimePackageExporter.cs) | Runtime配布用フォルダーを書き出します。Authoring専用ファイルを除外し、必須ファイルと除外結果を検証します。 |
+| [`EasyCarrySystemSetupMenu.cs`](Editor/Authoring/EasyCarrySystemSetupMenu.cs) | Hierarchyの右クリックメニューに`EasyCarry System/Setup`を追加し、選択オブジェクトのセットアップを開始します。 |
+| [`EasyCarrySystemSetupEditorUtility.cs`](Editor/Authoring/EasyCarrySystemSetupEditorUtility.cs) | 未使用スロットの選択、Prefab Variantの生成、対象アイテムへのItem ReferenceとVRC Constraintの追加、共有`GestureChecker`の用意を行います。生成EasyCarry Systemが削除された場合は、Inspectorの生成ボタンから同じ処理を再実行します。 |
+| [`EasyCarrySystemItemReferenceAuthoringEditor.cs`](Editor/Authoring/EasyCarrySystemItemReferenceAuthoringEditor.cs) | Authoring版のフルInspectorです。位置・Contact・接続方法・ジェスチャー・装備時オプション・メニュー表示名・装備位置リストの追加、削除、並び替えを編集します。Scene上の調整用ハンドルとInspectorロックも管理します。 |
+| [`EasyCarrySystemComponentClipboardEditorUtility.cs`](Editor/Authoring/EasyCarrySystemComponentClipboardEditorUtility.cs) | `EasyCarrySystemItemReference`のコンテキストメニューへ設定値のCopy/Pasteを追加します。貼り付け先のスロット番号を維持したまま、位置やContactなどのAuthoring設定を複製します。 |
+| [`EasyCarrySystemGestureSettingsAuthoringEditor.cs`](Editor/Authoring/EasyCarrySystemGestureSettingsAuthoringEditor.cs) | `GestureChecker`単体を選択した場合のジェスチャー設定Inspectorを提供し、設定変更をパラメータ初期値へ反映します。 |
+| [`EasyCarrySystemRuntimePackageExporter.cs`](Editor/Authoring/EasyCarrySystemRuntimePackageExporter.cs) | Runtime配布用フォルダーを書き出します。Authoring専用ファイルを除外し、必須ファイルと除外結果を検証します。 |
 
 ## 主な処理の関係
 
 ```mermaid
 flowchart TD
-    Targets["GrabSystemItemReference<br>アイテム設定データ"]
-    GestureSettings["GrabSystemGestureSettings<br>ジェスチャー設定"]
+    Targets["EasyCarrySystemItemReference<br>アイテム設定データ"]
+    GestureSettings["EasyCarrySystemGestureSettings<br>ジェスチャー設定"]
     RuntimeInspector["Runtime Inspector"]
     AuthoringInspector["Authoring Inspector"]
     Setup["Setup Menu / Utility"]
@@ -95,26 +95,26 @@ flowchart TD
 ### 新規セットアップ
 
 1. Hierarchyで装備させたいオブジェクトを右クリックし、`EasyCarry System/Setup`を実行します。
-2. `GrabSystemSetupEditorUtility`が未使用スロットのPrefab Variantを生成します。
-3. 対象オブジェクトに`GrabSystemItemReference`とVRC Parent / Scale Constraintを追加し、生成したEasyCarry Systemの`GI_Root`へ接続します。対象オブジェクトは元の階層に残ります。
+2. `EasyCarrySystemSetupEditorUtility`が未使用スロットのPrefab Variantを生成します。
+3. 対象オブジェクトに`EasyCarrySystemItemReference`とVRC Parent / Scale Constraintを追加し、生成したEasyCarry Systemの`CI_Root`へ接続します。対象オブジェクトは元の階層に残ります。
 4. アバター内に共有`GestureChecker`がなければ生成します。
 
 ### スロット変更
 
-1. `GrabSystemSlotEditorUtility`が現在の位置、Contact、装備位置、オプション、メニュー名をItem Referenceへ保存します。
+1. `EasyCarrySystemSlotEditorUtility`が現在の位置、Contact、装備位置、オプション、メニュー名をItem Referenceへ保存します。
 2. 選択した番号のPrefab Variantへ交換します。
-3. Item Referenceの保存値を新しいPrefabへ適用し、対象アイテムのConstraintを新しい`GI_Root`へ接続します。
+3. Item Referenceの保存値を新しいPrefabへ適用し、対象アイテムのConstraintを新しい`CI_Root`へ接続します。
 
 ### Play Mode・ビルド開始
 
-1. `GrabSystemGestureCheckerLifecycle`または`GrabSystemAvatarBuildProcessor`が共有`GestureChecker`を確認します。
+1. `EasyCarrySystemGestureCheckerLifecycle`または`EasyCarrySystemAvatarBuildProcessor`が共有`GestureChecker`を確認します。
 2. 不足している場合は生成確認を表示します。
 3. Play Mode開始時は全アイテムの装備位置をAP_00へ戻します。ビルド時もAP_00へ正規化し、MA Bone Proxyや追従用Constraintの構成を検証します。
-4. `GrabSystemItemReference`と`GrabSystemGestureSettings`をビルド対象から除去します。
+4. `EasyCarrySystemItemReference`と`EasyCarrySystemGestureSettings`をビルド対象から除去します。
 
 ## 運用ルール
 
-- EasyCarry Systemを移動・パッケージ化する場合は、`GrabSystemRootMarker.txt`とその`.meta`を必ず一緒に含めてください。
+- EasyCarry Systemを移動・パッケージ化する場合は、`EasyCarrySystemRootMarker.txt`とその`.meta`を必ず一緒に含めてください。
 - `master`基準で動作確認を行うため、基本的にはpullだけで問題ありません。
 - 動作確認が必要な場合はserreから連絡します。
 - Prefabに更新が入る場合があるため、機能確認用の変更はPrefab Variantで行ってください。

@@ -1,0 +1,22 @@
+{
+    "name": "Serre.EasyCarrySystem.Editor",
+    "rootNamespace": "Serre.EasyCarrySystem.Editor",
+    "references": [
+        "Serre.EasyCarrySystem.Runtime",
+        "nadena.dev.modular-avatar.core",
+        "VRC.SDKBase",
+        "VRC.SDKBase.Editor.BuildPipeline",
+        "VRC.SDK3A"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
