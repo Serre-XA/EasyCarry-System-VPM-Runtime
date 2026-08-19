@@ -338,7 +338,7 @@ namespace Serre.GrabSystem.Editor
 
             Debug.LogError(
                 settingsCount == 0
-                    ? "GrabSystem is present, but the shared GestureChecker was not found. Select a GrabSystem once to repair it before building."
+                    ? "EasyCarry System is present, but the shared GestureChecker was not found. Select an EasyCarry System item once to repair it before building."
                     : "Multiple shared GestureChecker objects were found. Keep exactly one GestureChecker directly under the avatar root.",
                 avatarGameObject);
             return false;

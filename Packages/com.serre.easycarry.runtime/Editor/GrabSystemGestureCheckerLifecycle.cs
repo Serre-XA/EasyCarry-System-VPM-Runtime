@@ -28,11 +28,11 @@ namespace Serre.GrabSystem.Editor
             var message = missingTargets.Count == 1
                 ? $"{GetAvatarName(missingTargets[0])} に共有 GestureChecker がありません。\n\n"
                     + "プレイモード開始前に自動生成してもよいですか？"
-                : $"GrabSystemを使用している {missingTargets.Count} 体のアバターに共有 GestureChecker がありません。\n\n"
+                : $"EasyCarry Systemを使用している {missingTargets.Count} 体のアバターに共有 GestureChecker がありません。\n\n"
                     + "プレイモード開始前に自動生成してもよいですか？";
 
             if (Application.isBatchMode
-                || !EditorUtility.DisplayDialog("GrabSystem", message, "生成する", "キャンセル"))
+                || !EditorUtility.DisplayDialog("EasyCarry System", message, "生成する", "キャンセル"))
             {
                 CancelPlayMode("GestureChecker がないため、プレイモードへの移行を中止しました。",
                     missingTargets[0]);

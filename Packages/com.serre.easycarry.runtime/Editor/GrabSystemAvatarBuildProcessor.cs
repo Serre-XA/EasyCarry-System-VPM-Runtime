@@ -91,10 +91,10 @@ namespace Serre.GrabSystem.Editor
             var message = $"{avatarGameObject.name} に共有 GestureChecker がありません。\n\n"
                 + "ビルド開始前に自動生成してもよいですか？";
             if (Application.isBatchMode
-                || !EditorUtility.DisplayDialog("GrabSystem", message, "生成して続行", "ビルドを中止"))
+                || !EditorUtility.DisplayDialog("EasyCarry System", message, "生成して続行", "ビルドを中止"))
             {
                 Debug.LogError(
-                    "GestureChecker がないため、GrabSystemのビルドを中止しました。",
+                    "GestureChecker がないため、EasyCarry Systemのビルドを中止しました。",
                     avatarGameObject);
                 return false;
             }
@@ -107,7 +107,7 @@ namespace Serre.GrabSystem.Editor
             }
 
             Debug.LogError(
-                "GestureCheckerを生成できなかったため、GrabSystemのビルドを中止しました。",
+                "GestureCheckerを生成できなかったため、EasyCarry Systemのビルドを中止しました。",
                 avatarGameObject);
             return false;
         }
@@ -131,7 +131,7 @@ namespace Serre.GrabSystem.Editor
                     var itemPath = AnimationUtility.CalculateTransformPath(
                         target.transform,
                         avatarGameObject.transform);
-                    invalidPaths.Add($"{itemPath}: 生成されたGrabSystemがありません");
+                    invalidPaths.Add($"{itemPath}: 生成されたEasyCarry Systemがありません");
                     continue;
                 }
 
@@ -177,16 +177,16 @@ namespace Serre.GrabSystem.Editor
             }
 
             var message =
-                "GrabSystem のビルドを中止しました。\n\n"
-                + "GrabSystemが未生成、追従用Constraintが不正、または制御対象アイテムにMA Bone Proxyが含まれています。\n"
-                + "GrabSystem Setupとアイテム階層を確認してから、再度ビルドしてください。\n\n"
+                "EasyCarry System のビルドを中止しました。\n\n"
+                + "EasyCarry Systemが未生成、追従用Constraintが不正、または制御対象アイテムにMA Bone Proxyが含まれています。\n"
+                + "EasyCarry System Setupとアイテム階層を確認してから、再度ビルドしてください。\n\n"
                 + string.Join("\n", invalidPaths);
 
             Debug.LogError(message, firstBoneProxy != null ? firstBoneProxy : avatarGameObject);
             if (!Application.isBatchMode)
             {
                 EditorUtility.DisplayDialog(
-                    "GrabSystem ビルドエラー",
+                    "EasyCarry System ビルドエラー",
                     message,
                     "OK");
             }

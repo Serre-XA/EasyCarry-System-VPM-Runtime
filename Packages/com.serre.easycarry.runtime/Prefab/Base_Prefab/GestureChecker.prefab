@@ -480,7 +480,7 @@ GameObject:
   - component: {fileID: 5606298924727997194}
   - component: {fileID: 6878430594431402775}
   m_Layer: 0
-  m_Name: GrabSystem_Menu
+  m_Name: EasyCarry System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

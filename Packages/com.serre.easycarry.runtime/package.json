@@ -1,9 +1,9 @@
 {
-  "name": "com.serre.grabsystem.runtime",
-  "displayName": "GrabSystem Runtime",
+  "name": "com.serre.easycarry.runtime",
+  "displayName": "EasyCarry System",
   "version": "0.1.0-alpha.1",
   "unity": "2022.3",
-  "description": "Runtime components and editor support for GrabSystem.",
+  "description": "Runtime components and editor support for EasyCarry System.",
   "author": {
     "name": "Serre-XA",
     "email": "133144046+Serre-XA@users.noreply.github.com"

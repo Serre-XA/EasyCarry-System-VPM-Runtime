@@ -9,10 +9,10 @@ namespace Serre.GrabSystem.Editor
     [InitializeOnLoad]
     internal static class GrabSystemEditorSharedUtility
     {
-        private const string RuntimeLogoRelativePath = "Editor/Images/GrabSystem_Logo_Runtime.png";
-        private const string AuthoringLogoRelativePath = "Editor/Authoring/GrabSystem_Logo_Authoring.png";
-        private const string FallbackLogoRelativePath = "Editor/Images/GrabSystem_Logo.png";
-        private const string ComponentIconRelativePath = "Editor/Images/GrabSystem_Icon.png";
+        private const string RuntimeLogoRelativePath = "Editor/Images/EasyCarrySystem_Logo_Runtime.png";
+        private const string AuthoringLogoRelativePath = "Editor/Authoring/EasyCarrySystem_Logo_Authoring.png";
+        private const string FallbackLogoRelativePath = "Editor/Images/EasyCarrySystem_Logo.png";
+        private const string ComponentIconRelativePath = "Editor/Images/EasyCarrySystem_Icon.png";
         private const string ItemReferenceScriptRelativePath = "Scripts/GrabSystemItemReference.cs";
         private static Texture2D runtimeLogo;
         private static Texture2D authoringLogo;
@@ -101,15 +101,15 @@ namespace Serre.GrabSystem.Editor
 
         internal static void DrawRuntimeLogoHeader()
         {
-            DrawLogoHeader(RuntimeLogoRelativePath, ref runtimeLogo);
+            DrawLogoHeader(RuntimeLogoRelativePath, "Runtime", ref runtimeLogo);
         }
 
         internal static void DrawAuthoringLogoHeader()
         {
-            DrawLogoHeader(AuthoringLogoRelativePath, ref authoringLogo);
+            DrawLogoHeader(AuthoringLogoRelativePath, "Authoring", ref authoringLogo);
         }
 
-        private static void DrawLogoHeader(string logoRelativePath, ref Texture2D logo)
+        private static void DrawLogoHeader(string logoRelativePath, string editionLabel, ref Texture2D logo)
         {
             ApplyComponentIcon();
 
@@ -130,6 +130,7 @@ namespace Serre.GrabSystem.Editor
 
             if (logo == null)
             {
+                DrawTextLogoHeader(editionLabel);
                 return;
             }
 
@@ -144,6 +145,29 @@ namespace Serre.GrabSystem.Editor
             EditorGUILayout.Space(6f);
         }
 
+        private static void DrawTextLogoHeader(string editionLabel)
+        {
+            var titleStyle = new GUIStyle(EditorStyles.boldLabel)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 20
+            };
+            var editionStyle = new GUIStyle(EditorStyles.miniLabel)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 12
+            };
+
+            using (new HorizontalMarginScope())
+            using (new EditorGUILayout.VerticalScope())
+            {
+                EditorGUILayout.LabelField("EasyCarry System", titleStyle, GUILayout.Height(28f));
+                EditorGUILayout.LabelField(editionLabel, editionStyle, GUILayout.Height(18f));
+            }
+
+            EditorGUILayout.Space(6f);
+        }
+
         internal static void DrawGrabSystemReference(GrabSystemItemReference targets)
         {
             var grabSystemObject = targets != null ? targets.GeneratedGrabSystem : null;
@@ -151,8 +175,8 @@ namespace Serre.GrabSystem.Editor
             {
                 var rect = EditorGUILayout.GetControlRect();
                 var label = new GUIContent(
-                    "参照中のGrabSystem",
-                    "現在このアイテムが参照しているGrabSystemです。クリックするとHierarchyで選択します。");
+                    "参照中のEasyCarry System",
+                    "現在このアイテムが参照しているEasyCarry Systemです。クリックするとHierarchyで選択します。");
                 using (new EditorGUI.DisabledScope(true))
                 {
                     EditorGUI.ObjectField(rect, label, grabSystemObject, typeof(GameObject), true);
@@ -272,7 +296,7 @@ namespace Serre.GrabSystem.Editor
                 return;
             }
 
-            Undo.RecordObject(targets, "Prepare GrabSystem Slot Replacement");
+            Undo.RecordObject(targets, "Prepare EasyCarry System Slot Replacement");
             foreach (var attachPointName in AttachPointNames)
             {
                 targets.SetAttachPointEditing(attachPointName, false);
@@ -384,8 +408,8 @@ namespace Serre.GrabSystem.Editor
                 }
 
                 Undo.RecordObject(contactTransform, input
-                    ? "Sync GrabSystem Input Contact Transform"
-                    : "Sync GrabSystem Output Contact Transform");
+                    ? "Sync EasyCarry System Input Contact Transform"
+                    : "Sync EasyCarry System Output Contact Transform");
                 contactTransform.localPosition = primary.localPosition;
                 contactTransform.localRotation = primary.localRotation;
                 PrefabUtility.RecordPrefabInstancePropertyModifications(contactTransform);
@@ -893,7 +917,7 @@ namespace Serre.GrabSystem.Editor
 
             var targets = Resources.FindObjectsOfTypeAll<GrabSystemItemReference>();
             var undoGroup = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName("Reset GrabSystem Attach Points To AP 00");
+            Undo.SetCurrentGroupName("Reset EasyCarry System Attach Points To AP 00");
 
             foreach (var target in targets)
             {

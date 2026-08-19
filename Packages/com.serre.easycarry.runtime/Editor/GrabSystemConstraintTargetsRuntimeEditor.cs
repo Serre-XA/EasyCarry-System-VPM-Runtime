@@ -47,7 +47,7 @@ namespace Serre.GrabSystem.Editor
             GrabSystemEditorSharedUtility.DrawGrabSystemReference(targets);
             if (targets.GrabSystemRoot == null)
             {
-                EditorGUILayout.HelpBox("生成されたGrabSystemがありません。GrabSystem Setupを実行してください。", MessageType.Warning);
+                EditorGUILayout.HelpBox("生成されたEasyCarry Systemがありません。EasyCarry System Setupを実行してください。", MessageType.Warning);
                 return;
             }
 
@@ -317,7 +317,7 @@ namespace Serre.GrabSystem.Editor
                 return;
             }
 
-            Undo.RecordObject(value, "Edit GrabSystem Transform");
+            Undo.RecordObject(value, "Edit EasyCarry System Transform");
             value.localPosition = localPosition;
             value.localEulerAngles = localRotation;
             value.localScale = localScale;
@@ -732,7 +732,7 @@ namespace Serre.GrabSystem.Editor
                     continue;
                 }
 
-                Undo.RecordObject(targets, "Turn Off GrabSystem Edit");
+                Undo.RecordObject(targets, "Turn Off EasyCarry System Edit");
                 EndAllEditModes(targets, true);
                 GrabSystemEditorSharedUtility.CollapseGrabSystemHierarchy(targets);
             }

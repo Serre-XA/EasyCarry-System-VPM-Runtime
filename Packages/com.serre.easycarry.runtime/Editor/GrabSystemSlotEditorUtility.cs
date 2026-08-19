@@ -148,7 +148,7 @@ namespace Serre.GrabSystem.Editor
 
             if (isUsed)
             {
-                Debug.LogWarning($"GrabSystem \u30b9\u30ed\u30c3\u30c8 {slot} \u306f\u73fe\u5728\u306e\u30b7\u30fc\u30f3\u5185\u3067\u4f7f\u7528\u6e08\u307f\u3067\u3059\u3002", targets);
+                Debug.LogWarning($"EasyCarry System \u30b9\u30ed\u30c3\u30c8 {slot} \u306f\u73fe\u5728\u306e\u30b7\u30fc\u30f3\u5185\u3067\u4f7f\u7528\u6e08\u307f\u3067\u3059\u3002", targets);
                 return;
             }
 
@@ -213,7 +213,7 @@ namespace Serre.GrabSystem.Editor
             var oldRoot = itemReference.GeneratedGrabSystem;
             if (oldRoot == null)
             {
-                Debug.LogError("The generated GrabSystem is missing.", itemReference);
+                Debug.LogError("The generated EasyCarry System is missing.", itemReference);
                 return;
             }
 
@@ -222,7 +222,7 @@ namespace Serre.GrabSystem.Editor
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (prefab == null)
             {
-                Debug.LogError($"GrabSystem prefab was not found: {prefabPath}", itemReference);
+                Debug.LogError($"EasyCarry System prefab was not found: {prefabPath}", itemReference);
                 return;
             }
 
@@ -232,16 +232,16 @@ namespace Serre.GrabSystem.Editor
 
             var oldTransform = oldRoot.transform;
             var undoGroup = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName($"Switch GrabSystem Slot To {newSlot}");
+            Undo.SetCurrentGroupName($"Switch EasyCarry System Slot To {newSlot}");
 
             var newRoot = PrefabUtility.InstantiatePrefab(prefab, oldTransform.parent) as GameObject;
             if (newRoot == null)
             {
-                Debug.LogError($"Failed to instantiate GrabSystem prefab: {prefabPath}", itemReference);
+                Debug.LogError($"Failed to instantiate EasyCarry System prefab: {prefabPath}", itemReference);
                 return;
             }
 
-            Undo.RegisterCreatedObjectUndo(newRoot, "Create Replacement GrabSystem");
+            Undo.RegisterCreatedObjectUndo(newRoot, "Create Replacement EasyCarry System");
             newRoot.name = oldRoot.name;
             var newTransform = newRoot.transform;
             newTransform.SetSiblingIndex(oldTransform.GetSiblingIndex());
@@ -254,11 +254,11 @@ namespace Serre.GrabSystem.Editor
             if (newGIRoot == null)
             {
                 Undo.DestroyObjectImmediate(newRoot);
-                Debug.LogError("GI_Root was not found in the replacement GrabSystem prefab.", itemReference);
+                Debug.LogError("GI_Root was not found in the replacement EasyCarry System prefab.", itemReference);
                 return;
             }
 
-            Undo.RecordObject(itemReference, "Switch GrabSystem Slot");
+            Undo.RecordObject(itemReference, "Switch EasyCarry System Slot");
             itemReference.SetGeneratedGrabSystem(newRoot);
             itemReference.SetGISlot(newSlot);
             RestoreSnapshot(itemReference, settings, true);
@@ -288,7 +288,7 @@ namespace Serre.GrabSystem.Editor
                 return;
             }
 
-            Undo.RecordObject(constraint, "Retarget GrabSystem Constraint");
+            Undo.RecordObject(constraint, "Retarget EasyCarry System Constraint");
             if (constraint.Sources.Count == 0)
             {
                 constraint.Sources.Add(new VRCConstraintSource(source, 1f));
@@ -524,7 +524,7 @@ namespace Serre.GrabSystem.Editor
                 return;
             }
 
-            Undo.RecordObject(parametersComponent, "Restore GrabSystem Option Defaults");
+            Undo.RecordObject(parametersComponent, "Restore EasyCarry System Option Defaults");
             var changed = false;
             for (var parameterIndex = 0; parameterIndex < parametersComponent.parameters.Count; parameterIndex++)
             {
@@ -839,7 +839,7 @@ namespace Serre.GrabSystem.Editor
                 return;
             }
 
-            Undo.RecordObject(targetTransform.gameObject, "Restore GrabSystem Menu Name");
+            Undo.RecordObject(targetTransform.gameObject, "Restore EasyCarry System Menu Name");
             targetTransform.name = objectName;
             PrefabUtility.RecordPrefabInstancePropertyModifications(targetTransform.gameObject);
             EditorUtility.SetDirty(targetTransform.gameObject);

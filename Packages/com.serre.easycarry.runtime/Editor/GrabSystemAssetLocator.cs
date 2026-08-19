@@ -23,8 +23,8 @@ namespace Serre.GrabSystem.Editor
                 if (!markerMissingLogged)
                 {
                     Debug.LogError(
-                        "GrabSystem root marker was not found. "
-                        + "Keep GrabSystemRootMarker.txt and its .meta file when moving or packaging GrabSystem.");
+                        "EasyCarry System root marker was not found. "
+                        + "Keep GrabSystemRootMarker.txt and its .meta file when moving or packaging EasyCarry System.");
                     markerMissingLogged = true;
                 }
 
