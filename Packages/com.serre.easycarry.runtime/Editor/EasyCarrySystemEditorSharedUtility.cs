@@ -203,6 +203,36 @@ namespace Serre.EasyCarrySystem.Editor
             EditorGUILayout.Space(2f);
         }
 
+        internal static void DrawMissingGestureCheckerSection(EasyCarrySystemItemReference targets)
+        {
+            if (targets == null || EasyCarrySystemGestureCheckerEditorUtility.FindFor(targets) != null)
+            {
+                return;
+            }
+
+            EditorGUILayout.HelpBox(
+                "このアバターに共有 GestureChecker がありません。ビルド前に生成してください。",
+                MessageType.Warning);
+            using (new HorizontalMarginScope())
+            {
+                if (!GUILayout.Button("GestureCheckerを生成"))
+                {
+                    return;
+                }
+
+                var settings = EasyCarrySystemGestureCheckerEditorUtility.EnsureFor(targets);
+                if (settings == null)
+                {
+                    Debug.LogError("共有 GestureCheckerを生成できませんでした。", targets);
+                }
+                else
+                {
+                    Debug.Log("共有 GestureCheckerを生成しました。", settings);
+                }
+
+                GUIUtility.ExitGUI();
+            }
+        }
         private static void ApplyComponentIcon()
         {
             if (componentIconApplied || EditorApplication.timeSinceStartup < nextComponentIconLoadTime)

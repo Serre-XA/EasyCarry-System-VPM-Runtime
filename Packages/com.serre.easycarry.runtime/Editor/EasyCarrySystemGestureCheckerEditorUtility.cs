@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using nadena.dev.modular_avatar.core;
 using Serre.EasyCarrySystem;
 using UnityEditor;
@@ -42,6 +43,36 @@ namespace Serre.EasyCarrySystem.Editor
             return FindDirectChildSettings(avatarRoot);
         }
 
+        internal static List<EasyCarrySystemItemReference> FindMissingForLoadedAvatars()
+        {
+            var results = new List<EasyCarrySystemItemReference>();
+            var avatarRootIds = new HashSet<int>();
+            foreach (var targets in Resources.FindObjectsOfTypeAll<EasyCarrySystemItemReference>())
+            {
+                if (targets == null || EditorUtility.IsPersistent(targets)
+                    || !targets.gameObject.scene.IsValid())
+                {
+                    continue;
+                }
+
+                var avatarRoot = ResolveAvatarRoot(targets.transform);
+                if (avatarRoot == null || !avatarRootIds.Add(avatarRoot.GetInstanceID())
+                    || FindFor(targets) != null)
+                {
+                    continue;
+                }
+
+                results.Add(targets);
+            }
+
+            return results;
+        }
+
+        internal static string GetAvatarName(EasyCarrySystemItemReference targets)
+        {
+            var avatarRoot = ResolveAvatarRoot(targets != null ? targets.transform : null);
+            return avatarRoot != null ? avatarRoot.name : "アバター";
+        }
         internal static EasyCarrySystemGestureSettings EnsureFor(EasyCarrySystemItemReference targets)
         {
             if (targets == null || Application.isPlaying || EditorUtility.IsPersistent(targets)

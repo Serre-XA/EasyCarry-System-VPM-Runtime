@@ -44,6 +44,7 @@ namespace Serre.EasyCarrySystem.Editor
             var targets = (EasyCarrySystemItemReference)target;
             serializedObject.Update();
             EasyCarrySystemEditorSharedUtility.DrawRuntimeLogoHeader();
+            EasyCarrySystemEditorSharedUtility.DrawMissingGestureCheckerSection(targets);
             EasyCarrySystemEditorSharedUtility.DrawEasyCarrySystemReference(targets);
             if (targets.EasyCarrySystemRoot == null)
             {

@@ -16,7 +16,7 @@ EasyCarry Systemは、利用者が導入するRuntime部分と、制作者がセ
 
 | 区分 | 含めるフォルダ | 用途 |
 | --- | --- | --- |
-| Runtime / 共通 | `Scripts`、`Editor`直下 | 配布済みEasyCarry Systemのスロット変更、位置・当たり判定調整、ビルド前検証 |
+| Runtime / 共通 | `Runtime`、`Editor`直下 | 配布済みEasyCarry Systemのスロット変更、位置・当たり判定調整、ビルド前検証 |
 | Authoring | Runtime / 共通に加えて`Editor/Authoring` | 新規セットアップ、全設定の編集、コピー・ペースト |
 
 Runtime版を作成する場合は、`Editor/Authoring`を含めません。
@@ -47,6 +47,7 @@ GUIDとスクリプトの重複を避けるため、書き出し先には現在�
 | [`EasyCarrySystemEditorSharedUtility.cs`](Editor/EasyCarrySystemEditorSharedUtility.cs) | セクション表示、階層検索、VRC Parent Constraint・Contact参照、装備位置リスト、ウェイト切り替え、Inspectorロック、ビルド前設定などの共通処理をまとめています。 |
 | [`EasyCarrySystemGestureCheckerEditorUtility.cs`](Editor/EasyCarrySystemGestureCheckerEditorUtility.cs) | アバター内の共有`GestureChecker`を検索・生成し、ジェスチャー設定をModular Avatar Parametersの初期値へ反映します。複数生成や参照不整合の検証も担当します。 |
 | [`EasyCarrySystemGestureCheckerLifecycle.cs`](Editor/EasyCarrySystemGestureCheckerLifecycle.cs) | Play Mode開始時に`GestureChecker`が不足していないか確認します。不足時は確認ダイアログを表示し、生成するかPlay Modeを中止します。 |
+| [`EasyCarrySystemGestureCheckerBuildRequest.cs`](Editor/EasyCarrySystemGestureCheckerBuildRequest.cs) | VRCSDKのビルド開始要求を受け、編集シーン上で不足している`GestureChecker`を確認・生成してからビルドを続行します。 |
 | [`EasyCarrySystemAvatarBuildProcessor.cs`](Editor/EasyCarrySystemAvatarBuildProcessor.cs) | VRCSDKのアバタービルド前処理です。保存設定の適用、`GestureChecker`の存在確認、対象アイテム内の不正なMA Bone Proxyと追従用Constraintの検証、装備位置設定のAP_00への正規化、Editor用コンポーネントの除去を行います。問題がある場合はビルドを停止します。 |
 
 ### Authoring専用Editor
@@ -107,9 +108,9 @@ flowchart TD
 
 ### Play Mode・ビルド開始
 
-1. `EasyCarrySystemGestureCheckerLifecycle`または`EasyCarrySystemAvatarBuildProcessor`が共有`GestureChecker`を確認します。
-2. 不足している場合は生成確認を表示します。
-3. Play Mode開始時は全アイテムの装備位置をAP_00へ戻します。ビルド時もAP_00へ正規化し、MA Bone Proxyや追従用Constraintの構成を検証します。
+1. Play Mode開始時は`EasyCarrySystemGestureCheckerLifecycle`、ビルド開始時は`EasyCarrySystemGestureCheckerBuildRequest`が共有`GestureChecker`を確認します。
+2. 不足している場合は生成確認を表示し、ビルド時は編集シーン上へ生成してから処理を続行します。
+3. `EasyCarrySystemAvatarBuildProcessor`がビルド用アバター上で`GestureChecker`を再検証します。Play Mode開始時は全アイテムの装備位置をAP_00へ戻し、ビルド時もAP_00へ正規化してMA Bone Proxyや追従用Constraintの構成を検証します。
 4. `EasyCarrySystemItemReference`と`EasyCarrySystemGestureSettings`をビルド対象から除去します。
 
 ## 運用ルール

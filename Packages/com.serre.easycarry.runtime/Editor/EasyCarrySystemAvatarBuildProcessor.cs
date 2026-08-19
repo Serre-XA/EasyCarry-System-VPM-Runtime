@@ -21,10 +21,10 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             var targets = avatarGameObject.GetComponentsInChildren<EasyCarrySystemItemReference>(true);
-            var gestureSettings = avatarGameObject.GetComponentsInChildren<EasyCarrySystemGestureSettings>(true);
             if (targets.Length == 0)
             {
-                foreach (var settings in gestureSettings)
+                var orphanedGestureSettings = avatarGameObject.GetComponentsInChildren<EasyCarrySystemGestureSettings>(true);
+                foreach (var settings in orphanedGestureSettings)
                 {
                     if (settings != null)
                     {
@@ -35,23 +35,25 @@ namespace Serre.EasyCarrySystem.Editor
                 return true;
             }
 
-            if (!EnsureGestureCheckerForBuild(avatarGameObject, targets))
+            if (!EasyCarrySystemGestureCheckerEditorUtility.ValidateForAvatar(avatarGameObject, targets.Length))
             {
+                if (!Application.isBatchMode)
+                {
+                    EditorUtility.DisplayDialog(
+                        "EasyCarry System ビルドエラー",
+                        "共有 GestureChecker が見つからないか、複数存在しています。\n"
+                        + "アバター直下に1つだけ生成してから、再度ビルドしてください。",
+                        "OK");
+                }
+
                 return false;
             }
 
-            gestureSettings = avatarGameObject.GetComponentsInChildren<EasyCarrySystemGestureSettings>(true);
-
+            var gestureSettings = avatarGameObject.GetComponentsInChildren<EasyCarrySystemGestureSettings>(true);
             if (!ValidateItemBoneProxies(avatarGameObject, targets))
             {
                 return false;
             }
-
-            if (!EasyCarrySystemGestureCheckerEditorUtility.ValidateForAvatar(avatarGameObject, targets.Length))
-            {
-                return false;
-            }
-
             foreach (var target in targets)
             {
                 if (target != null)
@@ -76,40 +78,6 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             return true;
-        }
-
-        private static bool EnsureGestureCheckerForBuild(
-            GameObject avatarGameObject,
-            EasyCarrySystemItemReference[] targets)
-        {
-            if (targets == null || targets.Length == 0
-                || EasyCarrySystemGestureCheckerEditorUtility.FindFor(targets[0]) != null)
-            {
-                return true;
-            }
-
-            var message = $"{avatarGameObject.name} に共有 GestureChecker がありません。\n\n"
-                + "ビルド開始前に自動生成してもよいですか？";
-            if (Application.isBatchMode
-                || !EditorUtility.DisplayDialog("EasyCarry System", message, "生成して続行", "ビルドを中止"))
-            {
-                Debug.LogError(
-                    "GestureChecker がないため、EasyCarry Systemのビルドを中止しました。",
-                    avatarGameObject);
-                return false;
-            }
-
-            var settings = EasyCarrySystemGestureCheckerEditorUtility.EnsureFor(targets[0]);
-            if (settings != null)
-            {
-                Debug.Log("共有 GestureChecker を自動生成しました。", settings);
-                return true;
-            }
-
-            Debug.LogError(
-                "GestureCheckerを生成できなかったため、EasyCarry Systemのビルドを中止しました。",
-                avatarGameObject);
-            return false;
         }
 
         private static bool ValidateItemBoneProxies(
