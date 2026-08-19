@@ -24,9 +24,9 @@ Runtime版を作成する場合は、`Editor/Authoring`を含めません。
 ### Runtimeパッケージの書き出し
 
 Authoring版を導入したUnityプロジェクトで、`Tools/GrabSystem/Runtimeパッケージを書き出す`を実行します。
-選択した親フォルダーに`com.serre.monomotsu.runtime`が作成され、GrabSystem一式から`Editor/Authoring`と`Editor/Authoring.meta`を除いた内容がGUIDを維持したままコピーされます。
+選択した親フォルダーに`com.serre.grabsystem.runtime`が作成され、GrabSystem一式から`Editor/Authoring`と`Editor/Authoring.meta`を除いた内容がGUIDを維持したままコピーされます。
 
-GUIDとスクリプトの重複を避けるため、書き出し先には現在のUnityプロジェクト外を指定してください。`package.json`は書き出された`com.serre.monomotsu.runtime`の直下に配置します。
+GUIDとスクリプトの重複を避けるため、書き出し先には現在のUnityプロジェクト外を指定してください。`package.json`は書き出された`com.serre.grabsystem.runtime`の直下に配置します。
 
 ## スクリプト構成
 

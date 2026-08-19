@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "com.serre.monomotsu.runtime": {
-      "version": "file:com.serre.monomotsu.runtime",
+    "com.serre.grabsystem.runtime": {
+      "version": "file:com.serre.grabsystem.runtime",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
