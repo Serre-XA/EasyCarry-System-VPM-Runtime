@@ -42,7 +42,7 @@ namespace Serre.EasyCarrySystem
     public sealed class EasyCarrySystemItemSettings
     {
         public const int AttachPointCount = 9;
-        public const int ContactCount = 14;
+        public const int ContactCount = 15;
         public const int MainWeightCount = 16;
         public const int NumberedAttachPointCount = 7;
 
@@ -497,6 +497,11 @@ namespace Serre.EasyCarrySystem
         public void SetCISlot(int value)
         {
             ciSlot = Mathf.Clamp(value, 0, 15);
+        }
+
+        public void SetCIItemSize(Transform value)
+        {
+            ciItemSize = value;
         }
 
         public void SetMenuObjects(

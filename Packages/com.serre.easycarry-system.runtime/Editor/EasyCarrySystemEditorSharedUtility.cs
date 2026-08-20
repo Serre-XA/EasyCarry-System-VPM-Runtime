@@ -66,7 +66,7 @@ namespace Serre.EasyCarrySystem.Editor
 
         internal static readonly string[] ItemOutputContactNames =
         {
-            "CI_Output_IsGrabbed_L", "CI_Output_IsGrabbed_R",
+            "CI_Output_IsGrabbed_L", "CI_Output_IsGrabbed_R", "CI_Output_IsCarried",
         };
 
         private static readonly string[] ItemAttachedParameterNames =

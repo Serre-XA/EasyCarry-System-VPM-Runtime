@@ -1249,7 +1249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneReference: 55
+  boneReference: 7
   subPath: 
   attachmentMode: 2
   matchScale: 0
@@ -3085,8 +3085,8 @@ MonoBehaviour:
       ParentRotationOffset: {x: 0, y: 0, z: 0}
     totalLength: 9
     overflowList: []
-  cachedExecutionGroupIndex: 2
-  latestValidExecutionGroupIndex: 2
+  cachedExecutionGroupIndex: 1
+  latestValidExecutionGroupIndex: 1
   PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
@@ -3446,6 +3446,61 @@ MonoBehaviour:
   receiverType: 0
   parameter: Hand/L/OtherItemDetected
   minVelocity: 0.05
+--- !u!1 &7132115552353508360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6835309975459389570}
+  - component: {fileID: 1752138847954970209}
+  m_Layer: 0
+  m_Name: CI_Output_IsCarried
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &6835309975459389570
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7132115552353508360}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 3909852162130586747}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1752138847954970209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7132115552353508360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -802764141, guid: 80f1b8067b0760e4bb45023bc2e9de66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootTransform: {fileID: 0}
+  shapeType: 0
+  radius: 0.01
+  height: 0.5
+  size: {x: 1, y: 1, z: 1}
+  position: {x: 0, y: 0, z: 0}
+  rotation: {x: 0, y: 0, z: 0, w: 1}
+  localOnly: 1
+  contentTypes: -1
+  collisionTags:
+  - IsCarried
 --- !u!1 &7197128916957099816
 GameObject:
   m_ObjectHideFlags: 0
@@ -3478,6 +3533,7 @@ Transform:
   - {fileID: 5289757754739378844}
   - {fileID: 7058680740755272174}
   - {fileID: 8962507952967687836}
+  - {fileID: 6835309975459389570}
   - {fileID: 306093185921302325}
   - {fileID: 5246564927018244946}
   m_Father: {fileID: 4668934507027111956}

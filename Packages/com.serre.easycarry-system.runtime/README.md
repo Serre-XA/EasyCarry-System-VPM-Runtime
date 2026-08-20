@@ -16,17 +16,10 @@ EasyCarry Systemは、利用者が導入するRuntime部分と、制作者がセ
 
 | 区分 | 含めるフォルダ | 用途 |
 | --- | --- | --- |
-| Runtime / 共通 | `Runtime`、`Editor`直下 | 配布済みEasyCarry Systemのスロット変更、位置・当たり判定調整、ビルド前検証 |
-| Authoring | Runtime / 共通に加えて`Editor/Authoring` | 新規セットアップ、全設定の編集、コピー・ペースト |
+| Runtime / 共通 | `Runtime`、`Editor`直下 | 新規セットアップ、スロット変更、位置・当たり判定調整、ビルド前検証 |
+| Authoring | Runtime / 共通に加えて`Editor/Authoring` | 全設定の編集、コピー・ペースト |
 
 Runtime版を作成する場合は、`Editor/Authoring`を含めません。
-
-### Runtimeパッケージの書き出し
-
-Authoring版を導入したUnityプロジェクトで、`Tools/EasyCarry System/Runtimeパッケージを書き出す`を実行します。
-選択した親フォルダーに`com.serre.easycarry-system.runtime`が作成され、EasyCarry System一式から`Editor/Authoring`と`Editor/Authoring.meta`を除いた内容がGUIDを維持したままコピーされます。
-
-GUIDとスクリプトの重複を避けるため、書き出し先には現在のUnityプロジェクト外を指定してください。`package.json`は書き出された`com.serre.easycarry-system.runtime`の直下に配置します。
 
 ## スクリプト構成
 
@@ -41,6 +34,8 @@ GUIDとスクリプトの重複を避けるため、書き出し先には現在�
 
 | スクリプト | 役割 |
 | --- | --- |
+| [`EasyCarrySystemSetupMenu.cs`](Editor/EasyCarrySystemSetupMenu.cs) | Hierarchyの右クリックメニューに`EasyCarry System/Setup`を追加し、Authoring版とRuntime版の両方で選択オブジェクトのセットアップを開始します。 |
+| [`EasyCarrySystemSetupEditorUtility.cs`](Editor/EasyCarrySystemSetupEditorUtility.cs) | 未使用スロットの選択、Prefab Variantの生成、対象アイテムへのItem ReferenceとVRC Constraintの追加、共有`GestureChecker`の用意を行います。生成EasyCarry Systemが削除された場合は、Inspectorの生成ボタンから同じ処理を再実行します。 |
 | [`EasyCarrySystemItemReferenceRuntimeEditor.cs`](Editor/EasyCarrySystemItemReferenceRuntimeEditor.cs) | Runtime版の簡易Inspectorです。アイテムスロット変更、アイテムの当たり判定調整、手持ち位置の位置調整・反転コピー、装備位置リストの位置調整のみを公開します。Authoring版がある場合はAuthoring Inspectorが優先されます。 |
 | [`EasyCarrySystemSlotEditorUtility.cs`](Editor/EasyCarrySystemSlotEditorUtility.cs) | スロット選択UIと`EasyCarrySystem_00`～`EasyCarrySystem_15`のPrefab Variant交換を担当します。Item Referenceの保存値を新しいVariantへ適用し、対象アイテム上のConstraintを新しい`CI_Root`へ接続し直します。 |
 | [`EasyCarrySystemAssetLocator.cs`](Editor/EasyCarrySystemAssetLocator.cs) | `EasyCarrySystemRootMarker.txt`のGUIDからEasyCarry Systemの配置先を解決します。`Assets`・`Packages`のどちらに配置しても、各アセットをルートからの相対パスで読み込めます。 |
@@ -54,12 +49,9 @@ GUIDとスクリプトの重複を避けるため、書き出し先には現在�
 
 | スクリプト | 役割 |
 | --- | --- |
-| [`EasyCarrySystemSetupMenu.cs`](Editor/Authoring/EasyCarrySystemSetupMenu.cs) | Hierarchyの右クリックメニューに`EasyCarry System/Setup`を追加し、選択オブジェクトのセットアップを開始します。 |
-| [`EasyCarrySystemSetupEditorUtility.cs`](Editor/Authoring/EasyCarrySystemSetupEditorUtility.cs) | 未使用スロットの選択、Prefab Variantの生成、対象アイテムへのItem ReferenceとVRC Constraintの追加、共有`GestureChecker`の用意を行います。生成EasyCarry Systemが削除された場合は、Inspectorの生成ボタンから同じ処理を再実行します。 |
 | [`EasyCarrySystemItemReferenceAuthoringEditor.cs`](Editor/Authoring/EasyCarrySystemItemReferenceAuthoringEditor.cs) | Authoring版のフルInspectorです。位置・Contact・接続方法・ジェスチャー・装備時オプション・メニュー表示名・装備位置リストの追加、削除、並び替えを編集します。Scene上の調整用ハンドルとInspectorロックも管理します。 |
 | [`EasyCarrySystemComponentClipboardEditorUtility.cs`](Editor/Authoring/EasyCarrySystemComponentClipboardEditorUtility.cs) | `EasyCarrySystemItemReference`のコンテキストメニューへ設定値のCopy/Pasteを追加します。貼り付け先のスロット番号を維持したまま、位置やContactなどのAuthoring設定を複製します。 |
 | [`EasyCarrySystemGestureSettingsAuthoringEditor.cs`](Editor/Authoring/EasyCarrySystemGestureSettingsAuthoringEditor.cs) | `GestureChecker`単体を選択した場合のジェスチャー設定Inspectorを提供し、設定変更をパラメータ初期値へ反映します。 |
-| [`EasyCarrySystemRuntimePackageExporter.cs`](Editor/Authoring/EasyCarrySystemRuntimePackageExporter.cs) | Runtime配布用フォルダーを書き出します。Authoring専用ファイルを除外し、必須ファイルと除外結果を検証します。 |
 
 ## 主な処理の関係
 

@@ -55,7 +55,7 @@ namespace Serre.EasyCarrySystem.Editor
             "CI_ItemSize", "AP_Contact_Hand_L", "AP_Contact_Hand_R", "AP_Contact_00", "AP_Contact_01",
             "AP_Contact_02", "AP_Contact_03", "AP_Contact_04", "AP_Contact_05", "AP_Contact_06",
             "CI_Input_GrabBlocked", "CI_Input_ForceReturn",
-            "CI_Output_IsGrabbed_L", "CI_Output_IsGrabbed_R",
+            "CI_Output_IsGrabbed_L", "CI_Output_IsGrabbed_R", "CI_Output_IsCarried",
         };
 
         private static readonly string[] ContactPropertyNames =
