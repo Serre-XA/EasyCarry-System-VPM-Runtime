@@ -63,7 +63,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 1738368370
+      path: 4062606199
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -72,7 +72,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1738368370
+      path: 4062606199
       attribute: 4294967280
       script: {fileID: 0}
       typeID: 1773428102
