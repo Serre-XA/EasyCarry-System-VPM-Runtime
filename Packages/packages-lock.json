@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "com.serre.easycarry.runtime": {
-      "version": "file:com.serre.easycarry.runtime",
+    "com.serre.easycarry-system.runtime": {
+      "version": "file:com.serre.easycarry-system.runtime",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

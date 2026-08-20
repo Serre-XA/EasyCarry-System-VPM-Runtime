@@ -1,5 +1,5 @@
 {
-  "name": "com.serre.easycarry.runtime",
+  "name": "com.serre.easycarry-system.runtime",
   "displayName": "EasyCarry System",
   "version": "0.2.0-alpha.2",
   "unity": "2022.3",
