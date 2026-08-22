@@ -1,76 +1,95 @@
-# VPM Package Template
+# EasyCarry System Basic
 
-Starter for making Packages, including automation for building and publishing them.
+EasyCarry Systemで作成されたアイテムを利用し、基本的な調整を行うための無料パッケージです。
 
-Once you're all set up, you'll be able to push changes to this repository and have .zip and .unitypackage versions automatically generated, and a listing made which works in the VPM for delivering updates for this package. If you want to make a listing with a variety of packages, check out our [template-package-listing](https://github.com/vrchat-community/template-package-listing) repo.
+本READMEでは、Unityの基本的な操作や用語の説明は省略しています。
 
-## ▶ Getting Started
+> [!NOTE]
+> 現在は公開準備中です。導入方法や仕様は正式リリースまでに変更される場合があります。
 
-* Press [![Use This Template](https://user-images.githubusercontent.com/737888/185467681-e5fdb099-d99f-454b-8d9e-0760e5a6e588.png)](https://github.com/vrchat-community/template-package/generate)
-to start a new GitHub project based on this template.
-  * Choose a fitting repository name and description.
-  * Set the visibility to 'Public'. You can also choose 'Private' and change it later.
-  * You don't need to select 'Include all branches.'
-* Clone this repository locally using Git.
-  * If you're unfamiliar with Git and GitHub, [visit GitHub's documentation](https://docs.github.com/en/get-started/quickstart/git-and-github-learning-resources) to learn more.
-* Add the folder to Unity Hub and open it as a Unity Project.
-* After opening the project, wait while the VPM resolver is downloaded and added to your project.
-  * This gives you access to the VPM Package Maker and Package Resolver tools.
+## 概要
 
-## 🚇 Migrating Assets Package
-Full details at [Converting Assets to a VPM Package](https://vcc.docs.vrchat.com/guides/convert-unitypackage)
+EasyCarry Systemは、VRChatアバター向けの持ち運び・装備ギミックを導入するためのシステムです。
 
-## ✏️ Working on Your Package
+| エディション | 用途 |
+| --- | --- |
+| EasyCarry System Basic | 対応アイテムの利用と基本的な調整 |
+| EasyCarry System Advanced | 対応アイテムの制作と詳細な設定 |
 
-* Delete the "Packages/com.vrchat.demo-template" directory or reuse it for your own package.
-  * If you reuse the package, don't forget to rename it and add generated meta files to your repository!
-* Update the `.gitignore` file in the "Packages" directory to include your package.
-  * For example, change `!com.vrchat.demo-template` to `!com.username.package-name`.
-  * `.gitignore` files normally *exclude* the contents of your "Packages" directory. This `.gitignore` in this template show how to *include* the demo package. You can easily change this out for your own package name.
-* Open the Unity project and work on your package's files in your favorite code editor.
-* When you're ready, commit and push your changes.
-* Once you've set up the automation as described below, you can easily publish new versions.
+## 主な機能
 
-## 🤖 Setting up the Automation
+- アイテムスロットの変更
+- アイテムの当たり判定調整
+- 手持ち位置と装備位置の調整
+- EasyCarry System対応アイテムのセットアップ
 
-Create a repository variable with the name and value described below.
-For details on how to create repository variables, see [Creating Configuration Variables for a Repository](https://docs.github.com/en/actions/learn-github-actions/variables#creating-configuration-variables-for-a-repository).
-Make sure you are creating a **repository variable**, and not a **repository secret**.
+## 動作環境
 
-* `PACKAGE_NAME`: the name of your package, like `com.vrchat.demo-template`.
+- Unity 2022.3
+- VRChat SDK - Avatars 3.10.x
+- Modular Avatar 1.17.1以上、2.0.0未満
 
-Finally, go to the "Settings" page for your repo, then choose "Pages", and look for the heading "Build and deployment". Change the "Source" dropdown from "Deploy from a branch" to "GitHub Actions".
+## インストール
 
-That's it!
-Some other notes:
-* We highly recommend you keep the existing folder structure of this template.
-  * The root of the project should be a Unity project.
-  * Your packages should be in the "Packages" directory.
-  * If you deviate from this folder structure, you'll need to update the paths that assume your package is in the "Packages" directory on lines 24, 38, 41 and 57.
-* If you want to store and generate your web files in a folder other than "Website" in the root, you can change the `listPublicDirectory` item [here in build-listing.yml](.github/workflows/build-listing.yml#L17).
+### VCCから導入する場合
 
-## 🎉 Publishing a Release
+<!-- TODO: GitHub Pages公開後にVPMリポジトリURLと導入手順を記載する。 -->
 
-You can make a release by running the [Build Release](.github/workflows/release.yml) action. The version specified in your `package.json` file will be used to define the version of the release.
+1. EasyCarry SystemのVPMリポジトリをVCCへ追加します。
+2. 対象プロジェクトの`Manage Project`を開きます。
+3. `EasyCarry System Basic`を追加します。
 
-## 📃 Rebuilding the Listing
+### UnityPackageから導入する場合
 
-Whenever you make a change to a release - manually publishing it, or manually creating, editing or deleting a release, the [Build Repo Listing](.github/workflows/build-listing.yml) action will make a new index of all the releases available, and publish them as a website hosted fore free on [GitHub Pages](https://pages.github.com/). This listing can be used by the VPM to keep your package up to date, and the generated index page can serve as a simple landing page with info for your package. The URL for your package will be in the format `https://username.github.io/repo-name`.
+<!-- TODO: ReleaseページとUnityPackageの導入手順を記載する。 -->
 
-## 🏠 Customizing the Landing Page (Optional)
+## 基本的な使い方
 
-The action which rebuilds the listing also publishes a landing page. The source for this page is in `Website/index.html`. The automation system uses [Scriban](https://github.com/scriban/scriban) to fill in the objects like `{{ this }}` with information from the latest release's manifest, so it will stay up-to-date with the name, id and description that you provide there. You are welcome to modify this page however you want - just use the existing `{{ template.objects }}` to fill in that info wherever you like. The entire contents of your "Website" folder are published to your GitHub Page each time.
+1. セットアップしたいPrefabまたはGameObjectをアバター内へ配置します。
+2. 対象PrefabまたはGameObjectを右クリックし、`EasyCarry System`から`Setup`を実行します。
+3. Inspectorからスロット、位置、当たり判定を調整します。
 
-## 💻 Technical Stuff
+> [!NOTE]
+> Basic版では、装備位置00のボーン参照としてSpineのみ指定できます。
 
-You are welcome to make your own changes to the automation process to make it fit your needs, and you can create Pull Requests if you have some changes you think we should adopt. Here's some more info on the included automation:
+## 配布された対応アイテムを導入する
 
-### Build Release Action
-[release.yml](/.github/workflows/release.yml)
+1. 導入したいアイテムのPrefabをアバター内へ配置します。
+2. Prefabの`Easy Carry System Item Reference`コンポーネントにある`EasyCarry System Setup`ボタンを押します。
+    <br>対象アイテムの右クリックメニューから`EasyCarry System`、`Setup`の順に選択することもできます。
+3. 必要に応じて、アイテムスロットやアバターに合わせた位置を調整します。
+4. 一度プレイモードへ移行し、EasyCarry Systemに関するエラーが発生しないことを確認します。
+5. VRChatへアップロードし、実機で動作を確認します。
 
-This is a composite action combining a variety of existing GitHub Actions and some shell commands to create both a .zip of your Package and a .unitypackage. It creates a release which is named for the `version` in the `package.json` file found in your target Package, and publishes the zip, the unitypackage and the package.json file to this release.
+## 注意事項
 
-### Build Repo Listing
-[build-listing.yml](.github/workflows/build-listing.yml)
+<!-- TODO: MA Bone Proxy、既存コンポーネント、アップロード前処理などの注意点を記載する。 -->
 
-This is a composite action which builds a vpm-compatible [Repo Listing](https://vcc.docs.vrchat.com/vpm/repos) based on the releases you've created. In order to find all your releases and combine them into a listing, it checks out [another repository](https://github.com/vrchat-community/package-list-action) which has a [Nuke](https://nuke.build/) project which includes the VPM core lib to have access to its types and methods. This project will be expanded to include more functionality in the future - for now, the action just calls its `BuildRepoListing` target.
+- 導入前にUnityプロジェクトのバックアップを作成してください。
+- 対応するVRChat SDKとModular Avatarが導入されていることを確認してください。
+
+## 更新とアンインストール
+
+<!-- TODO: VCC経由の更新方法と、安全なアンインストール手順を記載する。 -->
+
+VCC経由で導入した場合は、`Manage Project`に表示される`-`ボタンから削除してください。
+
+## トラブルシューティング
+
+<!-- TODO: GestureChecker、Setup、ビルドエラーなどの代表的な対処方法を記載する。 -->
+
+## ライセンス
+
+本パッケージは[MIT License](LICENSE.md)の下で公開されています。
+
+依存パッケージおよび第三者制作物には、それぞれのライセンスが適用されます。
+
+## サポート
+
+不具合や要望は[GitHub Issues](https://github.com/Serre-XA/EasyCarry-System-VPM-Runtime/issues)へお寄せください。
+
+## クレジット
+
+- 制作者: Serre
+
+<!-- TODO: ロゴ制作者、使用ライブラリ、協力者、参考資料などを記載する。 -->
