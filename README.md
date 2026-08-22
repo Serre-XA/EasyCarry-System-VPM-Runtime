@@ -33,11 +33,16 @@ EasyCarry Systemは、VRChatアバター向けの持ち運び・装備ギミッ�
 
 ### VCCから導入する場合
 
-<!-- TODO: GitHub Pages公開後にVPMリポジトリURLと導入手順を記載する。 -->
+[![Add to VCC](https://img.shields.io/badge/Add%20to%20VCC-EasyCarry%20System%20Basic-2BACEA?style=for-the-badge)](vcc://vpm/addRepo?url=https%3A%2F%2Fserre-xa.github.io%2FEasyCarry-System-VPM-Runtime%2Findex.json)
 
-1. EasyCarry SystemのVPMリポジトリをVCCへ追加します。
-2. 対象プロジェクトの`Manage Project`を開きます。
-3. `EasyCarry System Basic`を追加します。
+上のボタンを押すとVCCが起動し、EasyCarry SystemのVPMリポジトリを追加する確認画面が表示されます。
+
+ボタンが反応しない場合は、VCCの`Settings`、`Packages`、`Add Repository`の順に開き、次のURLを追加してください。
+
+`https://serre-xa.github.io/EasyCarry-System-VPM-Runtime/index.json`
+
+1. 対象プロジェクトの`Manage Project`を開きます。
+2. `EasyCarry System Basic`を追加します。
 
 ### UnityPackageから導入する場合
 
