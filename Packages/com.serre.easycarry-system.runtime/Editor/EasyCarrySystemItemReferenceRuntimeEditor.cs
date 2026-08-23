@@ -5,13 +5,19 @@ using UnityEngine;
 
 namespace Serre.EasyCarrySystem.Editor
 {
-    [CustomEditor(typeof(EasyCarrySystemItemReference), true, isFallback = true)]
+    [CustomEditor(typeof(EasyCarrySystemItemReference), true)]
     internal sealed class EasyCarrySystemItemReferenceRuntimeEditor : UnityEditor.Editor
     {
+        private const string AuthoringEditorAssemblyQualifiedName =
+            "Serre.EasyCarrySystem.Editor.EasyCarrySystemItemReferenceAuthoringEditor, " +
+            "Serre.EasyCarrySystem.Authoring.Editor";
+
         private static int activeEditorCount;
         private static bool suppressSelectionChange;
 
         private readonly Dictionary<string, bool> foldouts = new Dictionary<string, bool>();
+        private UnityEditor.Editor authoringEditor;
+        private bool runtimePreviewEnabled;
 
         private void OnEnable()
         {
@@ -31,6 +37,8 @@ namespace Serre.EasyCarrySystem.Editor
 
         private void OnDisable()
         {
+            DestroyAuthoringEditor();
+
             activeEditorCount = Mathf.Max(0, activeEditorCount - 1);
             if (activeEditorCount == 0)
             {
@@ -40,6 +48,24 @@ namespace Serre.EasyCarrySystem.Editor
         }
 
         public override void OnInspectorGUI()
+        {
+            var authoringEditorType = ResolveAuthoringEditorType();
+            if (authoringEditorType != null && !runtimePreviewEnabled)
+            {
+                DrawAuthoringInspector(authoringEditorType);
+            }
+            else
+            {
+                DrawRuntimeInspector();
+            }
+
+            if (authoringEditorType != null)
+            {
+                DrawRuntimePreviewSection();
+            }
+        }
+
+        private void DrawRuntimeInspector()
         {
             var targets = (EasyCarrySystemItemReference)target;
             serializedObject.Update();
@@ -74,6 +100,65 @@ namespace Serre.EasyCarrySystem.Editor
             }
         }
 
+        private static System.Type ResolveAuthoringEditorType()
+        {
+            return System.Type.GetType(AuthoringEditorAssemblyQualifiedName, false);
+        }
+
+        private void DrawAuthoringInspector(System.Type authoringEditorType)
+        {
+            if (authoringEditor == null
+                || authoringEditor.target != target
+                || authoringEditor.GetType() != authoringEditorType)
+            {
+                DestroyAuthoringEditor();
+                authoringEditor = CreateEditor(target, authoringEditorType);
+            }
+
+            if (authoringEditor != null)
+            {
+                authoringEditor.OnInspectorGUI();
+                return;
+            }
+
+            EditorGUILayout.HelpBox("Authoring版Inspectorを生成できませんでした。", MessageType.Error);
+        }
+
+        private void DrawRuntimePreviewSection()
+        {
+            EditorGUILayout.Space(8f);
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            {
+                EasyCarrySystemEditorSharedUtility.DrawSectionHeader("Runtime版プレビュー");
+                EasyCarrySystemEditorSharedUtility.DrawSectionDescription(
+                    "Runtime版のみを導入した環境でのコンポーネント表示を一時的に確認します。");
+
+                var buttonLabel = runtimePreviewEnabled
+                    ? "Authoring版に戻る"
+                    : "Runtime版をプレビュー";
+                if (GUILayout.Button(buttonLabel))
+                {
+                    runtimePreviewEnabled = !runtimePreviewEnabled;
+                    if (runtimePreviewEnabled)
+                    {
+                        DestroyAuthoringEditor();
+                    }
+
+                    GUIUtility.ExitGUI();
+                }
+            }
+        }
+
+        private void DestroyAuthoringEditor()
+        {
+            if (authoringEditor == null)
+            {
+                return;
+            }
+
+            DestroyImmediate(authoringEditor);
+            authoringEditor = null;
+        }
         private void DrawItemCollisionSection(EasyCarrySystemItemReference targets)
         {
             EditorGUILayout.Space(8f);
