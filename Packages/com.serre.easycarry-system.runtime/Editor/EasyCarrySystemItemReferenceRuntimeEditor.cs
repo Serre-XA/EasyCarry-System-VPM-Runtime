@@ -166,9 +166,9 @@ namespace Serre.EasyCarrySystem.Editor
             {
                 EasyCarrySystemEditorSharedUtility.DrawSectionHeader("アイテムの当たり判定");
                 EasyCarrySystemEditorSharedUtility.DrawSectionDescription(
-                    "アイテムを掴める範囲と位置を調整します。");
+                    "アイテムをつかむ範囲の位置と大きさを調整します。");
 
-                DrawReadOnlyReference("対象", targets.CIItemSize);
+                DrawReadOnlyReference("参照オブジェクト", targets.CIItemSize);
                 var editing = targets.CIItemSizeContactEditing;
                 if (DrawEditButton(
                         "当たり判定調整",
@@ -185,7 +185,7 @@ namespace Serre.EasyCarrySystem.Editor
                 }
 
                 EditorGUILayout.Space(3f);
-                DrawTransformFields(targets.CIItemSize);
+                DrawLocalTransformFields(targets.CIItemSize);
                 DrawContactShapeFields(
                     EasyCarrySystemEditorSharedUtility.FindContactComponent(targets.CIItemSize, "ContactSender"));
             }
@@ -396,28 +396,31 @@ namespace Serre.EasyCarrySystem.Editor
                 ?.objectReferenceValue as Transform;
         }
 
-        private static void DrawTransformFields(Transform value)
+        private static void DrawLocalTransformFields(Transform value)
         {
             if (value == null)
             {
                 return;
             }
 
-            EditorGUI.BeginChangeCheck();
-            var localPosition = EditorGUILayout.Vector3Field("Position", value.localPosition);
-            var localRotation = EditorGUILayout.Vector3Field("Rotation", value.localEulerAngles);
-            var localScale = EditorGUILayout.Vector3Field("Scale", value.localScale);
-            if (!EditorGUI.EndChangeCheck())
+            using (new EditorGUI.IndentLevelScope())
             {
-                return;
-            }
+                EditorGUI.BeginChangeCheck();
+                var localPosition = EditorGUILayout.Vector3Field("位置", value.localPosition);
+                var localRotation = EditorGUILayout.Vector3Field(
+                    "回転",
+                    EasyCarrySystemEditorSharedUtility.NormalizeEulerAngles(value.localEulerAngles));
+                if (!EditorGUI.EndChangeCheck())
+                {
+                    return;
+                }
 
-            Undo.RecordObject(value, "Edit EasyCarry System Transform");
-            value.localPosition = localPosition;
-            value.localEulerAngles = localRotation;
-            value.localScale = localScale;
-            PrefabUtility.RecordPrefabInstancePropertyModifications(value);
-            EditorUtility.SetDirty(value);
+                Undo.RecordObject(value, "Edit EasyCarry System Transform");
+                value.localPosition = localPosition;
+                value.localRotation = Quaternion.Euler(localRotation);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(value);
+                EditorUtility.SetDirty(value);
+            }
         }
 
         private static void DrawContactShapeFields(Component contact)
@@ -440,36 +443,39 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(shapeType, new GUIContent("Shape Type"));
-            var shapeName = string.Empty;
-            if (shapeType.propertyType == SerializedPropertyType.Enum)
+            using (new EditorGUI.IndentLevelScope())
             {
-                var displayNames = shapeType.enumDisplayNames;
-                shapeName = displayNames != null && shapeType.enumValueIndex >= 0
-                    && shapeType.enumValueIndex < displayNames.Length
-                    ? displayNames[shapeType.enumValueIndex] : string.Empty;
-            }
-            var isBox = shapeName.Contains("Box") || shapeType.intValue == 2;
-            var isCapsule = shapeName.Contains("Capsule") || shapeType.intValue == 1;
-            if (isBox && size != null)
-            {
-                EditorGUILayout.PropertyField(size, new GUIContent("Size"));
-            }
-            else
-            {
-                EditorGUILayout.PropertyField(radius, new GUIContent("Radius"));
-                if (isCapsule && height != null)
+                EditorGUI.BeginChangeCheck();
+                EditorGUILayout.PropertyField(shapeType, new GUIContent("形状タイプ"));
+                var shapeName = string.Empty;
+                if (shapeType.propertyType == SerializedPropertyType.Enum)
                 {
-                    EditorGUILayout.PropertyField(height, new GUIContent("Height"));
+                    var displayNames = shapeType.enumDisplayNames;
+                    shapeName = displayNames != null && shapeType.enumValueIndex >= 0
+                        && shapeType.enumValueIndex < displayNames.Length
+                        ? displayNames[shapeType.enumValueIndex] : string.Empty;
                 }
-            }
+                var isBox = shapeName.Contains("Box") || shapeType.intValue == 2;
+                var isCapsule = shapeName.Contains("Capsule") || shapeType.intValue == 1;
+                if (isBox && size != null)
+                {
+                    EditorGUILayout.PropertyField(size, new GUIContent("サイズ"));
+                }
+                else
+                {
+                    EditorGUILayout.PropertyField(radius, new GUIContent("半径"));
+                    if (isCapsule && height != null)
+                    {
+                        EditorGUILayout.PropertyField(height, new GUIContent("高さ"));
+                    }
+                }
 
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedContact.ApplyModifiedProperties();
-                PrefabUtility.RecordPrefabInstancePropertyModifications(contact);
-                EditorUtility.SetDirty(contact);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    serializedContact.ApplyModifiedProperties();
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(contact);
+                    EditorUtility.SetDirty(contact);
+                }
             }
         }
 
@@ -478,24 +484,29 @@ namespace Serre.EasyCarrySystem.Editor
             EditorGUILayout.Space(3f);
             if (EasyCarrySystemEditorSharedUtility.UsesBoneProxy(targets, attachPointName))
             {
-                DrawTransformFields(EasyCarrySystemEditorSharedUtility.FindChildRecursive(targets.EasyCarrySystemRoot, attachPointName));
+                EditorGUILayout.LabelField("位置・回転", EditorStyles.boldLabel);
+                DrawLocalTransformFields(
+                    EasyCarrySystemEditorSharedUtility.FindChildRecursive(targets.EasyCarrySystemRoot, attachPointName));
                 return;
             }
 
             var position = targets.GetAttachPointPositionOffset(attachPointName);
             var rotation = targets.GetAttachPointRotationOffset(attachPointName);
-            EditorGUI.BeginChangeCheck();
-            position = EditorGUILayout.Vector3Field("Position Offset", position);
-            rotation = EditorGUILayout.Vector3Field("Rotation Offset", rotation);
-            if (!EditorGUI.EndChangeCheck())
+            using (new EditorGUI.IndentLevelScope())
             {
-                return;
-            }
+                EditorGUI.BeginChangeCheck();
+                position = EditorGUILayout.Vector3Field("位置オフセット", position);
+                rotation = EditorGUILayout.Vector3Field("回転オフセット", rotation);
+                if (!EditorGUI.EndChangeCheck())
+                {
+                    return;
+                }
 
-            Undo.RecordObject(targets, $"Edit {attachPointName} Offset");
-            targets.SetAttachPointOffsets(attachPointName, position, rotation);
-            ApplyConstraintOffset(targets, attachPointName, position, rotation);
-            EditorUtility.SetDirty(targets);
+                Undo.RecordObject(targets, $"Edit {attachPointName} Offset");
+                targets.SetAttachPointOffsets(attachPointName, position, rotation);
+                ApplyConstraintOffset(targets, attachPointName, position, rotation);
+                EditorUtility.SetDirty(targets);
+            }
         }
 
         private static void ToggleItemCollisionEdit(EasyCarrySystemItemReference targets)
@@ -846,7 +857,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return true;
             }
 
-            if (targets.CIItemSizeContactEditing && selected == targets.CIItemSize)
+            if ((targets.CIItemSizeEditing || targets.CIItemSizeContactEditing) && selected == targets.CIItemSize)
             {
                 return true;
             }
@@ -857,6 +868,15 @@ namespace Serre.EasyCarrySystem.Editor
                     && EasyCarrySystemEditorSharedUtility.IsItemContactGroupSelection(targets, false, selected)))
             {
                 return true;
+            }
+
+            foreach (var contactName in EasyCarrySystemEditorSharedUtility.ContactNames)
+            {
+                if (targets.GetContactEditing(contactName)
+                    && selected == targets.GetContactTransform(contactName))
+                {
+                    return true;
+                }
             }
 
             foreach (var attachPointName in EasyCarrySystemEditorSharedUtility.AttachPointNames)
