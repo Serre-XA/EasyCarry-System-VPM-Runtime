@@ -70,7 +70,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameters:
-  - nameOrPrefix: Serre/EasyCarrySystem/Hand/L/InputGrab
+  - nameOrPrefix: EasyCarrySystem/Hand/L/InputGrab
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -80,7 +80,7 @@ MonoBehaviour:
     saved: 0
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: Serre/EasyCarrySystem/Hand/R/InputGrab
+  - nameOrPrefix: EasyCarrySystem/Hand/R/InputGrab
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -90,7 +90,7 @@ MonoBehaviour:
     saved: 0
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: Serre/EasyCarrySystem/Hand/L/InputTriggerPull
+  - nameOrPrefix: EasyCarrySystem/Hand/L/InputTriggerPull
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
     saved: 0
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: Serre/EasyCarrySystem/Hand/R/InputTriggerPull
+  - nameOrPrefix: EasyCarrySystem/Hand/R/InputTriggerPull
     remapTo: 
     internalParameter: 0
     isPrefix: 0

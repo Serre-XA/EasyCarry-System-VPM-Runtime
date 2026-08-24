@@ -396,7 +396,7 @@ MonoBehaviour:
   localOnly: 1
   contentTypes: -1
   collisionTags:
-  - IsGrabbed_R
+  - EasyCarrySystem/Item/R/IsGrabbed
 --- !u!1 &984416703294859457
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,7 +1201,7 @@ MonoBehaviour:
   localOnly: 1
   contentTypes: -1
   collisionTags:
-  - IsGrabbed_L
+  - EasyCarrySystem/Item/L/IsGrabbed
 --- !u!1 &2124836711263273639
 GameObject:
   m_ObjectHideFlags: 0
@@ -2045,7 +2045,7 @@ MonoBehaviour:
   localOnly: 1
   contentTypes: -1
   collisionTags:
-  - GrabBlocked
+  - EasyCarrySystem/Item/GrabBlocked
   allowSelf: 1
   allowOthers: 0
   useFaceProximity: 0
@@ -3229,7 +3229,7 @@ MonoBehaviour:
   localOnly: 1
   contentTypes: -1
   collisionTags:
-  - ForceReturn
+  - EasyCarrySystem/Item/ForceReturn
   allowSelf: 1
   allowOthers: 0
   useFaceProximity: 0
@@ -3500,7 +3500,7 @@ MonoBehaviour:
   localOnly: 1
   contentTypes: -1
   collisionTags:
-  - IsCarried
+  - EasyCarrySystem/Item/IsCarried
 --- !u!1 &7197128916957099816
 GameObject:
   m_ObjectHideFlags: 0

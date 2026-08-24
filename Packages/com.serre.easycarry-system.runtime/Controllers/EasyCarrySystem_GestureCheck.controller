@@ -22,11 +22,11 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 0}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_Tag:
+  m_SpeedParameter:
+  m_MirrorParameter:
+  m_CycleOffsetParameter:
+  m_TimeParameter:
 --- !u!114 &-8325975022788745499
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: Serre/EasyCarrySystem/Hand/L/InputTriggerPull
+    name: EasyCarrySystem/Hand/L/InputTriggerPull
     source: 
     value: 1
     valueMin: 0
@@ -189,7 +189,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureLeft
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: Serre/EasyCarrySystem/Hand/R/InputGrab
+    name: EasyCarrySystem/Hand/R/InputGrab
     source: 
     value: 1
     valueMin: 0
@@ -261,11 +261,11 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 0}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_Tag:
+  m_SpeedParameter:
+  m_MirrorParameter:
+  m_CycleOffsetParameter:
+  m_TimeParameter:
 --- !u!1101 &-6946097031247859257
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -308,7 +308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: Serre/EasyCarrySystem/Hand/R/InputTriggerPull
+    name: EasyCarrySystem/Hand/R/InputTriggerPull
     source: 
     value: 1
     valueMin: 0
@@ -471,7 +471,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureRight
@@ -543,11 +543,11 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 0}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_Tag:
+  m_SpeedParameter:
+  m_MirrorParameter:
+  m_CycleOffsetParameter:
+  m_TimeParameter:
 --- !u!1101 &-4090456367931296107
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -598,11 +598,11 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 0}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_Tag:
+  m_SpeedParameter:
+  m_MirrorParameter:
+  m_CycleOffsetParameter:
+  m_TimeParameter:
 --- !u!1101 &-3039398760310944755
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -612,7 +612,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3454066091279723354}
@@ -873,7 +873,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6133533199991927376}
@@ -939,11 +939,11 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 0}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_Tag:
+  m_SpeedParameter:
+  m_MirrorParameter:
+  m_CycleOffsetParameter:
+  m_TimeParameter:
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -953,246 +953,246 @@ AnimatorController:
   m_Name: EasyCarrySystem_GestureCheck
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: Serre/EasyCarrySystem/Hand/L/InputGrab
+  - m_Name: EasyCarrySystem/Hand/L/InputGrab
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_Controller: {fileID: 0}
+  - m_Name: EasyCarrySystem/Hand/R/InputGrab
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Serre/EasyCarrySystem/Hand/L/InputTriggerPull
+    m_Controller: {fileID: 0}
+  - m_Name: EasyCarrySystem/Hand/L/InputTriggerPull
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Serre/EasyCarrySystem/Hand/R/InputTriggerPull
+    m_Controller: {fileID: 0}
+  - m_Name: EasyCarrySystem/Hand/R/InputTriggerPull
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: GestureLeft
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: GestureLeftWeight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: GestureRight
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: GestureRightWeight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/GrabCheck/Neutral
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/GrabCheck/Fist
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/GrabCheck/HandOpen
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/GrabCheck/FingerPoint
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/GrabCheck/Victory
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/GrabCheck/RockNRoll
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/GrabCheck/HandGun
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/GrabCheck/ThumbsUp
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/GrabCheck/Neutral
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/GrabCheck/Fist
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/GrabCheck/HandOpen
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/GrabCheck/FingerPoint
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/GrabCheck/Victory
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/GrabCheck/RockNRoll
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/GrabCheck/HandGun
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/GrabCheck/ThumbsUp
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/TriggerCheck/Neutral
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/TriggerCheck/Fist
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/TriggerCheck/HandOpen
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/TriggerCheck/FingerPoint
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/TriggerCheck/Victory
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/TriggerCheck/RockNRoll
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/TriggerCheck/HandGun
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/L/TriggerCheck/ThumbsUp
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/TriggerCheck/Neutral
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/TriggerCheck/Fist
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/TriggerCheck/HandOpen
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/TriggerCheck/FingerPoint
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/TriggerCheck/Victory
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/TriggerCheck/RockNRoll
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/TriggerCheck/HandGun
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Hand/R/TriggerCheck/ThumbsUp
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -1421,7 +1421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: Serre/EasyCarrySystem/Hand/L/InputGrab
+    name: EasyCarrySystem/Hand/L/InputGrab
     source: 
     value: 0
     valueMin: 0
@@ -1457,11 +1457,11 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 0}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_Tag:
+  m_SpeedParameter:
+  m_MirrorParameter:
+  m_CycleOffsetParameter:
+  m_TimeParameter:
 --- !u!114 &4047687351070126525
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1476,7 +1476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: Serre/EasyCarrySystem/Hand/L/InputGrab
+    name: EasyCarrySystem/Hand/L/InputGrab
     source: 
     value: 1
     valueMin: 0
@@ -1532,7 +1532,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: Serre/EasyCarrySystem/Hand/R/InputGrab
+    name: EasyCarrySystem/Hand/R/InputGrab
     source: 
     value: 0
     valueMin: 0
@@ -1568,11 +1568,11 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 0}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_Tag:
+  m_SpeedParameter:
+  m_MirrorParameter:
+  m_CycleOffsetParameter:
+  m_TimeParameter:
 --- !u!1101 &4798096308000748792
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1757,11 +1757,11 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 0}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_Tag:
+  m_SpeedParameter:
+  m_MirrorParameter:
+  m_CycleOffsetParameter:
+  m_TimeParameter:
 --- !u!1101 &6297198242006525577
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -2009,7 +2009,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureLeft
@@ -2068,7 +2068,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureLeft
@@ -2127,7 +2127,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureLeft
@@ -2186,7 +2186,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureLeft
@@ -2245,7 +2245,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureLeft
@@ -2304,7 +2304,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureLeft
@@ -2363,7 +2363,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureLeft
@@ -2422,7 +2422,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureRight
@@ -2481,7 +2481,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureRight
@@ -2540,7 +2540,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureRight
@@ -2599,7 +2599,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureRight
@@ -2658,7 +2658,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureRight
@@ -2717,7 +2717,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureRight
@@ -2776,7 +2776,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Serre/EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: GestureRight
@@ -2812,7 +2812,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: Serre/EasyCarrySystem/Hand/L/InputTriggerPull
+    name: EasyCarrySystem/Hand/L/InputTriggerPull
     source: 
     value: 0
     valueMin: 0
@@ -2840,7 +2840,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: Serre/EasyCarrySystem/Hand/R/InputTriggerPull
+    name: EasyCarrySystem/Hand/R/InputTriggerPull
     source: 
     value: 0
     valueMin: 0
