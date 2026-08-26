@@ -30,7 +30,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            if (RejectSetupInsideEasyCarrySystem(itemObject))
+            if (RejectSetupInProtectedHierarchy(itemObject))
             {
                 return;
             }
@@ -63,7 +63,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            if (RejectSetupInsideEasyCarrySystem(itemObject))
+            if (RejectSetupInProtectedHierarchy(itemObject))
             {
                 return;
             }
@@ -163,7 +163,19 @@ namespace Serre.EasyCarrySystem.Editor
             return;
 #endif
 
-            EasyCarrySystemGestureCheckerEditorUtility.EnsureFor(itemReference);
+            var gestureSettings =
+                EasyCarrySystemGestureCheckerEditorUtility.FindSettingsFor(itemReference);
+            if (gestureSettings == null
+                || !EasyCarrySystemGestureCheckerEditorUtility.ApplyParameterDefaults(gestureSettings))
+            {
+                Debug.LogError(
+                    "EasyCarry System内の握り判定設定またはMA Parametersが正しくありません。Prefab構成を確認してください。",
+                    instanceObject);
+                Undo.RevertAllDownToGroup(undoGroup);
+                return;
+            }
+
+            EasyCarrySystemGestureCheckerEditorUtility.EnsureMenuRootFor(itemReference);
             Undo.CollapseUndoOperations(undoGroup);
             Selection.activeObject = itemObject;
         }
@@ -291,11 +303,28 @@ namespace Serre.EasyCarrySystem.Editor
             return targets.CISlot >= 0 && targets.CISlot < SlotCount ? targets.CISlot : -1;
         }
 
-        private static bool RejectSetupInsideEasyCarrySystem(GameObject itemObject)
+        private static bool RejectSetupInProtectedHierarchy(GameObject itemObject)
         {
+            if (itemObject != null
+                && EasyCarrySystemGestureCheckerEditorUtility.IsMenuRootHierarchy(itemObject.transform))
+            {
+                Debug.LogWarning(
+                    "EasyCarry System Setupを中止しました。共有メニューとその子階層にはSetupできません。",
+                    itemObject);
+                return true;
+            }
+
             var current = itemObject != null ? itemObject.transform : null;
             while (current != null)
             {
+                if (current.GetComponent<EasyCarrySystemGestureSettings>() != null)
+                {
+                    Debug.LogWarning(
+                        "EasyCarry System Setupを中止しました。握り判定用の内部オブジェクトとその子階層にはSetupできません。",
+                        itemObject);
+                    return true;
+                }
+
                 var itemReference = current.GetComponent<EasyCarrySystemItemReference>();
                 if (itemReference != null
                     && (current.gameObject != itemObject || itemReference.GeneratedEasyCarrySystem != null))

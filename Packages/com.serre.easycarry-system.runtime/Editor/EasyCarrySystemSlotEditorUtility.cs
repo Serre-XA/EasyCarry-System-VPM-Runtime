@@ -400,6 +400,14 @@ namespace Serre.EasyCarrySystem.Editor
                 }
             }
 
+            var gestureSettings =
+                EasyCarrySystemGestureCheckerEditorUtility.FindSettingsFor(targets);
+            if (gestureSettings != null)
+            {
+                snapshot.LeftHandGrabGestures = gestureSettings.LeftHandGrabGestures;
+                snapshot.RightHandGrabGestures = gestureSettings.RightHandGrabGestures;
+            }
+
             CaptureOptionDefaults(targets, snapshot);
             return snapshot;
         }
@@ -457,6 +465,10 @@ namespace Serre.EasyCarrySystem.Editor
 
             serializedTargets.ApplyModifiedPropertiesWithoutUndo();
             RestoreOptionDefaults(targets, snapshot);
+            EasyCarrySystemGestureCheckerEditorUtility.ApplyStoredGestureSettings(
+                EasyCarrySystemGestureCheckerEditorUtility.FindSettingsFor(targets),
+                snapshot.LeftHandGrabGestures,
+                snapshot.RightHandGrabGestures);
 
             var mainConstraint = FindParentConstraint(FindChildRecursive(targets.EasyCarrySystemRoot, "CI_MainConst"));
             if (mainConstraint != null)

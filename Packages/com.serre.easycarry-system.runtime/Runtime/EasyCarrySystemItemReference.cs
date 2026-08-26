@@ -58,6 +58,8 @@ namespace Serre.EasyCarrySystem
         public float[] MainWeights = new float[MainWeightCount];
         public bool[] HideWhenAttachedDefaults = new bool[NumberedAttachPointCount];
         public bool WorldFixedDefault;
+        public EasyCarrySystemGestureMask LeftHandGrabGestures = EasyCarrySystemGestureSettings.DefaultGrabGestures;
+        public EasyCarrySystemGestureMask RightHandGrabGestures = EasyCarrySystemGestureSettings.DefaultGrabGestures;
 
         public void EnsureInitialized()
         {

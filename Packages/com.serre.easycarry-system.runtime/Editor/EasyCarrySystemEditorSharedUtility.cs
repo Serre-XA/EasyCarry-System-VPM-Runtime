@@ -203,37 +203,37 @@ namespace Serre.EasyCarrySystem.Editor
             EditorGUILayout.Space(2f);
         }
 
-        internal static void DrawMissingGestureCheckerSection(EasyCarrySystemItemReference targets)
+        internal static void DrawMissingMenuRootSection(EasyCarrySystemItemReference targets)
         {
-            if (targets == null || EasyCarrySystemGestureCheckerEditorUtility.FindFor(targets) != null)
+            if (targets == null
+                || EasyCarrySystemGestureCheckerEditorUtility.FindMenuRootFor(targets) != null)
             {
                 return;
             }
 
             EditorGUILayout.HelpBox(
-                "このアバターに共有 GestureChecker がありません。ビルド前に生成してください。",
+                "このアバターにEasyCarry Systemの共有メニューがありません。ビルド前に生成してください。",
                 MessageType.Warning);
             using (new HorizontalMarginScope())
             {
-                if (!GUILayout.Button("GestureCheckerを生成"))
+                if (!GUILayout.Button("共有メニューを生成"))
                 {
                     return;
                 }
 
-                var settings = EasyCarrySystemGestureCheckerEditorUtility.EnsureFor(targets);
-                if (settings == null)
+                var menuRoot = EasyCarrySystemGestureCheckerEditorUtility.EnsureMenuRootFor(targets);
+                if (menuRoot == null)
                 {
-                    Debug.LogError("共有 GestureCheckerを生成できませんでした。", targets);
+                    Debug.LogError("EasyCarry Systemの共有メニューを生成できませんでした。", targets);
                 }
                 else
                 {
-                    Debug.Log("共有 GestureCheckerを生成しました。", settings);
+                    Debug.Log("EasyCarry Systemの共有メニューを生成しました。", menuRoot);
                 }
 
                 GUIUtility.ExitGUI();
             }
-        }
-        private static void ApplyComponentIcon()
+        }        private static void ApplyComponentIcon()
         {
             if (componentIconApplied || EditorApplication.timeSinceStartup < nextComponentIconLoadTime)
             {

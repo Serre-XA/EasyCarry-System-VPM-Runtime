@@ -23,26 +23,17 @@ namespace Serre.EasyCarrySystem.Editor
             var targets = avatarGameObject.GetComponentsInChildren<EasyCarrySystemItemReference>(true);
             if (targets.Length == 0)
             {
-                var orphanedGestureSettings = avatarGameObject.GetComponentsInChildren<EasyCarrySystemGestureSettings>(true);
-                foreach (var settings in orphanedGestureSettings)
-                {
-                    if (settings != null)
-                    {
-                        Object.DestroyImmediate(settings.gameObject);
-                    }
-                }
-
                 return true;
             }
 
-            if (!EasyCarrySystemGestureCheckerEditorUtility.ValidateForAvatar(avatarGameObject, targets.Length))
+            if (!EasyCarrySystemGestureCheckerEditorUtility.ValidateMenuRootForAvatar(avatarGameObject, targets.Length))
             {
                 if (!Application.isBatchMode)
                 {
                     EditorUtility.DisplayDialog(
                         "EasyCarry System ビルドエラー",
-                        "共有 GestureChecker が見つからないか、複数存在しています。\n"
-                        + "アバター直下に1つだけ生成してから、再度ビルドしてください。",
+                        "EasyCarry Systemの共有メニューが見つからないか、複数存在しています。\n"
+                        + "アバター直下に共有メニューを1つだけ生成してから、再度ビルドしてください。",
                         "OK");
                 }
 
@@ -59,6 +50,26 @@ namespace Serre.EasyCarrySystem.Editor
                 if (target != null)
                 {
                     EasyCarrySystemSlotEditorUtility.ApplyStoredSettings(target, true);
+                    var itemGestureSettings =
+                        EasyCarrySystemGestureCheckerEditorUtility.FindSettingsFor(target);
+                    if (itemGestureSettings == null
+                        || !EasyCarrySystemGestureCheckerEditorUtility.ApplyParameterDefaults(
+                            itemGestureSettings))
+                    {
+                        var message =
+                            $"{target.name} の握り判定設定またはMA Parametersが正しくありません。";
+                        Debug.LogError(message, target);
+                        if (!Application.isBatchMode)
+                        {
+                            EditorUtility.DisplayDialog(
+                                "EasyCarry System ビルドエラー",
+                                message,
+                                "OK");
+                        }
+
+                        return false;
+                    }
+
                     EasyCarrySystemEditorSharedUtility.SetMainConstraintSourceWeights(
                         target.EasyCarrySystemRoot,
                         "AP_00",

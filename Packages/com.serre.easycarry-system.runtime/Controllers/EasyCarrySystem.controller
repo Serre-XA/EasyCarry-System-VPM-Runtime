@@ -390,7 +390,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/00/OtherItemDetected
@@ -1162,7 +1162,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/L/ItemDetected
@@ -1367,7 +1367,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/05/OtherItemDetected
@@ -1943,7 +1943,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/06/OtherItemDetected
@@ -2087,7 +2087,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/03/OtherItemDetected
@@ -2143,7 +2143,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/R/ItemAttached
@@ -2370,7 +2370,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/03/OtherItemDetected
@@ -2640,7 +2640,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/L/ItemAttached
@@ -3268,7 +3268,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/02/OtherItemDetected
@@ -3547,7 +3547,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/R/ItemDetected
@@ -3902,13 +3902,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 1
     m_Controller: {fileID: 0}
-  - m_Name: EasyCarrySystem/Hand/R/InputGrab
+  - m_Name: Hand/R/InputGrab
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: EasyCarrySystem/Hand/L/InputGrab
+  - m_Name: Hand/L/InputGrab
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -4308,7 +4308,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/04/OtherItemDetected
@@ -4606,7 +4606,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/L/ItemDetected
@@ -4677,7 +4677,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/R/ItemDetected
@@ -4711,7 +4711,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/00/OtherItemDetected
@@ -4984,7 +4984,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/L/ItemDetected
@@ -5154,7 +5154,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/R/ItemAttached
@@ -5212,7 +5212,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/L/ItemDetected
@@ -5243,7 +5243,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/04/OtherItemDetected
@@ -5769,10 +5769,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -3094204394717323870}
-    m_Position: {x: 400, y: 100, z: 0}
+    m_Position: {x: 300, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5133182589590112172}
-    m_Position: {x: 400, y: 0, z: 0}
+    m_Position: {x: 300, y: 0, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -6115,7 +6115,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/01/OtherItemDetected
@@ -6290,7 +6290,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/06/OtherItemDetected
@@ -6720,7 +6720,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/R/ItemDetected
@@ -6760,7 +6760,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/L/ItemDetected
@@ -6816,7 +6816,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/01/OtherItemDetected
@@ -6871,7 +6871,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/L/ItemAttached
@@ -7022,7 +7022,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/R/ItemDetected
@@ -7410,7 +7410,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Hand/R/ItemDetected
@@ -7504,7 +7504,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/L/InputGrab
+    m_ConditionEvent: Hand/L/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/02/OtherItemDetected
@@ -7532,7 +7532,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: EasyCarrySystem/Hand/R/InputGrab
+    m_ConditionEvent: Hand/R/InputGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: AttachPoint/05/OtherItemDetected

@@ -16,16 +16,17 @@ namespace Serre.EasyCarrySystem.Editor
                 return true;
             }
 
-            var missingTargets = EasyCarrySystemGestureCheckerEditorUtility.FindMissingForLoadedAvatars();
+            var missingTargets =
+                EasyCarrySystemGestureCheckerEditorUtility.FindMissingMenuRootsForLoadedAvatars();
             if (missingTargets.Count == 0)
             {
                 return true;
             }
 
             var message = missingTargets.Count == 1
-                ? $"{EasyCarrySystemGestureCheckerEditorUtility.GetAvatarName(missingTargets[0])} に共有 GestureChecker がありません。\n\n"
+                ? $"{EasyCarrySystemGestureCheckerEditorUtility.GetAvatarName(missingTargets[0])} にEasyCarry Systemの共有メニューがありません。\\n\\n"
                     + "ビルド開始前に生成してもよいですか？"
-                : $"EasyCarry Systemを使用している {missingTargets.Count} 体のアバターに共有 GestureChecker がありません。\n\n"
+                : $"EasyCarry Systemを使用している {missingTargets.Count} 体のアバターに共有メニューがありません。\\n\\n"
                     + "ビルド開始前に生成してもよいですか？";
 
             if (Application.isBatchMode
@@ -36,27 +37,29 @@ namespace Serre.EasyCarrySystem.Editor
                     "ビルドを中止"))
             {
                 Debug.LogError(
-                    "GestureChecker がないため、EasyCarry Systemのビルドを中止しました。",
+                    "共有メニューがないため、EasyCarry Systemのビルドを中止しました。",
                     missingTargets[0]);
                 return false;
             }
 
             foreach (var targets in missingTargets)
             {
-                var settings = EasyCarrySystemGestureCheckerEditorUtility.EnsureFor(targets);
-                if (settings != null
-                    && EasyCarrySystemGestureCheckerEditorUtility.FindFor(targets) != null)
+                var menuRoot =
+                    EasyCarrySystemGestureCheckerEditorUtility.EnsureMenuRootFor(targets);
+                if (menuRoot != null
+                    && EasyCarrySystemGestureCheckerEditorUtility.FindMenuRootFor(targets) != null)
                 {
                     continue;
                 }
 
                 Debug.LogError(
-                    "GestureCheckerを生成できなかったため、EasyCarry Systemのビルドを中止しました。",
+                    "共有メニューを生成できなかったため、EasyCarry Systemのビルドを中止しました。",
                     targets);
                 return false;
             }
 
-            Debug.Log("共有 GestureCheckerを生成しました。ビルドを続行します。", missingTargets[0]);
+            Debug.Log("EasyCarry Systemの共有メニューを生成しました。ビルドを続行します。",
+                missingTargets[0]);
             return true;
         }
     }

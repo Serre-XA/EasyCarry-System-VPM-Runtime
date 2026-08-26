@@ -11,9 +11,10 @@ namespace Serre.EasyCarrySystem.Editor
 {
     internal static class EasyCarrySystemGestureCheckerEditorUtility
     {
-        private const string GestureCheckerPrefabRelativePath =
-            "Prefabs/Base/EasyCarrySystem_GestureChecker.prefab";
-        private const string GestureCheckerObjectName = "EasyCarrySystem_GestureChecker";
+        private const string MenuRootPrefabRelativePath =
+            "Prefabs/Base/EasyCarrySystem_Menu_Root.prefab";
+        private const string MenuRootObjectName = "EasyCarrySystem_Menu_Root";
+
         private static readonly EasyCarrySystemGestureMask[] GestureValues =
         {
             EasyCarrySystemGestureMask.Neutral,
@@ -37,13 +38,23 @@ namespace Serre.EasyCarrySystem.Editor
             "HandGun",
             "ThumbsUp",
         };
-        internal static EasyCarrySystemGestureSettings FindFor(EasyCarrySystemItemReference targets)
+
+        internal static EasyCarrySystemGestureSettings FindSettingsFor(
+            EasyCarrySystemItemReference targets)
         {
-            var avatarRoot = ResolveAvatarRoot(targets != null ? targets.transform : null);
-            return FindDirectChildSettings(avatarRoot);
+            return targets != null && targets.GeneratedEasyCarrySystem != null
+                ? targets.GeneratedEasyCarrySystem
+                    .GetComponentInChildren<EasyCarrySystemGestureSettings>(true)
+                : null;
         }
 
-        internal static List<EasyCarrySystemItemReference> FindMissingForLoadedAvatars()
+        internal static GameObject FindMenuRootFor(EasyCarrySystemItemReference targets)
+        {
+            var avatarRoot = ResolveAvatarRoot(targets != null ? targets.transform : null);
+            return FindDirectMenuRoot(avatarRoot);
+        }
+
+        internal static List<EasyCarrySystemItemReference> FindMissingMenuRootsForLoadedAvatars()
         {
             var results = new List<EasyCarrySystemItemReference>();
             var avatarRootIds = new HashSet<int>();
@@ -57,7 +68,7 @@ namespace Serre.EasyCarrySystem.Editor
 
                 var avatarRoot = ResolveAvatarRoot(targets.transform);
                 if (avatarRoot == null || !avatarRootIds.Add(avatarRoot.GetInstanceID())
-                    || FindFor(targets) != null)
+                    || FindDirectMenuRoot(avatarRoot) != null)
                 {
                     continue;
                 }
@@ -73,7 +84,8 @@ namespace Serre.EasyCarrySystem.Editor
             var avatarRoot = ResolveAvatarRoot(targets != null ? targets.transform : null);
             return avatarRoot != null ? avatarRoot.name : "アバター";
         }
-        internal static EasyCarrySystemGestureSettings EnsureFor(EasyCarrySystemItemReference targets)
+
+        internal static GameObject EnsureMenuRootFor(EasyCarrySystemItemReference targets)
         {
             if (targets == null || Application.isPlaying || EditorUtility.IsPersistent(targets)
                 || !targets.gameObject.scene.IsValid())
@@ -87,52 +99,94 @@ namespace Serre.EasyCarrySystem.Editor
                 return null;
             }
 
-            var settings = FindDirectChildSettings(avatarRoot);
-            if (settings != null)
+            var existingMenuRoot = FindDirectMenuRoot(avatarRoot);
+            if (existingMenuRoot != null)
             {
-                return settings;
+                return existingMenuRoot;
             }
 
-            var existingChecker = FindDirectChildChecker(avatarRoot);
-            if (existingChecker != null)
-            {
-                settings = Undo.AddComponent<EasyCarrySystemGestureSettings>(existingChecker);
-                ApplyParameterDefaults(settings);
-                EditorUtility.SetDirty(existingChecker);
-                return settings;
-            }
-
-            var gestureCheckerPrefabPath =
-                EasyCarrySystemAssetLocator.GetAssetPath(GestureCheckerPrefabRelativePath);
-            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(gestureCheckerPrefabPath);
+            var prefabPath = EasyCarrySystemAssetLocator.GetAssetPath(MenuRootPrefabRelativePath);
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (prefab == null)
             {
-                Debug.LogError($"GestureChecker prefab was not found: {gestureCheckerPrefabPath}", targets);
+                Debug.LogError($"EasyCarry System menu root prefab was not found: {prefabPath}", targets);
                 return null;
             }
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, avatarRoot) as GameObject;
             if (instance == null)
             {
-                Debug.LogError("Failed to instantiate the shared GestureChecker prefab.", targets);
+                Debug.LogError("Failed to instantiate the shared EasyCarry System menu root.", targets);
                 return null;
             }
 
-            Undo.RegisterCreatedObjectUndo(instance, "Create Shared GestureChecker");
-            instance.name = GestureCheckerObjectName;
+            Undo.RegisterCreatedObjectUndo(instance, "Create EasyCarry System Menu Root");
+            instance.name = MenuRootObjectName;
             instance.transform.localPosition = Vector3.zero;
             instance.transform.localRotation = Quaternion.identity;
             instance.transform.localScale = Vector3.one;
+            EditorUtility.SetDirty(instance);
+            return instance;
+        }
 
-            settings = instance.GetComponent<EasyCarrySystemGestureSettings>();
-            if (settings == null)
+        internal static bool ValidateMenuRootForAvatar(
+            GameObject avatarGameObject,
+            int easyCarrySystemCount)
+        {
+            if (avatarGameObject == null || easyCarrySystemCount <= 0)
             {
-                settings = Undo.AddComponent<EasyCarrySystemGestureSettings>(instance);
+                return true;
             }
 
-            ApplyParameterDefaults(settings);
-            EditorUtility.SetDirty(instance);
-            return settings;
+            var menuRootCount = CountDirectMenuRoots(avatarGameObject.transform);
+            if (menuRootCount == 1)
+            {
+                return true;
+            }
+
+            Debug.LogError(
+                menuRootCount == 0
+                    ? "EasyCarry System is present, but the shared menu root was not found."
+                    : "Multiple shared EasyCarry System menu roots were found. Keep exactly one directly under the avatar root.",
+                avatarGameObject);
+            return false;
+        }
+
+        internal static bool IsMenuRootHierarchy(Transform source)
+        {
+            var current = source;
+            while (current != null)
+            {
+                if (IsMenuRoot(current.gameObject))
+                {
+                    return true;
+                }
+
+                current = current.parent;
+            }
+
+            return false;
+        }
+
+
+        internal static bool ApplyStoredGestureSettings(
+            EasyCarrySystemGestureSettings settings,
+            EasyCarrySystemGestureMask leftHandGestures,
+            EasyCarrySystemGestureMask rightHandGestures)
+        {
+            if (settings == null)
+            {
+                return false;
+            }
+
+            var serializedSettings = new SerializedObject(settings);
+            serializedSettings.Update();
+            serializedSettings.FindProperty("leftHandGrabGestures").intValue = (int)leftHandGestures;
+            serializedSettings.FindProperty("rightHandGrabGestures").intValue = (int)rightHandGestures;
+            serializedSettings.ApplyModifiedPropertiesWithoutUndo();
+            PrefabUtility.RecordPrefabInstancePropertyModifications(settings);
+            EditorUtility.SetDirty(settings);
+            return ApplyParameterDefaults(settings);
         }
 
         internal static bool ApplyParameterDefaults(EasyCarrySystemGestureSettings settings)
@@ -142,7 +196,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return false;
             }
 
-            var parametersComponent = settings.GetComponent<ModularAvatarParameters>();
+            var parametersComponent = settings.GetComponentInParent<ModularAvatarParameters>();
             if (parametersComponent == null || parametersComponent.parameters == null)
             {
                 return false;
@@ -153,29 +207,13 @@ namespace Serre.EasyCarrySystem.Editor
             ApplyHandParameterDefaults(
                 parametersComponent,
                 "L",
-                "GrabCheck",
                 settings.LeftHandGrabGestures,
                 ref allParametersFound,
                 ref undoRecorded);
             ApplyHandParameterDefaults(
                 parametersComponent,
                 "R",
-                "GrabCheck",
                 settings.RightHandGrabGestures,
-                ref allParametersFound,
-                ref undoRecorded);
-            ApplyHandParameterDefaults(
-                parametersComponent,
-                "L",
-                "TriggerCheck",
-                settings.LeftHandTriggerPullGestures,
-                ref allParametersFound,
-                ref undoRecorded);
-            ApplyHandParameterDefaults(
-                parametersComponent,
-                "R",
-                "TriggerCheck",
-                settings.RightHandTriggerPullGestures,
                 ref allParametersFound,
                 ref undoRecorded);
 
@@ -199,7 +237,8 @@ namespace Serre.EasyCarrySystem.Editor
 
             EditorGUI.BeginChangeCheck();
             var currentValue = (EasyCarrySystemGestureMask)property.intValue;
-            var nextValue = (EasyCarrySystemGestureMask)EditorGUILayout.EnumFlagsField(label, currentValue);
+            var nextValue =
+                (EasyCarrySystemGestureMask)EditorGUILayout.EnumFlagsField(label, currentValue);
             if (EditorGUI.EndChangeCheck())
             {
                 property.intValue = (int)nextValue;
@@ -208,40 +247,69 @@ namespace Serre.EasyCarrySystem.Editor
             EditorGUI.showMixedValue = previousShowMixedValue;
         }
 
-        private static void DrawCombinedResetButton(
-            SerializedProperty grabProperty,
-            SerializedProperty triggerProperty,
-            SerializedProperty otherGrabProperty = null,
-            SerializedProperty otherTriggerProperty = null)
+        internal static void DrawHandSettingsFields(SerializedObject serializedSettings, bool leftHand)
         {
-            var grabDefault = (int)EasyCarrySystemGestureSettings.DefaultGrabGestures;
-            var triggerDefault = (int)EasyCarrySystemGestureSettings.DefaultTriggerPullGestures;
-            var isDefault = IsDefaultValue(grabProperty, grabDefault)
-                && IsDefaultValue(triggerProperty, triggerDefault)
-                && (otherGrabProperty == null || IsDefaultValue(otherGrabProperty, grabDefault))
-                && (otherTriggerProperty == null || IsDefaultValue(otherTriggerProperty, triggerDefault));
+            var handLabel = leftHand ? "左手" : "右手";
+            var otherHandLabel = leftHand ? "右手" : "左手";
+            var grabProperty = serializedSettings.FindProperty(
+                leftHand ? "leftHandGrabGestures" : "rightHandGrabGestures");
+            var otherGrabProperty = serializedSettings.FindProperty(
+                leftHand ? "rightHandGrabGestures" : "leftHandGrabGestures");
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("握り判定", EditorStyles.boldLabel);
+                if (GUILayout.Button(
+                        new GUIContent(
+                            $"{otherHandLabel}にジェスチャー設定をコピー",
+                            $"{handLabel}の握り判定設定を{otherHandLabel}へコピーします。"),
+                        GUILayout.ExpandWidth(false)))
+                {
+                    otherGrabProperty.intValue = grabProperty.intValue;
+                }
+            }
+
+            DrawGestureMaskField(grabProperty, new GUIContent(handLabel));
+
+            EditorGUILayout.Space(6f);
+            DrawResetButton(grabProperty);
+        }
+
+        internal static void DrawSettingsFields(SerializedObject serializedSettings)
+        {
+            var leftGrabProperty = serializedSettings.FindProperty("leftHandGrabGestures");
+            var rightGrabProperty = serializedSettings.FindProperty("rightHandGrabGestures");
+
+            EditorGUILayout.LabelField("握り判定", EditorStyles.boldLabel);
+            DrawGestureMaskField(leftGrabProperty, new GUIContent("左手"));
+            DrawGestureMaskField(rightGrabProperty, new GUIContent("右手"));
+
+            EditorGUILayout.Space(6f);
+            DrawResetButton(leftGrabProperty, rightGrabProperty);
+        }
+
+        private static void DrawResetButton(
+            SerializedProperty grabProperty,
+            SerializedProperty otherGrabProperty = null)
+        {
+            var defaultValue = (int)EasyCarrySystemGestureSettings.DefaultGrabGestures;
+            var isDefault = IsDefaultValue(grabProperty, defaultValue)
+                && (otherGrabProperty == null || IsDefaultValue(otherGrabProperty, defaultValue));
 
             using (new EditorGUI.DisabledScope(isDefault))
             {
-                if (!GUILayout.Button(
-                        new GUIContent(
-                            "\u65e2\u5b9a\u5024\u306b\u30ea\u30bb\u30c3\u30c8",
-                            "\u63e1\u308a\u5224\u5b9a\u3092 Fist / FingerPoint / HandGun / ThumbsUp\u3001\u30c8\u30ea\u30ac\u30fc\u30d7\u30eb\u5224\u5b9a\u3092 Fist / ThumbsUp \u306b\u623b\u3057\u307e\u3059\u3002")))
+                if (!GUILayout.Button(new GUIContent(
+                        "既定値にリセット",
+                        "握り判定を Fist / FingerPoint / HandGun / ThumbsUp に戻します。")))
                 {
                     return;
                 }
             }
 
-            grabProperty.intValue = grabDefault;
-            triggerProperty.intValue = triggerDefault;
+            grabProperty.intValue = defaultValue;
             if (otherGrabProperty != null)
             {
-                otherGrabProperty.intValue = grabDefault;
-            }
-
-            if (otherTriggerProperty != null)
-            {
-                otherTriggerProperty.intValue = triggerDefault;
+                otherGrabProperty.intValue = defaultValue;
             }
         }
 
@@ -252,60 +320,16 @@ namespace Serre.EasyCarrySystem.Editor
                 && property.intValue == defaultValue;
         }
 
-        internal static void DrawHandSettingsFields(SerializedObject serializedSettings, bool leftHand)
-        {
-            var handLabel = leftHand ? "\u5de6\u624b" : "\u53f3\u624b";
-            var grabProperty = serializedSettings.FindProperty(
-                leftHand ? "leftHandGrabGestures" : "rightHandGrabGestures");
-            var triggerProperty = serializedSettings.FindProperty(
-                leftHand ? "leftHandTriggerPullGestures" : "rightHandTriggerPullGestures");
-
-            EditorGUILayout.LabelField("\u63e1\u308a\u5224\u5b9a", EditorStyles.boldLabel);
-            DrawGestureMaskField(grabProperty, new GUIContent(handLabel));
-
-            EditorGUILayout.Space(6f);
-            EditorGUILayout.LabelField("\u30c8\u30ea\u30ac\u30fc\u30d7\u30eb\u5224\u5b9a", EditorStyles.boldLabel);
-            DrawGestureMaskField(triggerProperty, new GUIContent(handLabel));
-
-            EditorGUILayout.Space(6f);
-            DrawCombinedResetButton(grabProperty, triggerProperty);
-        }
-
-        internal static void DrawSettingsFields(SerializedObject serializedSettings)
-        {
-            var leftGrabProperty = serializedSettings.FindProperty("leftHandGrabGestures");
-            var rightGrabProperty = serializedSettings.FindProperty("rightHandGrabGestures");
-            var leftTriggerProperty = serializedSettings.FindProperty("leftHandTriggerPullGestures");
-            var rightTriggerProperty = serializedSettings.FindProperty("rightHandTriggerPullGestures");
-
-            EditorGUILayout.LabelField("\u63e1\u308a\u5224\u5b9a", EditorStyles.boldLabel);
-            DrawGestureMaskField(leftGrabProperty, new GUIContent("\u5de6\u624b"));
-            DrawGestureMaskField(rightGrabProperty, new GUIContent("\u53f3\u624b"));
-
-            EditorGUILayout.Space(6f);
-            EditorGUILayout.LabelField("\u30c8\u30ea\u30ac\u30fc\u30d7\u30eb\u5224\u5b9a", EditorStyles.boldLabel);
-            DrawGestureMaskField(leftTriggerProperty, new GUIContent("\u5de6\u624b"));
-            DrawGestureMaskField(rightTriggerProperty, new GUIContent("\u53f3\u624b"));
-
-            EditorGUILayout.Space(6f);
-            DrawCombinedResetButton(
-                leftGrabProperty,
-                leftTriggerProperty,
-                rightGrabProperty,
-                rightTriggerProperty);
-        }
-
         private static void ApplyHandParameterDefaults(
             ModularAvatarParameters parametersComponent,
             string hand,
-            string checkName,
             EasyCarrySystemGestureMask enabledGestures,
             ref bool allParametersFound,
             ref bool undoRecorded)
         {
             for (var gestureIndex = 0; gestureIndex < GestureValues.Length; gestureIndex++)
             {
-                var parameterName = $"Hand/{hand}/{checkName}/{GestureNames[gestureIndex]}";
+                var parameterName = $"Hand/{hand}/GrabCheck/{GestureNames[gestureIndex]}";
                 var parameterFound = false;
                 for (var parameterIndex = 0;
                      parameterIndex < parametersComponent.parameters.Count;
@@ -328,7 +352,7 @@ namespace Serre.EasyCarrySystem.Editor
 
                     if (!undoRecorded)
                     {
-                        Undo.RecordObject(parametersComponent, "Set Gesture Check Defaults");
+                        Undo.RecordObject(parametersComponent, "Set Grab Check Defaults");
                         undoRecorded = true;
                     }
 
@@ -345,37 +369,7 @@ namespace Serre.EasyCarrySystem.Editor
             }
         }
 
-        internal static bool ValidateForAvatar(GameObject avatarGameObject, int easyCarrySystemCount)
-        {
-            if (avatarGameObject == null || easyCarrySystemCount <= 0)
-            {
-                return true;
-            }
-
-            var settingsCount = 0;
-            for (var childIndex = 0; childIndex < avatarGameObject.transform.childCount; childIndex++)
-            {
-                var child = avatarGameObject.transform.GetChild(childIndex);
-                if (child.GetComponent<EasyCarrySystemGestureSettings>() != null)
-                {
-                    settingsCount++;
-                }
-            }
-
-            if (settingsCount == 1)
-            {
-                return true;
-            }
-
-            Debug.LogError(
-                settingsCount == 0
-                    ? "EasyCarry System is present, but the shared GestureChecker was not found. Select an EasyCarry System item once to repair it before building."
-                    : "Multiple shared GestureChecker objects were found. Keep exactly one GestureChecker directly under the avatar root.",
-                avatarGameObject);
-            return false;
-        }
-
-        private static EasyCarrySystemGestureSettings FindDirectChildSettings(Transform avatarRoot)
+        private static GameObject FindDirectMenuRoot(Transform avatarRoot)
         {
             if (avatarRoot == null)
             {
@@ -384,41 +378,47 @@ namespace Serre.EasyCarrySystem.Editor
 
             for (var childIndex = 0; childIndex < avatarRoot.childCount; childIndex++)
             {
-                var settings = avatarRoot.GetChild(childIndex).GetComponent<EasyCarrySystemGestureSettings>();
-                if (settings != null)
+                var childObject = avatarRoot.GetChild(childIndex).gameObject;
+                if (IsMenuRoot(childObject))
                 {
-                    return settings;
+                    return childObject;
                 }
             }
 
             return null;
         }
 
-        private static GameObject FindDirectChildChecker(Transform avatarRoot)
+        private static int CountDirectMenuRoots(Transform avatarRoot)
         {
             if (avatarRoot == null)
             {
-                return null;
+                return 0;
             }
 
-            var gestureCheckerPrefabPath =
-                EasyCarrySystemAssetLocator.GetAssetPath(GestureCheckerPrefabRelativePath);
+            var count = 0;
             for (var childIndex = 0; childIndex < avatarRoot.childCount; childIndex++)
             {
-                var child = avatarRoot.GetChild(childIndex);
-                if (child.name != GestureCheckerObjectName)
+                if (IsMenuRoot(avatarRoot.GetChild(childIndex).gameObject))
                 {
-                    continue;
-                }
-
-                var prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(child.gameObject);
-                if (prefabPath == gestureCheckerPrefabPath)
-                {
-                    return child.gameObject;
+                    count++;
                 }
             }
 
-            return null;
+            return count;
+        }
+
+        private static bool IsMenuRoot(GameObject candidate)
+        {
+            if (candidate == null)
+            {
+                return false;
+            }
+
+            var prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(candidate);
+            var expectedPath = EasyCarrySystemAssetLocator.GetAssetPath(MenuRootPrefabRelativePath);
+            return (!string.IsNullOrEmpty(prefabPath) && prefabPath == expectedPath)
+                || (candidate.name == MenuRootObjectName
+                    && candidate.GetComponent<ModularAvatarMenuInstaller>() != null);
         }
 
         internal static Transform ResolveAvatarRoot(Transform source)
@@ -444,5 +444,4 @@ namespace Serre.EasyCarrySystem.Editor
             return source.root;
         }
     }
-
 }

@@ -31,9 +31,6 @@ namespace Serre.EasyCarrySystem
             | EasyCarrySystemGestureMask.FingerPoint
             | EasyCarrySystemGestureMask.HandGun
             | EasyCarrySystemGestureMask.ThumbsUp;
-        public const EasyCarrySystemGestureMask DefaultTriggerPullGestures =
-            EasyCarrySystemGestureMask.Fist
-            | EasyCarrySystemGestureMask.ThumbsUp;
 
         [SerializeField, HideInInspector]
         private EasyCarrySystemGestureMask leftHandGrabGestures = DefaultGrabGestures;
@@ -41,15 +38,7 @@ namespace Serre.EasyCarrySystem
         [SerializeField, HideInInspector]
         private EasyCarrySystemGestureMask rightHandGrabGestures = DefaultGrabGestures;
 
-        [SerializeField, HideInInspector]
-        private EasyCarrySystemGestureMask leftHandTriggerPullGestures = DefaultTriggerPullGestures;
-
-        [SerializeField, HideInInspector]
-        private EasyCarrySystemGestureMask rightHandTriggerPullGestures = DefaultTriggerPullGestures;
-
         public EasyCarrySystemGestureMask LeftHandGrabGestures => leftHandGrabGestures;
         public EasyCarrySystemGestureMask RightHandGrabGestures => rightHandGrabGestures;
-        public EasyCarrySystemGestureMask LeftHandTriggerPullGestures => leftHandTriggerPullGestures;
-        public EasyCarrySystemGestureMask RightHandTriggerPullGestures => rightHandTriggerPullGestures;
     }
 }
