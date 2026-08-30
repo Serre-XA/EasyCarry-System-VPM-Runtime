@@ -4,6 +4,7 @@
     "references": [
         "Serre.EasyCarrySystem.Runtime",
         "nadena.dev.modular-avatar.core",
+        "nadena.dev.ndmf",
         "VRC.SDKBase",
         "VRC.SDKBase.Editor.BuildPipeline",
         "VRC.SDK3A"

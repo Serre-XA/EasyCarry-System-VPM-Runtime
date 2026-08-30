@@ -538,6 +538,7 @@ namespace Serre.EasyCarrySystem.Editor
 
             // Output contacts are visible only while authoring and must never leak into a build.
             SetItemOutputContactVisibility(targets, false);
+            SetCIEditRootOriginConstraintEnabled(targets, true, false);
             SyncAllAttachmentMethodComponents(targets, false);
             SyncNumberedAttachPointAvailability(targets, false);
 
@@ -974,6 +975,15 @@ namespace Serre.EasyCarrySystem.Editor
                 FindVrcParentConstraint(mainConst), activeSourceName, recordUndo);
             SetConstraintSourceWeights(
                 FindVrcScaleConstraint(mainConst), activeSourceName, recordUndo);
+        }
+
+        internal static void SetCIEditRootOriginConstraintEnabled(
+            EasyCarrySystemItemReference targets,
+            bool enabled,
+            bool recordUndo = false)
+        {
+            var ciRoot = FindChildRecursive(targets?.EasyCarrySystemRoot, "CI_Root");
+            SetComponentEnabled(FindVrcParentConstraint(ciRoot), enabled, recordUndo);
         }
 
         private static void SetConstraintSourceWeights(

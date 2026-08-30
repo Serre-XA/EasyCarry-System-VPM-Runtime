@@ -523,12 +523,14 @@ namespace Serre.EasyCarrySystem.Editor
 
                 if (next && targets.CIItemSize != null)
                 {
+                    EasyCarrySystemEditorSharedUtility.SetCIEditRootOriginConstraintEnabled(targets, false);
                     EasyCarrySystemEditorSharedUtility.SetMainConstraintSourceWeights(targets.EasyCarrySystemRoot, null);
                     LockInspector();
                     Selection.activeTransform = targets.CIItemSize;
                 }
                 else
                 {
+                    EasyCarrySystemEditorSharedUtility.SetCIEditRootOriginConstraintEnabled(targets, true);
                     UnlockInspectorIfIdle(targets);
                     Selection.activeObject = targets.gameObject;
                     EasyCarrySystemEditorSharedUtility.CollapseEasyCarrySystemHierarchy(targets);
@@ -571,11 +573,13 @@ namespace Serre.EasyCarrySystem.Editor
                     }
 
                     InitializeBoneProxyTransform(attachPoint, attachPointName);
+                    EasyCarrySystemEditorSharedUtility.SetCIEditRootOriginConstraintEnabled(targets, false);
                     LockInspector();
                     Selection.activeTransform = attachPoint;
                 }
                 else
                 {
+                    EasyCarrySystemEditorSharedUtility.SetCIEditRootOriginConstraintEnabled(targets, false);
                     CreateEditObjects(targets, attachPointName);
                 }
             }
@@ -604,6 +608,7 @@ namespace Serre.EasyCarrySystem.Editor
                 targets.SetContactEditing(contactName, false);
             }
 
+            EasyCarrySystemEditorSharedUtility.SetCIEditRootOriginConstraintEnabled(targets, true);
             EditorUtility.SetDirty(targets);
             if (unlockInspector)
             {
@@ -685,6 +690,9 @@ namespace Serre.EasyCarrySystem.Editor
                     continue;
                 }
 
+                EasyCarrySystemEditorSharedUtility.SetCIEditRootOriginConstraintEnabled(
+                    targets,
+                    !IsAnyEditActive(targets));
                 EasyCarrySystemEditorSharedUtility.SyncItemContactGroupTransforms(targets);
 
                 foreach (var attachPointName in EasyCarrySystemEditorSharedUtility.AttachPointNames)

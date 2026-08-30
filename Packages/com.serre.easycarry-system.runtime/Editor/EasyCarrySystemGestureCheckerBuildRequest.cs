@@ -24,9 +24,9 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             var message = missingTargets.Count == 1
-                ? $"{EasyCarrySystemGestureCheckerEditorUtility.GetAvatarName(missingTargets[0])} にEasyCarry Systemの共有メニューがありません。\\n\\n"
+                ? $"{EasyCarrySystemGestureCheckerEditorUtility.GetAvatarName(missingTargets[0])} にEasyCarry Systemの共有メニューがありません。\n\n"
                     + "ビルド開始前に生成してもよいですか？"
-                : $"EasyCarry Systemを使用している {missingTargets.Count} 体のアバターに共有メニューがありません。\\n\\n"
+                : $"EasyCarry Systemを使用している {missingTargets.Count} 体のアバターに共有メニューがありません。\n\n"
                     + "ビルド開始前に生成してもよいですか？";
 
             if (Application.isBatchMode
