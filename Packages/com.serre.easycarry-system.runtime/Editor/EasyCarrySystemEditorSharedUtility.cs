@@ -575,6 +575,15 @@ namespace Serre.EasyCarrySystem.Editor
                 var usesBoneProxy = UsesBoneProxy(targets, attachPointName);
                 SetComponentEnabled(attachPoint.GetComponent<ModularAvatarBoneProxy>(), usesBoneProxy, recordUndo);
                 SetComponentEnabled(FindVrcParentConstraint(attachPoint), !usesBoneProxy, recordUndo);
+                var scaleConstraint = FindVrcScaleConstraint(attachPoint);
+                SetComponentEnabled(scaleConstraint, !usesBoneProxy, recordUndo);
+                if (!usesBoneProxy)
+                {
+                    SetConstraintSourceTransform(
+                        scaleConstraint,
+                        GetAttachPointReference(targets, attachPointName),
+                        recordUndo);
+                }
             }
         }
 
@@ -865,6 +874,66 @@ namespace Serre.EasyCarrySystem.Editor
             return null;
         }
 
+        internal static Component FindVrcScaleConstraint(Transform targetTransform)
+        {
+            if (targetTransform == null)
+            {
+                return null;
+            }
+
+            foreach (var component in targetTransform.GetComponents<Component>())
+            {
+                if (component == null || !component.GetType().Name.Contains("ScaleConstraint"))
+                {
+                    continue;
+                }
+
+                var serializedComponent = new SerializedObject(component);
+                if (serializedComponent.FindProperty(SourceTransformPath) != null)
+                {
+                    return component;
+                }
+            }
+
+            return null;
+        }
+
+        internal static void SetConstraintSourceTransform(
+            Component constraint,
+            Transform sourceTransform,
+            bool recordUndo)
+        {
+            if (constraint == null)
+            {
+                return;
+            }
+
+            var serializedConstraint = new SerializedObject(constraint);
+            var sourceProperty = serializedConstraint.FindProperty(SourceTransformPath);
+            if (sourceProperty == null || sourceProperty.objectReferenceValue == sourceTransform)
+            {
+                return;
+            }
+
+            if (recordUndo)
+            {
+                Undo.RecordObject(constraint, "Set Constraint Source");
+            }
+
+            sourceProperty.objectReferenceValue = sourceTransform;
+            if (recordUndo)
+            {
+                serializedConstraint.ApplyModifiedProperties();
+            }
+            else
+            {
+                serializedConstraint.ApplyModifiedPropertiesWithoutUndo();
+            }
+
+            PrefabUtility.RecordPrefabInstancePropertyModifications(constraint);
+            EditorUtility.SetDirty(constraint);
+        }
+
         internal static Component FindContactComponent(Transform targetTransform, string typeName)
         {
             if (targetTransform == null)
@@ -895,14 +964,30 @@ namespace Serre.EasyCarrySystem.Editor
             string activeSourceName,
             bool recordUndo = true)
         {
-            var mainConstraint = FindVrcParentConstraint(FindChildRecursive(root, "CI_MainConst"));
-            if (mainConstraint == null)
+            var mainConst = FindChildRecursive(root, "CI_MainConst");
+            if (mainConst == null)
+            {
+                return;
+            }
+
+            SetConstraintSourceWeights(
+                FindVrcParentConstraint(mainConst), activeSourceName, recordUndo);
+            SetConstraintSourceWeights(
+                FindVrcScaleConstraint(mainConst), activeSourceName, recordUndo);
+        }
+
+        private static void SetConstraintSourceWeights(
+            Component constraint,
+            string activeSourceName,
+            bool recordUndo)
+        {
+            if (constraint == null)
             {
                 return;
             }
 
             var activeIndex = -1;
-            var serializedConstraint = new SerializedObject(mainConstraint);
+            var serializedConstraint = new SerializedObject(constraint);
             for (var index = 0; index < 16; index++)
             {
                 var sourceProperty = serializedConstraint.FindProperty($"Sources.source{index}.SourceTransform");
@@ -915,7 +1000,7 @@ namespace Serre.EasyCarrySystem.Editor
 
             if (recordUndo)
             {
-                Undo.RecordObject(mainConstraint, "Set CI_MainConst Weights");
+                Undo.RecordObject(constraint, "Set CI_MainConst Weights");
             }
             for (var index = 0; index < 16; index++)
             {
@@ -929,13 +1014,13 @@ namespace Serre.EasyCarrySystem.Editor
             if (recordUndo)
             {
                 serializedConstraint.ApplyModifiedProperties();
-                PrefabUtility.RecordPrefabInstancePropertyModifications(mainConstraint);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(constraint);
             }
             else
             {
                 serializedConstraint.ApplyModifiedPropertiesWithoutUndo();
             }
-            EditorUtility.SetDirty(mainConstraint);
+            EditorUtility.SetDirty(constraint);
         }
 
         private static void ResetAllAttachPointsToAP00OnPlayMode(PlayModeStateChange state)

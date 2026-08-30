@@ -470,21 +470,9 @@ namespace Serre.EasyCarrySystem.Editor
                 snapshot.LeftHandGrabGestures,
                 snapshot.RightHandGrabGestures);
 
-            var mainConstraint = FindParentConstraint(FindChildRecursive(targets.EasyCarrySystemRoot, "CI_MainConst"));
-            if (mainConstraint != null)
-            {
-                var serializedConstraint = new SerializedObject(mainConstraint);
-                Undo.RecordObject(mainConstraint, "Restore CI_MainConst Weights");
-                for (var i = 0; i < Mathf.Min(MaxSourceCount, snapshot.MainWeights.Length); i++)
-                {
-                    var weightProperty = serializedConstraint.FindProperty($"Sources.source{i}.Weight");
-                    if (weightProperty != null)
-                    {
-                        weightProperty.floatValue = snapshot.MainWeights[i];
-                    }
-                }
-                serializedConstraint.ApplyModifiedProperties();
-            }
+            var mainConst = FindChildRecursive(targets.EasyCarrySystemRoot, "CI_MainConst");
+            RestoreMainConstraintWeights(FindParentConstraint(mainConst), snapshot.MainWeights);
+            RestoreMainConstraintWeights(FindScaleConstraint(mainConst), snapshot.MainWeights);
 
             targets.SetItemSettings(CaptureSnapshot(targets));
             PrefabUtility.RecordPrefabInstancePropertyModifications(targets);
@@ -639,6 +627,7 @@ namespace Serre.EasyCarrySystem.Editor
                 || attachmentMethod == EasyCarrySystemAttachPointMethod.BoneProxy;
             SetComponentEnabled(attachPoint.GetComponent<ModularAvatarBoneProxy>(), usesBoneProxy);
             SetComponentEnabled(FindParentConstraint(attachPoint), !usesBoneProxy);
+            SetComponentEnabled(FindScaleConstraint(attachPoint), !usesBoneProxy);
         }
 
         private static void SetComponentEnabled(Component component, bool enabled)
@@ -665,21 +654,36 @@ namespace Serre.EasyCarrySystem.Editor
         private static void ApplyAttachPoint(Transform root, string attachPointName, EasyCarrySystemAttachPointSettings snapshot)
         {
             var attachPoint = FindChildRecursive(root, attachPointName);
-            var constraint = FindParentConstraint(attachPoint);
-            if (constraint == null)
+            var parentConstraint = FindParentConstraint(attachPoint);
+            if (parentConstraint != null)
             {
-                return;
+                var serializedConstraint = new SerializedObject(parentConstraint);
+                var sourceProperty = serializedConstraint.FindProperty(SourceTransformPath);
+                var positionProperty = serializedConstraint.FindProperty(SourcePositionOffsetPath);
+                var rotationProperty = serializedConstraint.FindProperty(SourceRotationOffsetPath);
+                Undo.RecordObject(parentConstraint, "Restore Attach Point Settings");
+                if (sourceProperty != null) sourceProperty.objectReferenceValue = snapshot.SourceTransform;
+                if (positionProperty != null) positionProperty.vector3Value = snapshot.PositionOffset;
+                if (rotationProperty != null) rotationProperty.vector3Value = snapshot.RotationOffset;
+                serializedConstraint.ApplyModifiedProperties();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(parentConstraint);
+                EditorUtility.SetDirty(parentConstraint);
             }
 
-            var serializedConstraint = new SerializedObject(constraint);
-            var sourceProperty = serializedConstraint.FindProperty(SourceTransformPath);
-            var positionProperty = serializedConstraint.FindProperty(SourcePositionOffsetPath);
-            var rotationProperty = serializedConstraint.FindProperty(SourceRotationOffsetPath);
-            Undo.RecordObject(constraint, "Restore Attach Point Settings");
-            if (sourceProperty != null) sourceProperty.objectReferenceValue = snapshot.SourceTransform;
-            if (positionProperty != null) positionProperty.vector3Value = snapshot.PositionOffset;
-            if (rotationProperty != null) rotationProperty.vector3Value = snapshot.RotationOffset;
-            serializedConstraint.ApplyModifiedProperties();
+            var scaleConstraint = FindScaleConstraint(attachPoint);
+            if (scaleConstraint != null)
+            {
+                var serializedScaleConstraint = new SerializedObject(scaleConstraint);
+                var scaleSourceProperty = serializedScaleConstraint.FindProperty(SourceTransformPath);
+                if (scaleSourceProperty != null)
+                {
+                    Undo.RecordObject(scaleConstraint, "Restore Attach Point Scale Source");
+                    scaleSourceProperty.objectReferenceValue = snapshot.SourceTransform;
+                    serializedScaleConstraint.ApplyModifiedProperties();
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(scaleConstraint);
+                    EditorUtility.SetDirty(scaleConstraint);
+                }
+            }
         }
 
         private static Transform GetAttachPointSource(EasyCarrySystemItemReference targets, string attachPointName)
@@ -780,6 +784,16 @@ namespace Serre.EasyCarrySystem.Editor
 
         private static Component FindParentConstraint(Transform target)
         {
+            return FindConstraint(target, "ParentConstraint");
+        }
+
+        private static Component FindScaleConstraint(Transform target)
+        {
+            return FindConstraint(target, "ScaleConstraint");
+        }
+
+        private static Component FindConstraint(Transform target, string typeName)
+        {
             if (target == null)
             {
                 return null;
@@ -787,17 +801,42 @@ namespace Serre.EasyCarrySystem.Editor
 
             foreach (var component in target.GetComponents<Component>())
             {
-                if (component == null)
+                if (component == null || !component.GetType().Name.Contains(typeName))
                 {
                     continue;
                 }
+
                 var serializedComponent = new SerializedObject(component);
                 if (serializedComponent.FindProperty(SourceTransformPath) != null)
                 {
                     return component;
                 }
             }
+
             return null;
+        }
+
+        private static void RestoreMainConstraintWeights(Component constraint, float[] weights)
+        {
+            if (constraint == null || weights == null)
+            {
+                return;
+            }
+
+            var serializedConstraint = new SerializedObject(constraint);
+            Undo.RecordObject(constraint, "Restore CI_MainConst Weights");
+            for (var index = 0; index < Mathf.Min(MaxSourceCount, weights.Length); index++)
+            {
+                var weightProperty = serializedConstraint.FindProperty($"Sources.source{index}.Weight");
+                if (weightProperty != null)
+                {
+                    weightProperty.floatValue = weights[index];
+                }
+            }
+
+            serializedConstraint.ApplyModifiedProperties();
+            PrefabUtility.RecordPrefabInstancePropertyModifications(constraint);
+            EditorUtility.SetDirty(constraint);
         }
 
         private static Component FindContactShapeComponent(Transform target)
