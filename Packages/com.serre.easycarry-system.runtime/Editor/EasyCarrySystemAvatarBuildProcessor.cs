@@ -36,8 +36,35 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            var targets = avatarGameObject.GetComponentsInChildren<EasyCarrySystemItemReference>(true);
+            var allTargets = avatarGameObject.GetComponentsInChildren<EasyCarrySystemItemReference>(true);
+            if (allTargets.Length == 0)
+            {
+                return;
+            }
+
+            if (!ValidateEditorOnlyStates(avatarGameObject, allTargets))
+            {
+                return;
+            }
+
+            var buildTargets = new List<EasyCarrySystemItemReference>();
+            foreach (var target in allTargets)
+            {
+                if (target != null
+                    && EasyCarrySystemEditorSharedUtility.GetEditorOnlyState(target)
+                    != EasyCarrySystemEditorOnlyState.Both)
+                {
+                    buildTargets.Add(target);
+                }
+            }
+
+            var targets = buildTargets.ToArray();
             if (targets.Length == 0)
+            {
+                return;
+            }
+
+            if (!ValidateUniqueSlots(avatarGameObject, targets))
             {
                 return;
             }
@@ -92,6 +119,106 @@ namespace Serre.EasyCarrySystem.Editor
                     Object.DestroyImmediate(settings);
                 }
             }
+        }
+
+        private static bool ValidateEditorOnlyStates(
+            GameObject avatarGameObject,
+            EasyCarrySystemItemReference[] targets)
+        {
+            var invalidPaths = new List<string>();
+            EasyCarrySystemItemReference firstInvalidTarget = null;
+            foreach (var target in targets)
+            {
+                if (target == null)
+                {
+                    continue;
+                }
+
+                var state = EasyCarrySystemEditorSharedUtility.GetEditorOnlyState(target);
+                if (state != EasyCarrySystemEditorOnlyState.ItemOnly
+                    && state != EasyCarrySystemEditorOnlyState.GeneratedSystemOnly)
+                {
+                    continue;
+                }
+
+                var itemPath = AnimationUtility.CalculateTransformPath(
+                    target.transform,
+                    avatarGameObject.transform);
+                var detail = state == EasyCarrySystemEditorOnlyState.ItemOnly
+                    ? "制御対象アイテムだけがEditorOnlyです。生成されたEasyCarry SystemもEditorOnlyにしてください"
+                    : "生成されたEasyCarry SystemだけがEditorOnlyです。制御対象アイテムもEditorOnlyにするか、両方からEditorOnlyを外してください";
+                invalidPaths.Add($"{itemPath}: {detail}");
+                firstInvalidTarget ??= target;
+            }
+
+            if (invalidPaths.Count == 0)
+            {
+                return true;
+            }
+
+            ReportBuildError(
+                "EasyCarry System のビルドを中止しました。\n\n"
+                + "制御対象アイテムと生成されたEasyCarry SystemのEditorOnly設定が一致していません。\n"
+                + "両方をEditorOnlyにするか、両方からEditorOnlyを外してから再度ビルドしてください。\n\n"
+                + string.Join("\n", invalidPaths),
+                firstInvalidTarget != null ? firstInvalidTarget : avatarGameObject);
+            return false;
+        }
+
+        private static bool ValidateUniqueSlots(
+            GameObject avatarGameObject,
+            EasyCarrySystemItemReference[] targets)
+        {
+            var targetsBySlot = new Dictionary<int, List<EasyCarrySystemItemReference>>();
+            foreach (var target in targets)
+            {
+                if (target == null)
+                {
+                    continue;
+                }
+
+                var slot = target.CISlot;
+                if (!targetsBySlot.TryGetValue(slot, out var slotTargets))
+                {
+                    slotTargets = new List<EasyCarrySystemItemReference>();
+                    targetsBySlot.Add(slot, slotTargets);
+                }
+
+                slotTargets.Add(target);
+            }
+
+            var duplicateMessages = new List<string>();
+            Object firstDuplicate = null;
+            for (var slot = 0; slot <= 15; slot++)
+            {
+                if (!targetsBySlot.TryGetValue(slot, out var slotTargets) || slotTargets.Count < 2)
+                {
+                    continue;
+                }
+
+                duplicateMessages.Add($"アイテムスロット {slot:00} が重複しています。");
+                foreach (var target in slotTargets)
+                {
+                    var itemPath = AnimationUtility.CalculateTransformPath(
+                        target.transform,
+                        avatarGameObject.transform);
+                    duplicateMessages.Add($"  - {itemPath}");
+                    firstDuplicate ??= target;
+                }
+            }
+
+            if (duplicateMessages.Count == 0)
+            {
+                return true;
+            }
+
+            ReportBuildError(
+                "EasyCarry System のビルドを中止しました。\n\n"
+                + "同じアバター内でアイテムスロットが重複しています。"
+                + "各アイテムに異なるスロットを指定してから、再度ビルドしてください。\n\n"
+                + string.Join("\n", duplicateMessages),
+                firstDuplicate != null ? firstDuplicate : avatarGameObject);
+            return false;
         }
 
         private static bool ValidateItemBoneProxies(

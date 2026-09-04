@@ -88,6 +88,8 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             EditorGUI.BeginChangeCheck();
+            EasyCarrySystemEditorSharedUtility.DrawEditorOnlyStateError(targets);
+            EasyCarrySystemEditorSharedUtility.DrawDuplicateSlotError(targets);
             EasyCarrySystemSlotEditorUtility.DrawSlotSelector(targets);
             DrawItemCollisionSection(targets);
             DrawHandSection(targets);

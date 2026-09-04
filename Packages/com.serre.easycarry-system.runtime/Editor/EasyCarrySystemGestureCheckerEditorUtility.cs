@@ -14,6 +14,7 @@ namespace Serre.EasyCarrySystem.Editor
         private const string MenuRootPrefabRelativePath =
             "Prefabs/Base/EasyCarrySystem_Menu_Root.prefab";
         private const string MenuRootObjectName = "EasyCarrySystem_Menu_Root";
+        private const string MenuEntryObjectName = "ECS設定";
 
         private static readonly EasyCarrySystemGestureMask[] GestureValues =
         {
@@ -62,6 +63,12 @@ namespace Serre.EasyCarrySystem.Editor
             {
                 if (targets == null || EditorUtility.IsPersistent(targets)
                     || !targets.gameObject.scene.IsValid())
+                {
+                    continue;
+                }
+
+                if (EasyCarrySystemEditorSharedUtility.GetEditorOnlyState(targets)
+                    == EasyCarrySystemEditorOnlyState.Both)
                 {
                     continue;
                 }
@@ -416,9 +423,11 @@ namespace Serre.EasyCarrySystem.Editor
 
             var prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(candidate);
             var expectedPath = EasyCarrySystemAssetLocator.GetAssetPath(MenuRootPrefabRelativePath);
+            var menuEntry = candidate.transform.Find(MenuEntryObjectName);
             return (!string.IsNullOrEmpty(prefabPath) && prefabPath == expectedPath)
                 || (candidate.name == MenuRootObjectName
-                    && candidate.GetComponent<ModularAvatarMenuInstaller>() != null);
+                    && menuEntry != null
+                    && menuEntry.GetComponent<ModularAvatarMenuInstaller>() != null);
         }
 
         internal static Transform ResolveAvatarRoot(Transform source)

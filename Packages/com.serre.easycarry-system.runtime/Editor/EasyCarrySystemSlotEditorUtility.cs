@@ -12,10 +12,6 @@ namespace Serre.EasyCarrySystem.Editor
     internal static class EasyCarrySystemSlotEditorUtility
     {
         private const string PrefabRelativePathFormat = "Prefabs/EasyCarrySystem_{0:00}.prefab";
-        private const string MenuSettingsNameFormat = "CarryItem_{0:00}_Settings";
-        private const string MenuResetNameFormat = "CI_{0:00}_Reset";
-        private const string MenuSwitchHandsNameFormat = "CI_{0:00}_SwitchHands_Enable";
-        private const string MenuFreezeNameFormat = "CI_{0:00}_Freeze_Enable";
         private const string SourceTransformPath = "Sources.source0.SourceTransform";
         private const string SourcePositionOffsetPath = "Sources.source0.ParentPositionOffset";
         private const string SourceRotationOffsetPath = "Sources.source0.ParentRotationOffset";
@@ -24,6 +20,7 @@ namespace Serre.EasyCarrySystem.Editor
         private const string ContactHeightPath = "height";
         private const string ContactSizePath = "size";
         private const string WorldFixedParameterName = "Item/CanFreeze";
+        private const string SwitchHandsParameterName = "Item/CanSwitchHands";
         private const int SlotCount = 16;
         private const int MaxSourceCount = 16;
         private const float SlotButtonWidth = 28f;
@@ -85,9 +82,9 @@ namespace Serre.EasyCarrySystem.Editor
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 EasyCarrySystemEditorSharedUtility.DrawSectionHeader(
-                    "\u30a2\u30a4\u30c6\u30e0\u30b9\u30ed\u30c3\u30c8");
+                    "アイテムスロット");
                 EasyCarrySystemEditorSharedUtility.DrawSectionDescription(
-                    "\u540c\u3058\u30a2\u30d0\u30bf\u30fc\u5185\u3067\u91cd\u8907\u3057\u306a\u3044\u756a\u53f7\u3092\u9078\u3073\u307e\u3059\u3002\u7dd1\u306f\u9078\u629e\u4e2d\u3001\u8d64\u306f\u4f7f\u7528\u4e2d\u3067\u3059\u3002");
+                    "同じアバター内で重複しない番号を選びます。緑は選択中、赤は使用中です。");
                 using (new EasyCarrySystemEditorSharedUtility.HorizontalMarginScope())
                 {
                     using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox, GUILayout.ExpandWidth(true)))
@@ -134,10 +131,10 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             var tooltip = isActive
-                ? "\u73fe\u5728\u306e\u30a2\u30a4\u30c6\u30e0\u30b9\u30ed\u30c3\u30c8"
+                ? "現在のアイテムスロット"
                 : isUsed
-                    ? "\u3053\u306e\u756a\u53f7\u306f\u73fe\u5728\u306e\u30b7\u30fc\u30f3\u5185\u3067\u4f7f\u7528\u3055\u308c\u3066\u3044\u307e\u3059"
-                    : $"\u30a2\u30a4\u30c6\u30e0\u30b9\u30ed\u30c3\u30c8 {slot} \u306b\u5207\u308a\u66ff\u3048";
+                    ? "この番号は現在のシーン内で使用されています"
+                    : $"アイテムスロット {slot} に切り替え";
 
             var selected = GUILayout.Toggle(isActive, new GUIContent(slot.ToString(), tooltip), style,
                 GUILayout.Width(SlotButtonWidth), GUILayout.Height(SlotButtonHeight));
@@ -148,7 +145,7 @@ namespace Serre.EasyCarrySystem.Editor
 
             if (isUsed)
             {
-                Debug.LogWarning($"EasyCarry System \u30b9\u30ed\u30c3\u30c8 {slot} \u306f\u73fe\u5728\u306e\u30b7\u30fc\u30f3\u5185\u3067\u4f7f\u7528\u6e08\u307f\u3067\u3059\u3002", targets);
+                Debug.LogWarning($"EasyCarry System スロット {slot} は現在のシーン内で使用済みです。", targets);
                 return;
             }
 
@@ -163,6 +160,12 @@ namespace Serre.EasyCarrySystem.Editor
             foreach (var candidate in allTargets)
             {
                 if (candidate == null || candidate == current || EditorUtility.IsPersistent(candidate))
+                {
+                    continue;
+                }
+
+                if (EasyCarrySystemEditorSharedUtility.GetEditorOnlyState(candidate)
+                    == EasyCarrySystemEditorOnlyState.Both)
                 {
                     continue;
                 }
@@ -262,6 +265,7 @@ namespace Serre.EasyCarrySystem.Editor
             itemReference.SetGeneratedEasyCarrySystem(newRoot);
             itemReference.SetCISlot(newSlot);
             RestoreSnapshot(itemReference, settings, true);
+            EasyCarrySystemEditorSharedUtility.ResetMenuDisplayName(itemReference);
             EasyCarrySystemEditorSharedUtility.SyncNumberedAttachPointAvailability(itemReference, false);
             RetargetItem(itemReference, newCIRoot);
 
@@ -347,11 +351,6 @@ namespace Serre.EasyCarrySystem.Editor
             {
                 Initialized = true,
                 NumberedAttachPointOrder = targets.GetNumberedAttachPointOrder(),
-                SourceSlot = Mathf.Clamp(targets.CISlot, 0, SlotCount - 1),
-                MenuSettingsName = GetObjectName(targets.MenuSettingsRoot),
-                MenuResetName = GetObjectName(targets.MenuResetItem),
-                MenuSwitchHandsName = GetObjectName(targets.MenuSwitchHandsItem),
-                MenuFreezeName = GetObjectName(targets.MenuFreezeItem),
             };
             for (var i = 0; i < AttachPointNames.Length; i++)
             {
@@ -423,15 +422,6 @@ namespace Serre.EasyCarrySystem.Editor
             snapshot.EnsureInitialized();
             targets.SetNumberedAttachPointOrder(snapshot.NumberedAttachPointOrder);
             EasyCarrySystemEditorSharedUtility.EnsureMenuObjectReferences(targets);
-            var targetSlot = Mathf.Clamp(targets.CISlot, 0, SlotCount - 1);
-            RestoreObjectName(targets.MenuSettingsRoot, ResolveRestoredMenuName(
-                snapshot.MenuSettingsName, snapshot.SourceSlot, targetSlot, MenuSettingsNameFormat));
-            RestoreObjectName(targets.MenuResetItem, ResolveRestoredMenuName(
-                snapshot.MenuResetName, snapshot.SourceSlot, targetSlot, MenuResetNameFormat));
-            RestoreObjectName(targets.MenuSwitchHandsItem, ResolveRestoredMenuName(
-                snapshot.MenuSwitchHandsName, snapshot.SourceSlot, targetSlot, MenuSwitchHandsNameFormat));
-            RestoreObjectName(targets.MenuFreezeItem, ResolveRestoredMenuName(
-                snapshot.MenuFreezeName, snapshot.SourceSlot, targetSlot, MenuFreezeNameFormat));
             for (var i = 0; i < AttachPointNames.Length; i++)
             {
                 targets.SetAttachPointMethod(AttachPointNames[i], snapshot.AttachPoints[i].AttachmentMethod);
@@ -501,6 +491,10 @@ namespace Serre.EasyCarrySystem.Editor
                 {
                     snapshot.WorldFixedDefault = parameter.defaultValue > 0.5f;
                 }
+                else if (parameter.nameOrPrefix == SwitchHandsParameterName)
+                {
+                    snapshot.CanSwitchHandsDefault = parameter.defaultValue > 0.5f;
+                }
 
                 for (var attachPointIndex = 0; attachPointIndex < HideWhenAttachedParameterNames.Length;
                      attachPointIndex++)
@@ -537,6 +531,20 @@ namespace Serre.EasyCarrySystem.Editor
                 if (parameter.nameOrPrefix == WorldFixedParameterName)
                 {
                     var defaultValue = snapshot.WorldFixedDefault ? 1f : 0f;
+                    if (!Mathf.Approximately(parameter.defaultValue, defaultValue)
+                        || !parameter.hasExplicitDefaultValue)
+                    {
+                        parameter.defaultValue = defaultValue;
+                        parameter.hasExplicitDefaultValue = true;
+                        parametersComponent.parameters[parameterIndex] = parameter;
+                        changed = true;
+                    }
+
+                    continue;
+                }
+                if (parameter.nameOrPrefix == SwitchHandsParameterName)
+                {
+                    var defaultValue = snapshot.CanSwitchHandsDefault ? 1f : 0f;
                     if (!Mathf.Approximately(parameter.defaultValue, defaultValue)
                         || !parameter.hasExplicitDefaultValue)
                     {
@@ -862,39 +870,6 @@ namespace Serre.EasyCarrySystem.Editor
                 && serializedComponent.FindProperty(ContactRadiusPath) != null;
         }
 
-        private static string GetObjectName(Transform targetTransform)
-        {
-            return targetTransform != null ? targetTransform.name : null;
-        }
-
-        private static string ResolveRestoredMenuName(
-            string objectName, int sourceSlot, int targetSlot, string defaultNameFormat)
-        {
-            if (string.IsNullOrWhiteSpace(objectName))
-            {
-                return objectName;
-            }
-
-            var sourceDefaultName = string.Format(defaultNameFormat, sourceSlot);
-            return objectName == sourceDefaultName
-                ? string.Format(defaultNameFormat, targetSlot)
-                : objectName;
-        }
-
-        private static void RestoreObjectName(Transform targetTransform, string objectName)
-        {
-            if (targetTransform == null
-                || string.IsNullOrWhiteSpace(objectName)
-                || targetTransform.name == objectName)
-            {
-                return;
-            }
-
-            Undo.RecordObject(targetTransform.gameObject, "Restore EasyCarry System Menu Name");
-            targetTransform.name = objectName;
-            PrefabUtility.RecordPrefabInstancePropertyModifications(targetTransform.gameObject);
-            EditorUtility.SetDirty(targetTransform.gameObject);
-        }
         private static Transform FindChildRecursive(Transform parent, string childName)
         {
             if (parent == null)

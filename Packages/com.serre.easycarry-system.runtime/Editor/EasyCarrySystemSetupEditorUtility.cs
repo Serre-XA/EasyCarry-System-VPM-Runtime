@@ -153,6 +153,7 @@ namespace Serre.EasyCarrySystem.Editor
             itemReference.SetCISlot(slot);
             itemReference.SetCIItemSize(ciItemSize);
             EasyCarrySystemSlotEditorUtility.ApplyStoredSettings(itemReference, true);
+            EasyCarrySystemEditorSharedUtility.ResetMenuDisplayName(itemReference);
             EditorUtility.SetDirty(itemReference);
 
 #if VRC_SDK_VRCSDK3

@@ -8,11 +8,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 43311365263883623, guid: 9481ae1da46b4d7bb41b3d4a32cd438a,
-        type: 3}
-      propertyPath: m_Name
-      value: CI_05_Reset
-      objectReference: {fileID: 0}
     - target: {fileID: 403591923474199583, guid: 9481ae1da46b4d7bb41b3d4a32cd438a,
         type: 3}
       propertyPath: collisionTags.Array.data[0]
@@ -22,11 +17,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EasyCarrySystem_05
-      objectReference: {fileID: 0}
-    - target: {fileID: 1129167491350277741, guid: 9481ae1da46b4d7bb41b3d4a32cd438a,
-        type: 3}
-      propertyPath: m_Name
-      value: CI_05_SwitchHands_Enable
       objectReference: {fileID: 0}
     - target: {fileID: 1426304289934129239, guid: 9481ae1da46b4d7bb41b3d4a32cd438a,
         type: 3}
@@ -278,11 +268,6 @@ PrefabInstance:
       propertyPath: collisionTags.Array.data[4]
       value: CarryItem_04
       objectReference: {fileID: 0}
-    - target: {fileID: 6236357583580773854, guid: 9481ae1da46b4d7bb41b3d4a32cd438a,
-        type: 3}
-      propertyPath: m_Name
-      value: CI_05_Freeze_Enable
-      objectReference: {fileID: 0}
     - target: {fileID: 6569804210943783652, guid: 9481ae1da46b4d7bb41b3d4a32cd438a,
         type: 3}
       propertyPath: collisionTags.Array.data[0]
@@ -311,7 +296,7 @@ PrefabInstance:
     - target: {fileID: 6588781964987064703, guid: 9481ae1da46b4d7bb41b3d4a32cd438a,
         type: 3}
       propertyPath: m_Name
-      value: CarryItem_05_Settings
+      value: "\u30A2\u30A4\u30C6\u30E0\u30B9\u30ED\u30C3\u30C8_05_\u8A2D\u5B9A"
       objectReference: {fileID: 0}
     - target: {fileID: 7536234622374177926, guid: 9481ae1da46b4d7bb41b3d4a32cd438a,
         type: 3}

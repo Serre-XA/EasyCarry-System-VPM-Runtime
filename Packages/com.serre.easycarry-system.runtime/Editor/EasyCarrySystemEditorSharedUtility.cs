@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using nadena.dev.modular_avatar.core;
 using UnityEditor;
@@ -6,6 +7,14 @@ using UnityEngine;
 
 namespace Serre.EasyCarrySystem.Editor
 {
+    internal enum EasyCarrySystemEditorOnlyState
+    {
+        None,
+        Both,
+        ItemOnly,
+        GeneratedSystemOnly,
+    }
+
     [InitializeOnLoad]
     internal static class EasyCarrySystemEditorSharedUtility
     {
@@ -233,7 +242,125 @@ namespace Serre.EasyCarrySystem.Editor
 
                 GUIUtility.ExitGUI();
             }
-        }        private static void ApplyComponentIcon()
+        }
+
+        internal static void DrawDuplicateSlotError(EasyCarrySystemItemReference targets)
+        {
+            if (targets == null)
+            {
+                return;
+            }
+
+            if (GetEditorOnlyState(targets) == EasyCarrySystemEditorOnlyState.Both)
+            {
+                return;
+            }
+
+            var avatarRoot = EasyCarrySystemGestureCheckerEditorUtility.ResolveAvatarRoot(targets.transform);
+            if (avatarRoot == null)
+            {
+                return;
+            }
+
+            var duplicatePaths = new List<string>();
+            foreach (var candidate in avatarRoot.GetComponentsInChildren<EasyCarrySystemItemReference>(true))
+            {
+                if (candidate == null
+                    || candidate.CISlot != targets.CISlot
+                    || GetEditorOnlyState(candidate) == EasyCarrySystemEditorOnlyState.Both)
+                {
+                    continue;
+                }
+
+                var itemPath = AnimationUtility.CalculateTransformPath(candidate.transform, avatarRoot);
+                duplicatePaths.Add(string.IsNullOrEmpty(itemPath) ? candidate.name : itemPath);
+            }
+
+            if (duplicatePaths.Count < 2)
+            {
+                return;
+            }
+
+            DrawInspectorError(
+                $"エラー: アイテムスロット {targets.CISlot:00} が重複しています。別のスロットを選択してください。\n"
+                + "重複しているアイテム:\n- "
+                + string.Join("\n- ", duplicatePaths));
+        }
+
+        internal static void DrawEditorOnlyStateError(EasyCarrySystemItemReference targets)
+        {
+            switch (GetEditorOnlyState(targets))
+            {
+                case EasyCarrySystemEditorOnlyState.ItemOnly:
+                    DrawInspectorError(
+                        "エラー: 制御対象アイテムだけがEditorOnlyです。"
+                        + "生成されたEasyCarry SystemもEditorOnlyにしてください。");
+                    break;
+                case EasyCarrySystemEditorOnlyState.GeneratedSystemOnly:
+                    DrawInspectorError(
+                        "エラー: 生成されたEasyCarry SystemだけがEditorOnlyです。"
+                        + "制御対象アイテムもEditorOnlyにするか、両方からEditorOnlyを外してください。");
+                    break;
+            }
+        }
+
+        internal static EasyCarrySystemEditorOnlyState GetEditorOnlyState(
+            EasyCarrySystemItemReference targets)
+        {
+            if (targets == null)
+            {
+                return EasyCarrySystemEditorOnlyState.None;
+            }
+
+            var avatarRoot = EasyCarrySystemGestureCheckerEditorUtility.ResolveAvatarRoot(targets.transform);
+            var itemIsEditorOnly = IsInEditorOnlyHierarchy(targets.transform, avatarRoot);
+            var generatedSystemIsEditorOnly = targets.GeneratedEasyCarrySystem != null
+                && IsInEditorOnlyHierarchy(targets.GeneratedEasyCarrySystem.transform, avatarRoot);
+
+            if (itemIsEditorOnly && generatedSystemIsEditorOnly)
+            {
+                return EasyCarrySystemEditorOnlyState.Both;
+            }
+
+            if (itemIsEditorOnly)
+            {
+                return EasyCarrySystemEditorOnlyState.ItemOnly;
+            }
+
+            return generatedSystemIsEditorOnly
+                ? EasyCarrySystemEditorOnlyState.GeneratedSystemOnly
+                : EasyCarrySystemEditorOnlyState.None;
+        }
+
+        private static bool IsInEditorOnlyHierarchy(Transform target, Transform avatarRoot)
+        {
+            for (var current = target; current != null; current = current.parent)
+            {
+                if (current.gameObject.CompareTag("EditorOnly"))
+                {
+                    return true;
+                }
+
+                if (current == avatarRoot)
+                {
+                    break;
+                }
+            }
+
+            return false;
+        }
+
+        internal static void DrawInspectorError(string message)
+        {
+            var errorStyle = CreateReadableStyle(EditorStyles.wordWrappedLabel);
+            errorStyle.fontStyle = FontStyle.Bold;
+            errorStyle.normal.textColor = Color.red;
+
+            EditorGUILayout.Space(4f);
+            EditorGUILayout.LabelField(message, errorStyle);
+        }
+
+        private static void ApplyComponentIcon()
         {
             if (componentIconApplied || EditorApplication.timeSinceStartup < nextComponentIconLoadTime)
             {
@@ -598,40 +725,41 @@ namespace Serre.EasyCarrySystem.Editor
             var slot = Mathf.Clamp(targets.CISlot, 0, 15);
             var settingsRoot = IsTransformUnder(targets.MenuSettingsRoot, targets.EasyCarrySystemRoot)
                 ? targets.MenuSettingsRoot
-                : FindChildRecursive(targets.EasyCarrySystemRoot, $"CarryItem_{slot:00}_Settings");
-            settingsRoot ??= FindChildRecursiveByNamePattern(targets.EasyCarrySystemRoot, "CarryItem_", "_Settings");
+                : FindChildRecursive(targets.EasyCarrySystemRoot, $"アイテムスロット_{slot:00}_設定");
+            settingsRoot ??= FindChildRecursiveByNamePattern(targets.EasyCarrySystemRoot, "アイテムスロット_", "_設定");
 
-            if (settingsRoot == null)
+            if (targets.MenuSettingsRoot != settingsRoot)
             {
-                var resetCandidate = FindChildRecursive(targets.EasyCarrySystemRoot, $"CI_{slot:00}_Reset")
-                    ?? FindChildRecursiveByNamePattern(targets.EasyCarrySystemRoot, "CI_", "_Reset");
-                settingsRoot = resetCandidate != null ? resetCandidate.parent : null;
-            }
-
-            var resetItem = IsDirectChildOf(targets.MenuResetItem, settingsRoot)
-                ? targets.MenuResetItem
-                : FindDirectChild(settingsRoot, $"CI_{slot:00}_Reset");
-            resetItem ??= FindDirectChildBySuffix(settingsRoot, "_Reset");
-
-            var switchHandsItem = IsDirectChildOf(targets.MenuSwitchHandsItem, settingsRoot)
-                ? targets.MenuSwitchHandsItem
-                : FindDirectChild(settingsRoot, $"CI_{slot:00}_SwitchHands_Enable");
-            switchHandsItem ??= FindDirectChildBySuffix(settingsRoot, "_SwitchHands_Enable");
-
-            var freezeItem = IsDirectChildOf(targets.MenuFreezeItem, settingsRoot)
-                ? targets.MenuFreezeItem
-                : FindDirectChild(settingsRoot, $"CI_{slot:00}_Freeze_Enable");
-            freezeItem ??= FindDirectChildBySuffix(settingsRoot, "_Freeze_Enable");
-
-            if (targets.MenuSettingsRoot != settingsRoot || targets.MenuResetItem != resetItem
-                || targets.MenuSwitchHandsItem != switchHandsItem || targets.MenuFreezeItem != freezeItem)
-            {
-                targets.SetMenuObjects(settingsRoot, resetItem, switchHandsItem, freezeItem);
+                targets.SetMenuSettingsRoot(settingsRoot);
                 PrefabUtility.RecordPrefabInstancePropertyModifications(targets);
                 EditorUtility.SetDirty(targets);
             }
 
-            return settingsRoot != null && resetItem != null && switchHandsItem != null && freezeItem != null;
+            return settingsRoot != null;
+        }
+
+        internal static bool ResetMenuDisplayName(EasyCarrySystemItemReference targets)
+        {
+            if (targets == null
+                || targets.GeneratedEasyCarrySystem == null
+                || !EnsureMenuObjectReferences(targets)
+                || targets.MenuSettingsRoot == null)
+            {
+                return false;
+            }
+
+            var menuSettingsRoot = targets.MenuSettingsRoot;
+            var itemObjectName = targets.gameObject.name;
+            if (menuSettingsRoot.name == itemObjectName)
+            {
+                return true;
+            }
+
+            Undo.RecordObject(menuSettingsRoot.gameObject, "Reset EasyCarry System Menu Display Name");
+            menuSettingsRoot.name = itemObjectName;
+            PrefabUtility.RecordPrefabInstancePropertyModifications(menuSettingsRoot.gameObject);
+            EditorUtility.SetDirty(menuSettingsRoot.gameObject);
+            return true;
         }
 
         internal static bool UsesBoneProxy(EasyCarrySystemItemReference targets, string attachPointName)
@@ -1218,11 +1346,6 @@ namespace Serre.EasyCarrySystem.Editor
             return candidate != null && parent != null && candidate != parent && candidate.IsChildOf(parent);
         }
 
-        private static bool IsDirectChildOf(Transform candidate, Transform parent)
-        {
-            return candidate != null && parent != null && candidate.parent == parent;
-        }
-
         private static Transform FindChildRecursiveByNamePattern(Transform parent, string prefix, string suffix)
         {
             if (parent == null)
@@ -1243,25 +1366,6 @@ namespace Serre.EasyCarrySystem.Editor
                 if (found != null)
                 {
                     return found;
-                }
-            }
-
-            return null;
-        }
-
-        private static Transform FindDirectChildBySuffix(Transform parent, string suffix)
-        {
-            if (parent == null)
-            {
-                return null;
-            }
-
-            for (var index = 0; index < parent.childCount; index++)
-            {
-                var child = parent.GetChild(index);
-                if (child.name.EndsWith(suffix, StringComparison.Ordinal))
-                {
-                    return child;
                 }
             }
 

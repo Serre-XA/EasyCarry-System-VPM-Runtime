@@ -47,17 +47,13 @@ namespace Serre.EasyCarrySystem
         public const int NumberedAttachPointCount = 7;
 
         public bool Initialized;
-        public int SourceSlot;
         public int[] NumberedAttachPointOrder = Array.Empty<int>();
-        public string MenuSettingsName;
-        public string MenuResetName;
-        public string MenuSwitchHandsName;
-        public string MenuFreezeName;
         public EasyCarrySystemAttachPointSettings[] AttachPoints = new EasyCarrySystemAttachPointSettings[AttachPointCount];
         public EasyCarrySystemContactSettings[] Contacts = new EasyCarrySystemContactSettings[ContactCount];
         public float[] MainWeights = new float[MainWeightCount];
         public bool[] HideWhenAttachedDefaults = new bool[NumberedAttachPointCount];
         public bool WorldFixedDefault;
+        public bool CanSwitchHandsDefault = true;
         public EasyCarrySystemGestureMask LeftHandGrabGestures = EasyCarrySystemGestureSettings.DefaultGrabGestures;
         public EasyCarrySystemGestureMask RightHandGrabGestures = EasyCarrySystemGestureSettings.DefaultGrabGestures;
 
@@ -145,15 +141,6 @@ namespace Serre.EasyCarrySystem
 
         [SerializeField, HideInInspector]
         private Transform menuSettingsRoot;
-
-        [SerializeField, HideInInspector]
-        private Transform menuResetItem;
-
-        [SerializeField, HideInInspector]
-        private Transform menuSwitchHandsItem;
-
-        [SerializeField, HideInInspector]
-        private Transform menuFreezeItem;
 
         [SerializeField]
         private Transform apHandL;
@@ -409,9 +396,6 @@ namespace Serre.EasyCarrySystem
 
         public int CISlot => ciSlot;
         public Transform MenuSettingsRoot => menuSettingsRoot;
-        public Transform MenuResetItem => menuResetItem;
-        public Transform MenuSwitchHandsItem => menuSwitchHandsItem;
-        public Transform MenuFreezeItem => menuFreezeItem;
         public int NumberedAttachPointCount => HasValidNumberedAttachPointOrder()
             ? numberedAttachPointOrder.Count
             : Mathf.Clamp(numberedAttachPointCount, 0, 7);
@@ -506,16 +490,9 @@ namespace Serre.EasyCarrySystem
             ciItemSize = value;
         }
 
-        public void SetMenuObjects(
-            Transform settingsRoot,
-            Transform resetItem,
-            Transform switchHandsItem,
-            Transform freezeItem)
+        public void SetMenuSettingsRoot(Transform settingsRoot)
         {
             menuSettingsRoot = settingsRoot;
-            menuResetItem = resetItem;
-            menuSwitchHandsItem = switchHandsItem;
-            menuFreezeItem = freezeItem;
         }
 
         public void InitializeNumberedAttachPointList(int count)
