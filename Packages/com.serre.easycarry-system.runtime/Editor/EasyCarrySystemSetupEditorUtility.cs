@@ -97,7 +97,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            var prefabPath = EasyCarrySystemAssetLocator.GetAssetPath(
+            var prefabPath = EasyCarrySystemPackageAssets.GetAssetPath(
                 string.Format(PrefabRelativePathFormat, Mathf.Clamp(slot, 0, SlotCount - 1)));
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (prefab == null)

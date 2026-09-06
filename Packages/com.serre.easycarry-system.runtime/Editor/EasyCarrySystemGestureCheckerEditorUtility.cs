@@ -112,7 +112,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return existingMenuRoot;
             }
 
-            var prefabPath = EasyCarrySystemAssetLocator.GetAssetPath(MenuRootPrefabRelativePath);
+            var prefabPath = EasyCarrySystemPackageAssets.GetAssetPath(MenuRootPrefabRelativePath);
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (prefab == null)
             {
@@ -422,7 +422,7 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             var prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(candidate);
-            var expectedPath = EasyCarrySystemAssetLocator.GetAssetPath(MenuRootPrefabRelativePath);
+            var expectedPath = EasyCarrySystemPackageAssets.GetAssetPath(MenuRootPrefabRelativePath);
             var menuEntry = candidate.transform.Find(MenuEntryObjectName);
             return (!string.IsNullOrEmpty(prefabPath) && prefabPath == expectedPath)
                 || (candidate.name == MenuRootObjectName

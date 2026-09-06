@@ -122,18 +122,18 @@ namespace Serre.EasyCarrySystem.Editor
         {
             ApplyComponentIcon();
 
-            var logoAssetPath = EasyCarrySystemAssetLocator.GetAssetPath(logoRelativePath);
+            var logoAssetPath = EasyCarrySystemPackageAssets.GetAssetPath(logoRelativePath);
             var loadedLogoPath = logo != null ? AssetDatabase.GetAssetPath(logo) : string.Empty;
             if (logo == null || loadedLogoPath != logoAssetPath)
             {
-                var editionLogo = EasyCarrySystemAssetLocator.LoadAsset<Texture2D>(logoRelativePath);
+                var editionLogo = EasyCarrySystemPackageAssets.LoadAsset<Texture2D>(logoRelativePath);
                 if (editionLogo != null)
                 {
                     logo = editionLogo;
                 }
                 else if (logo == null)
                 {
-                    logo = EasyCarrySystemAssetLocator.LoadAsset<Texture2D>(FallbackLogoRelativePath);
+                    logo = EasyCarrySystemPackageAssets.LoadAsset<Texture2D>(FallbackLogoRelativePath);
                 }
             }
 
@@ -371,7 +371,7 @@ namespace Serre.EasyCarrySystem.Editor
             if (easyCarrySystemComponentIcon == null)
             {
                 easyCarrySystemComponentIcon =
-                    EasyCarrySystemAssetLocator.LoadAsset<Texture2D>(ComponentIconRelativePath);
+                    EasyCarrySystemPackageAssets.LoadAsset<Texture2D>(ComponentIconRelativePath);
             }
 
             if (easyCarrySystemComponentIcon == null)
@@ -380,7 +380,7 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             var itemReferenceScript =
-                EasyCarrySystemAssetLocator.LoadAsset<MonoScript>(ItemReferenceScriptRelativePath);
+                EasyCarrySystemPackageAssets.LoadAsset<MonoScript>(ItemReferenceScriptRelativePath);
             if (itemReferenceScript == null)
             {
                 return;
