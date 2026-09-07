@@ -142,6 +142,15 @@ namespace Serre.EasyCarrySystem
         [SerializeField, HideInInspector]
         private Transform menuSettingsRoot;
 
+        [SerializeField, HideInInspector]
+        private Transform menuResetItem;
+
+        [SerializeField, HideInInspector]
+        private Transform menuSwitchHandsItem;
+
+        [SerializeField, HideInInspector]
+        private Transform menuFreezeItem;
+
         [SerializeField]
         private Transform apHandL;
 
@@ -396,6 +405,9 @@ namespace Serre.EasyCarrySystem
 
         public int CISlot => ciSlot;
         public Transform MenuSettingsRoot => menuSettingsRoot;
+        public Transform MenuResetItem => menuResetItem;
+        public Transform MenuSwitchHandsItem => menuSwitchHandsItem;
+        public Transform MenuFreezeItem => menuFreezeItem;
         public int NumberedAttachPointCount => HasValidNumberedAttachPointOrder()
             ? numberedAttachPointOrder.Count
             : Mathf.Clamp(numberedAttachPointCount, 0, 7);
@@ -493,6 +505,18 @@ namespace Serre.EasyCarrySystem
         public void SetMenuSettingsRoot(Transform settingsRoot)
         {
             menuSettingsRoot = settingsRoot;
+        }
+
+        public void SetMenuObjects(
+            Transform settingsRoot,
+            Transform resetItem,
+            Transform switchHandsItem,
+            Transform freezeItem)
+        {
+            menuSettingsRoot = settingsRoot;
+            menuResetItem = resetItem;
+            menuSwitchHandsItem = switchHandsItem;
+            menuFreezeItem = freezeItem;
         }
 
         public void InitializeNumberedAttachPointList(int count)
