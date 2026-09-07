@@ -77,7 +77,7 @@ namespace Serre.EasyCarrySystem.Editor
                 EditorUtility.SetDirty(targets);
             }
 
-            var usedSlots = FindUsedSlots(targets);
+            var usedSlots = FindUsedSlots(targets.transform, targets);
             EditorGUILayout.Space(8f);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
@@ -133,7 +133,7 @@ namespace Serre.EasyCarrySystem.Editor
             var tooltip = isActive
                 ? "現在のアイテムスロット"
                 : isUsed
-                    ? "この番号は現在のシーン内で使用されています"
+                    ? "この番号は同じアバター内で使用されています"
                     : $"アイテムスロット {slot} に切り替え";
 
             var selected = GUILayout.Toggle(isActive, new GUIContent(slot.ToString(), tooltip), style,
@@ -145,7 +145,7 @@ namespace Serre.EasyCarrySystem.Editor
 
             if (isUsed)
             {
-                Debug.LogWarning($"EasyCarry System スロット {slot} は現在のシーン内で使用済みです。", targets);
+                Debug.LogWarning($"EasyCarry System スロット {slot} は同じアバター内で使用済みです。", targets);
                 return;
             }
 
@@ -153,13 +153,20 @@ namespace Serre.EasyCarrySystem.Editor
             GUIUtility.ExitGUI();
         }
 
-        private static bool[] FindUsedSlots(EasyCarrySystemItemReference current)
+        internal static bool[] FindUsedSlots(Transform itemTransform, EasyCarrySystemItemReference ignoredReference)
         {
             var usedSlots = new bool[SlotCount];
-            var allTargets = Resources.FindObjectsOfTypeAll<EasyCarrySystemItemReference>();
+            var avatarRoot = EasyCarrySystemGestureCheckerEditorUtility.ResolveAvatarRoot(itemTransform);
+            if (avatarRoot == null)
+            {
+                return usedSlots;
+            }
+
+            var allTargets = avatarRoot.GetComponentsInChildren<EasyCarrySystemItemReference>(true);
             foreach (var candidate in allTargets)
             {
-                if (candidate == null || candidate == current || EditorUtility.IsPersistent(candidate))
+                if (candidate == null || candidate == ignoredReference || candidate.GeneratedEasyCarrySystem == null
+                    || EditorUtility.IsPersistent(candidate))
                 {
                     continue;
                 }
@@ -170,7 +177,7 @@ namespace Serre.EasyCarrySystem.Editor
                     continue;
                 }
 
-                if (candidate.gameObject.scene != current.gameObject.scene)
+                if (EasyCarrySystemGestureCheckerEditorUtility.ResolveAvatarRoot(candidate.transform) != avatarRoot)
                 {
                     continue;
                 }
@@ -229,23 +236,27 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            EasyCarrySystemEditorSharedUtility.PrepareForSlotReplacement(itemReference);
-            var settings = CaptureSnapshot(itemReference);
-            itemReference.SetItemSettings(settings);
-
-            var oldTransform = oldRoot.transform;
+            Undo.IncrementCurrentGroup();
             var undoGroup = Undo.GetCurrentGroup();
             Undo.SetCurrentGroupName($"Switch EasyCarry System Slot To {newSlot}");
+            EasyCarrySystemEditorSharedUtility.PrepareForSlotReplacement(itemReference);
+            var settings = CaptureSnapshot(itemReference);
 
-            var newRoot = PrefabUtility.InstantiatePrefab(prefab, oldTransform.parent) as GameObject;
+            var oldTransform = oldRoot.transform;
+            var newRoot = (oldTransform.parent != null
+                ? PrefabUtility.InstantiatePrefab(prefab, oldTransform.parent)
+                : PrefabUtility.InstantiatePrefab(prefab, oldRoot.scene)) as GameObject;
             if (newRoot == null)
             {
                 Debug.LogError($"Failed to instantiate EasyCarry System prefab: {prefabPath}", itemReference);
+                Undo.RevertAllDownToGroup(undoGroup);
                 return;
             }
 
             Undo.RegisterCreatedObjectUndo(newRoot, "Create Replacement EasyCarry System");
             newRoot.name = oldRoot.name;
+            newRoot.tag = oldRoot.tag;
+            newRoot.layer = oldRoot.layer;
             var newTransform = newRoot.transform;
             newTransform.SetSiblingIndex(oldTransform.GetSiblingIndex());
             newTransform.localPosition = oldTransform.localPosition;
@@ -256,8 +267,8 @@ namespace Serre.EasyCarrySystem.Editor
             var newCIRoot = FindChildRecursive(newTransform, "CI_Root");
             if (newCIRoot == null)
             {
-                Undo.DestroyObjectImmediate(newRoot);
                 Debug.LogError("CI_Root was not found in the replacement EasyCarry System prefab.", itemReference);
+                Undo.RevertAllDownToGroup(undoGroup);
                 return;
             }
 
@@ -269,6 +280,8 @@ namespace Serre.EasyCarrySystem.Editor
             EasyCarrySystemEditorSharedUtility.SyncNumberedAttachPointAvailability(itemReference, false);
             RetargetItem(itemReference, newCIRoot);
 
+            PrefabUtility.RecordPrefabInstancePropertyModifications(newRoot);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(newTransform);
             Undo.DestroyObjectImmediate(oldRoot);
             PrefabUtility.RecordPrefabInstancePropertyModifications(itemReference);
             EditorUtility.SetDirty(itemReference);

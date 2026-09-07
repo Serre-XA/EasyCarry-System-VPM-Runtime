@@ -52,7 +52,7 @@ namespace Serre.EasyCarrySystem.Editor
         internal static GameObject FindMenuRootFor(EasyCarrySystemItemReference targets)
         {
             var avatarRoot = ResolveAvatarRoot(targets != null ? targets.transform : null);
-            return FindDirectMenuRoot(avatarRoot);
+            return FindMenuRootInHierarchy(avatarRoot);
         }
 
         internal static List<EasyCarrySystemItemReference> FindMissingMenuRootsForLoadedAvatars()
@@ -75,7 +75,7 @@ namespace Serre.EasyCarrySystem.Editor
 
                 var avatarRoot = ResolveAvatarRoot(targets.transform);
                 if (avatarRoot == null || !avatarRootIds.Add(avatarRoot.GetInstanceID())
-                    || FindDirectMenuRoot(avatarRoot) != null)
+                    || FindMenuRootInHierarchy(avatarRoot) != null)
                 {
                     continue;
                 }
@@ -106,7 +106,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return null;
             }
 
-            var existingMenuRoot = FindDirectMenuRoot(avatarRoot);
+            var existingMenuRoot = FindMenuRootInHierarchy(avatarRoot);
             if (existingMenuRoot != null)
             {
                 return existingMenuRoot;
@@ -145,7 +145,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return true;
             }
 
-            var menuRootCount = CountDirectMenuRoots(avatarGameObject.transform);
+            var menuRootCount = CountMenuRootsInHierarchy(avatarGameObject.transform);
             if (menuRootCount == 1)
             {
                 return true;
@@ -154,7 +154,7 @@ namespace Serre.EasyCarrySystem.Editor
             Debug.LogError(
                 menuRootCount == 0
                     ? "EasyCarry System is present, but the shared menu root was not found."
-                    : "Multiple shared EasyCarry System menu roots were found. Keep exactly one directly under the avatar root.",
+                    : "Multiple shared EasyCarry System menu roots were found. Keep exactly one within the avatar hierarchy.",
                 avatarGameObject);
             return false;
         }
@@ -190,7 +190,7 @@ namespace Serre.EasyCarrySystem.Editor
             serializedSettings.Update();
             serializedSettings.FindProperty("leftHandGrabGestures").intValue = (int)leftHandGestures;
             serializedSettings.FindProperty("rightHandGrabGestures").intValue = (int)rightHandGestures;
-            serializedSettings.ApplyModifiedPropertiesWithoutUndo();
+            serializedSettings.ApplyModifiedProperties();
             PrefabUtility.RecordPrefabInstancePropertyModifications(settings);
             EditorUtility.SetDirty(settings);
             return ApplyParameterDefaults(settings);
@@ -376,42 +376,46 @@ namespace Serre.EasyCarrySystem.Editor
             }
         }
 
-        private static GameObject FindDirectMenuRoot(Transform avatarRoot)
+        private static GameObject FindMenuRootInHierarchy(Transform avatarRoot)
         {
-            if (avatarRoot == null)
+            foreach (var menuRoot in EnumerateMenuRoots(avatarRoot))
             {
-                return null;
-            }
-
-            for (var childIndex = 0; childIndex < avatarRoot.childCount; childIndex++)
-            {
-                var childObject = avatarRoot.GetChild(childIndex).gameObject;
-                if (IsMenuRoot(childObject))
-                {
-                    return childObject;
-                }
+                return menuRoot;
             }
 
             return null;
         }
 
-        private static int CountDirectMenuRoots(Transform avatarRoot)
+        private static int CountMenuRootsInHierarchy(Transform avatarRoot)
         {
-            if (avatarRoot == null)
-            {
-                return 0;
-            }
-
             var count = 0;
-            for (var childIndex = 0; childIndex < avatarRoot.childCount; childIndex++)
+            foreach (var menuRoot in EnumerateMenuRoots(avatarRoot))
             {
-                if (IsMenuRoot(avatarRoot.GetChild(childIndex).gameObject))
-                {
-                    count++;
-                }
+                count++;
             }
 
             return count;
+        }
+
+        private static IEnumerable<GameObject> EnumerateMenuRoots(Transform avatarRoot)
+        {
+            if (avatarRoot == null)
+            {
+                yield break;
+            }
+
+            foreach (var child in avatarRoot.GetComponentsInChildren<Transform>(true))
+            {
+                if (child == avatarRoot || ResolveAvatarRoot(child) != avatarRoot)
+                {
+                    continue;
+                }
+
+                if (IsMenuRoot(child.gameObject))
+                {
+                    yield return child.gameObject;
+                }
+            }
         }
 
         private static bool IsMenuRoot(GameObject candidate)
@@ -424,7 +428,9 @@ namespace Serre.EasyCarrySystem.Editor
             var prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(candidate);
             var expectedPath = EasyCarrySystemPackageAssets.GetAssetPath(MenuRootPrefabRelativePath);
             var menuEntry = candidate.transform.Find(MenuEntryObjectName);
-            return (!string.IsNullOrEmpty(prefabPath) && prefabPath == expectedPath)
+            // A prefab's children report the same asset path; only count the instance root.
+            return (PrefabUtility.GetNearestPrefabInstanceRoot(candidate) == candidate
+                    && !string.IsNullOrEmpty(prefabPath) && prefabPath == expectedPath)
                 || (candidate.name == MenuRootObjectName
                     && menuEntry != null
                     && menuEntry.GetComponent<ModularAvatarMenuInstaller>() != null);

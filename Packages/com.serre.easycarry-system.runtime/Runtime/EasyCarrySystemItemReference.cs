@@ -68,10 +68,14 @@ namespace Serre.EasyCarrySystem
 
         private static T[] Resize<T>(T[] source, int length, Func<T> createItem = null)
         {
-            var result = new T[length];
-            if (source != null)
+            var result = source;
+            if (result == null || result.Length != length)
             {
-                Array.Copy(source, result, Mathf.Min(source.Length, length));
+                result = new T[length];
+                if (source != null)
+                {
+                    Array.Copy(source, result, Mathf.Min(source.Length, length));
+                }
             }
 
             if (createItem != null)

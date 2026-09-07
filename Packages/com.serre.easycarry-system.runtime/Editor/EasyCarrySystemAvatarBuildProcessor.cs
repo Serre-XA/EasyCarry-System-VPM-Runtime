@@ -75,7 +75,7 @@ namespace Serre.EasyCarrySystem.Editor
             {
                 ReportBuildError(
                     "EasyCarry Systemの共有メニューが見つからないか、複数存在しています。\n"
-                    + "アバター直下に共有メニューを1つだけ生成してから、再度ビルドしてください。",
+                    + "アバターの子階層に共有メニューを1つだけ配置してから、再度ビルドしてください。",
                     avatarGameObject);
                 return;
             }

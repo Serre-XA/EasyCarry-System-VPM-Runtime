@@ -46,10 +46,10 @@ namespace Serre.EasyCarrySystem.Editor
 
             var itemReference = itemObject.GetComponent<EasyCarrySystemItemReference>();
             var preferredSlot = itemReference != null ? itemReference.CISlot : -1;
-            var slot = FindFirstAvailableSlot(itemObject.scene, preferredSlot, itemReference);
+            var slot = FindFirstAvailableSlot(itemObject.transform, preferredSlot, itemReference);
             if (slot < 0)
             {
-                Debug.LogError("No available EasyCarry System slot was found in the current scene.", itemObject);
+                Debug.LogError("No available EasyCarry System slot was found in this avatar.", itemObject);
                 return;
             }
 
@@ -110,7 +110,9 @@ namespace Serre.EasyCarrySystem.Editor
             var undoGroup = Undo.GetCurrentGroup();
             Undo.SetCurrentGroupName("Setup EasyCarry System");
 
-            var instanceObject = PrefabUtility.InstantiatePrefab(prefab, installParent) as GameObject;
+            var instanceObject = (installParent != null
+                ? PrefabUtility.InstantiatePrefab(prefab, installParent)
+                : PrefabUtility.InstantiatePrefab(prefab, itemObject.scene)) as GameObject;
             if (instanceObject == null)
             {
                 Debug.LogError($"Failed to instantiate EasyCarry System prefab: {prefabPath}", itemObject);
@@ -248,24 +250,9 @@ namespace Serre.EasyCarrySystem.Editor
 #endif
 
 
-        private static int FindFirstAvailableSlot(UnityEngine.SceneManagement.Scene scene, int preferredSlot, EasyCarrySystemItemReference ignoredReference)
+        private static int FindFirstAvailableSlot(Transform itemTransform, int preferredSlot, EasyCarrySystemItemReference ignoredReference)
         {
-            var usedSlots = new bool[SlotCount];
-            var allTargets = Resources.FindObjectsOfTypeAll<EasyCarrySystemItemReference>();
-            foreach (var candidate in allTargets)
-            {
-                if (candidate == null || candidate == ignoredReference || candidate.GeneratedEasyCarrySystem == null
-                    || EditorUtility.IsPersistent(candidate) || candidate.gameObject.scene != scene)
-                {
-                    continue;
-                }
-
-                var slot = ResolveSlot(candidate);
-                if (slot >= 0 && slot < SlotCount)
-                {
-                    usedSlots[slot] = true;
-                }
-            }
+            var usedSlots = EasyCarrySystemSlotEditorUtility.FindUsedSlots(itemTransform, ignoredReference);
 
             if (preferredSlot >= 0 && preferredSlot < usedSlots.Length && !usedSlots[preferredSlot])
             {
@@ -281,27 +268,6 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             return -1;
-        }
-
-        private static int ResolveSlot(EasyCarrySystemItemReference targets)
-        {
-            if (targets == null)
-            {
-                return -1;
-            }
-
-            var prefabPath = targets.GeneratedEasyCarrySystem != null
-                ? PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(targets.GeneratedEasyCarrySystem)
-                : string.Empty;
-            for (var slot = 0; slot < SlotCount; slot++)
-            {
-                if (!string.IsNullOrEmpty(prefabPath) && prefabPath.EndsWith($"EasyCarrySystem_{slot:00}.prefab"))
-                {
-                    return slot;
-                }
-            }
-
-            return targets.CISlot >= 0 && targets.CISlot < SlotCount ? targets.CISlot : -1;
         }
 
         private static bool RejectSetupInProtectedHierarchy(GameObject itemObject)
