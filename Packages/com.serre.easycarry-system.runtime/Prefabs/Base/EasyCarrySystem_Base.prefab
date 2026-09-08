@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1238695109101958982}
   - component: {fileID: 4982444799376936867}
   m_Layer: 0
-  m_Name: "\u88C5\u5099\u4F4D\u7F6E\u306E\u30EA\u30BB\u30C3\u30C8"
+  m_Name: "\u4F4D\u7F6E\u3092\u30EA\u30BB\u30C3\u30C8"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b29d45007c5493d926d2cd45a489529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   Control:
     name: 
     icon: {fileID: 2800000, guid: cb2b299b794ec3d4a99538a2991ce047, type: 3}
@@ -110,6 +113,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   boneReference: 55
   subPath: 
   attachmentMode: 2
@@ -347,6 +353,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dac8cfeaeb4c399ddd90597f849f70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
 --- !u!1 &300246066072422652
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,6 +587,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bb122659f724ebf85fe095ac02dc339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   animator: {fileID: 9100000, guid: ab7b0fe995f54e9894088a86fef3bae1, type: 2}
   layerType: 5
   deleteAttachedAnimator: 1
@@ -600,6 +612,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a96d4ea0c344f39e277d82035bf9bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 1.18.7
+    MinimumVersion: 1.18.0
   parameters:
   - nameOrPrefix: AttachPoint/00/ItemAttached
     remapTo: 
@@ -821,14 +836,14 @@ MonoBehaviour:
     saved: 0
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: Item/IsEnabled
+  - nameOrPrefix: Item/IsDisabled
     remapTo: 
     internalParameter: 1
     isPrefix: 0
     syncType: 3
     localOnly: 1
-    defaultValue: 1
-    saved: 1
+    defaultValue: 0
+    saved: 0
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
   - nameOrPrefix: Item/CanFreeze
@@ -1221,6 +1236,26 @@ MonoBehaviour:
     saved: 0
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
+  - nameOrPrefix: EasyCarrySystem/Item/AllDisabled
+    remapTo: 
+    internalParameter: 0
+    isPrefix: 0
+    syncType: 0
+    localOnly: 0
+    defaultValue: 0
+    saved: 0
+    hasExplicitDefaultValue: 1
+    m_overrideAnimatorDefaults: 0
+  - nameOrPrefix: EasyCarrySystem/Item/ResetAll
+    remapTo: 
+    internalParameter: 0
+    isPrefix: 0
+    syncType: 0
+    localOnly: 0
+    defaultValue: 0
+    saved: 0
+    hasExplicitDefaultValue: 1
+    m_overrideAnimatorDefaults: 0
 --- !u!1 &1067839239097230509
 GameObject:
   m_ObjectHideFlags: 0
@@ -1370,6 +1405,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b29d45007c5493d926d2cd45a489529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   Control:
     name: 
     icon: {fileID: 2800000, guid: f6bb7955dc3dc25488ec3e67ce908983, type: 3}
@@ -1636,6 +1674,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   boneReference: 7
   subPath: 
   attachmentMode: 2
@@ -1873,6 +1914,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dac8cfeaeb4c399ddd90597f849f70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
 --- !u!1 &2587585164787806254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1921,6 +1965,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   boneReference: 55
   subPath: 
   attachmentMode: 2
@@ -2158,6 +2205,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dac8cfeaeb4c399ddd90597f849f70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
 --- !u!1 &2946550182291306282
 GameObject:
   m_ObjectHideFlags: 0
@@ -2206,6 +2256,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   boneReference: 55
   subPath: 
   attachmentMode: 2
@@ -2443,6 +2496,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dac8cfeaeb4c399ddd90597f849f70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
 --- !u!1 &3470512475915468386
 GameObject:
   m_ObjectHideFlags: 0
@@ -2491,6 +2547,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   boneReference: 55
   subPath: 
   attachmentMode: 2
@@ -2728,6 +2787,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dac8cfeaeb4c399ddd90597f849f70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
 --- !u!1 &3747832877471532725
 GameObject:
   m_ObjectHideFlags: 0
@@ -2739,7 +2801,7 @@ GameObject:
   - component: {fileID: 1168155614387788302}
   - component: {fileID: 3892879498708024348}
   m_Layer: 0
-  m_Name: "\u30B7\u30B9\u30C6\u30E0\u306E\u6709\u52B9\u5316"
+  m_Name: "\u30B7\u30B9\u30C6\u30E0\u3092\u7121\u52B9\u5316"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2772,12 +2834,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b29d45007c5493d926d2cd45a489529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 1.18.7
+    MinimumVersion: 1.18.0
   Control:
     name: 
     icon: {fileID: 2800000, guid: dabe0867de3e32e4ca4c72c162d8ef69, type: 3}
     type: 102
     parameter:
-      name: Item/IsEnabled
+      name: Item/IsDisabled
     value: 1
     style: 0
     subMenu: {fileID: 0}
@@ -2875,6 +2940,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   boneReference: 18
   subPath: 
   attachmentMode: 2
@@ -3090,6 +3158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   boneReference: 17
   subPath: 
   attachmentMode: 2
@@ -3302,6 +3373,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   boneReference: 55
   subPath: 
   attachmentMode: 2
@@ -3539,6 +3613,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dac8cfeaeb4c399ddd90597f849f70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
 --- !u!1 &5796424515438158154
 GameObject:
   m_ObjectHideFlags: 0
@@ -3760,7 +3837,7 @@ GameObject:
   - component: {fileID: 3789662909964304331}
   - component: {fileID: 546864886765407318}
   m_Layer: 0
-  m_Name: "\u30EF\u30FC\u30EB\u30C9\u56FA\u5B9A\u306E\u6709\u52B9\u5316"
+  m_Name: "\u30EF\u30FC\u30EB\u30C9\u56FA\u5B9A\u3092\u6709\u52B9\u5316"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3793,6 +3870,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b29d45007c5493d926d2cd45a489529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   Control:
     name: 
     icon: {fileID: 2800000, guid: 76219de1a6be74c40ac3e917bb132009, type: 3}
@@ -4142,6 +4222,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b29d45007c5493d926d2cd45a489529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   Control:
     name: 
     icon: {fileID: 2800000, guid: fe5d72845649dbc42999d64d7df3ce6c, type: 3}
@@ -4172,6 +4255,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ef83cb0c23d4d7c9d41021e544a1978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   menuToAppend: {fileID: 11400000, guid: 30f7c293e19fc744daf64d486176077b, type: 2}
   installTargetMenu: {fileID: 11400000, guid: 30f7c293e19fc744daf64d486176077b, type: 2}
 --- !u!1 &6806677825729872659
@@ -4841,6 +4927,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42581d8044b64899834d3d515ab3a144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
   boneReference: 55
   subPath: 
   attachmentMode: 2
@@ -5078,6 +5167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dac8cfeaeb4c399ddd90597f849f70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _modularAvatarVersionTag:
+    UpdatedAtVersion: 
+    MinimumVersion: 
 --- !u!1001 &8337519829353356458
 PrefabInstance:
   m_ObjectHideFlags: 0
