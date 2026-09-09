@@ -49,6 +49,8 @@ namespace Serre.EasyCarrySystem.Editor
 
         public override void OnInspectorGUI()
         {
+            EasyCarrySystemSetupEditorUtility.DrawMissingItemConstraints(target as EasyCarrySystemItemReference);
+
             var authoringEditorType = ResolveAuthoringEditorType();
             if (authoringEditorType != null && !runtimePreviewEnabled)
             {

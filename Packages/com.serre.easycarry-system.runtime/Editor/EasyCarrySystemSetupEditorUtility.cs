@@ -183,6 +183,91 @@ namespace Serre.EasyCarrySystem.Editor
             Selection.activeObject = itemObject;
         }
 
+        internal static void DrawMissingItemConstraints(EasyCarrySystemItemReference target)
+        {
+#if VRC_SDK_VRCSDK3
+            if (target == null || target.GeneratedEasyCarrySystem == null)
+            {
+                return;
+            }
+
+            var missingParent = target.GetComponent<VRCParentConstraint>() == null;
+            var missingScale = target.GetComponent<VRCScaleConstraint>() == null;
+            if (!missingParent && !missingScale)
+            {
+                return;
+            }
+
+            var missing = missingParent && missingScale
+                ? "VRC Parent Constraint / VRC Scale Constraint"
+                : missingParent ? "VRC Parent Constraint" : "VRC Scale Constraint";
+            EditorGUILayout.HelpBox($"必須の{missing}がありません。再生成してください。", MessageType.Error);
+            var source = FindChildRecursive(target.GeneratedEasyCarrySystem.transform, "CI_Root");
+            if (source == null)
+            {
+                EditorGUILayout.HelpBox("参照先のCI_Rootが見つからないため再生成できません。生成されたECSの構成を確認してください。", MessageType.Error);
+            }
+
+            using (new EditorGUI.DisabledScope(Application.isPlaying || source == null
+                || EditorUtility.IsPersistent(target) || !target.gameObject.scene.IsValid()))
+            {
+                if (GUILayout.Button("不足している必須Constraintを再生成"))
+                {
+                    RestoreMissingItemConstraints(target);
+                    GUIUtility.ExitGUI();
+                }
+            }
+#endif
+        }
+
+#if VRC_SDK_VRCSDK3
+        internal static void RestoreMissingItemConstraints(EasyCarrySystemItemReference target)
+        {
+            if (target == null || target.GeneratedEasyCarrySystem == null || Application.isPlaying
+                || EditorUtility.IsPersistent(target) || !target.gameObject.scene.IsValid())
+            {
+                return;
+            }
+
+            var source = FindChildRecursive(target.GeneratedEasyCarrySystem.transform, "CI_Root");
+            if (source == null)
+            {
+                Debug.LogError("必須Constraintを再生成できません。CI_Rootが見つかりません。", target);
+                return;
+            }
+
+            var missingParent = target.GetComponent<VRCParentConstraint>() == null;
+            var missingScale = target.GetComponent<VRCScaleConstraint>() == null;
+            if (!missingParent && !missingScale)
+            {
+                return;
+            }
+
+            Undo.IncrementCurrentGroup();
+            var group = Undo.GetCurrentGroup();
+            Undo.SetCurrentGroupName("Restore EasyCarry System Constraints");
+            // Capture scale before adding a constraint can evaluate the item transform.
+            var scale = target.transform.localScale;
+            try
+            {
+                if (missingParent)
+                {
+                    ConfigureItemParentConstraint(Undo.AddComponent<VRCParentConstraint>(target.gameObject), source);
+                }
+                if (missingScale)
+                {
+                    ConfigureItemScaleConstraint(Undo.AddComponent<VRCScaleConstraint>(target.gameObject), source, scale);
+                }
+                Undo.CollapseUndoOperations(group);
+            }
+            catch (System.Exception exception)
+            {
+                Undo.RevertAllDownToGroup(group);
+                Debug.LogException(exception, target);
+            }
+        }
+#endif
+
         private static string GetGeneratedObjectName(Transform parent, string itemName)
         {
             var prefixedName = itemName.StartsWith(GeneratedObjectNamePrefix, System.StringComparison.Ordinal)
@@ -205,6 +290,15 @@ namespace Serre.EasyCarrySystem.Editor
 
             var parentConstraint = itemObject.GetComponent<VRCParentConstraint>()
                 ?? Undo.AddComponent<VRCParentConstraint>(itemObject);
+            ConfigureItemParentConstraint(parentConstraint, ciRoot);
+
+            var scaleConstraint = itemObject.GetComponent<VRCScaleConstraint>()
+                ?? Undo.AddComponent<VRCScaleConstraint>(itemObject);
+            ConfigureItemScaleConstraint(scaleConstraint, ciRoot, originalLocalScale);
+        }
+
+        private static void ConfigureItemParentConstraint(VRCParentConstraint parentConstraint, Transform ciRoot)
+        {
             Undo.RecordObject(parentConstraint, "Configure EasyCarry System Parent Constraint");
             ConfigureConstraintSource(parentConstraint, ciRoot);
             parentConstraint.PositionAtRest = Vector3.zero;
@@ -217,9 +311,12 @@ namespace Serre.EasyCarrySystem.Editor
             parentConstraint.AffectsRotationZ = true;
             parentConstraint.ApplyConfigurationChanges();
             EditorUtility.SetDirty(parentConstraint);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(parentConstraint);
+        }
 
-            var scaleConstraint = itemObject.GetComponent<VRCScaleConstraint>()
-                ?? Undo.AddComponent<VRCScaleConstraint>(itemObject);
+        private static void ConfigureItemScaleConstraint(VRCScaleConstraint scaleConstraint, Transform ciRoot,
+            Vector3 originalLocalScale)
+        {
             Undo.RecordObject(scaleConstraint, "Configure EasyCarry System Scale Constraint");
             ConfigureConstraintSource(scaleConstraint, ciRoot);
             scaleConstraint.ScaleAtRest = originalLocalScale;
@@ -229,6 +326,7 @@ namespace Serre.EasyCarrySystem.Editor
             scaleConstraint.AffectsScaleZ = true;
             scaleConstraint.ApplyConfigurationChanges();
             EditorUtility.SetDirty(scaleConstraint);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(scaleConstraint);
         }
 
         private static void ConfigureConstraintSource(VRCConstraintBase constraint, Transform source)
