@@ -88,6 +88,8 @@ namespace Serre.EasyCarrySystem.Editor
         static EasyCarrySystemEditorSharedUtility()
         {
             EditorApplication.playModeStateChanged += ResetAllAttachPointsToAP00OnPlayMode;
+            EditorApplication.hierarchyChanged += QueueScaleLinkRefresh;
+            Undo.undoRedoPerformed += QueueScaleLinkRefresh;
         }
 
         internal sealed class HorizontalMarginScope : GUI.Scope
@@ -703,16 +705,108 @@ namespace Serre.EasyCarrySystem.Editor
                 var usesBoneProxy = UsesBoneProxy(targets, attachPointName);
                 SetComponentEnabled(attachPoint.GetComponent<ModularAvatarBoneProxy>(), usesBoneProxy, recordUndo);
                 SetComponentEnabled(FindVrcParentConstraint(attachPoint), !usesBoneProxy, recordUndo);
-                var scaleConstraint = FindVrcScaleConstraint(attachPoint);
-                SetComponentEnabled(scaleConstraint, !usesBoneProxy, recordUndo);
-                if (!usesBoneProxy)
+                SyncAttachPointScale(targets, attachPointName, recordUndo);
+            }
+        }
+
+        private static bool scaleLinkRefreshQueued;
+
+        private static void QueueScaleLinkRefresh()
+        {
+            if (scaleLinkRefreshQueued || EditorApplication.isPlayingOrWillChangePlaymode) return;
+            scaleLinkRefreshQueued = true;
+            EditorApplication.delayCall += RefreshSceneScaleLinks;
+        }
+
+        private static void RefreshSceneScaleLinks()
+        {
+            scaleLinkRefreshQueued = false;
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+            foreach (var target in UnityEngine.Object.FindObjectsOfType<EasyCarrySystemItemReference>(true))
+            {
+                if (EditorUtility.IsPersistent(target) || !target.gameObject.scene.IsValid()
+                    || UnityEditor.SceneManagement.EditorSceneManager.IsPreviewScene(target.gameObject.scene)) continue;
+                foreach (var pointName in NumberedAttachPointNames)
+                    SyncAttachPointScale(target, pointName, false);
+            }
+        }
+
+        internal static string RepairAndValidateScaleLinksForBuild(EasyCarrySystemItemReference target)
+        {
+            foreach (var pointName in NumberedAttachPointNames)
+            {
+                SyncAttachPointScale(target, pointName, false, true);
+                if (UsesBoneProxy(target, pointName)) continue;
+                var owner = FindSourceItem(GetAttachPointReference(target, pointName));
+                if (owner == null) continue;
+                var expected = owner.GeneratedEasyCarrySystem != null
+                    ? FindChildRecursive(owner.EasyCarrySystemRoot, "CI_Root") : null;
+                var point = FindChildRecursive(target.EasyCarrySystemRoot, pointName);
+                var constraint = FindVrcScaleConstraint(point);
+                if (owner == target || expected == null || constraint == null
+                    || owner.gameObject.scene != target.gameObject.scene
+                    || GetEditorOnlyState(owner) != EasyCarrySystemEditorOnlyState.None
+                    || HasScaleDependency(owner, target, new HashSet<int>()))
+                    return $"{target.name} / {pointName}: 追従先ECSのCI_Rootを解決できません（参照欠落・ビルド除外・循環参照を確認してください）。";
+                var serialized = new SerializedObject(constraint);
+                if (serialized.FindProperty("m_Enabled")?.boolValue != true
+                    || serialized.FindProperty(SourceTransformPath)?.objectReferenceValue != expected)
+                    return $"{target.name} / {pointName}: Scale ConstraintのCI_Root参照を修復できませんでした。";
+            }
+            return null;
+        }
+
+        internal static void SyncAttachPointScale(EasyCarrySystemItemReference target, string pointName,
+            bool recordUndo, bool forBuild = false)
+        {
+            if (target == null || target.EasyCarrySystemRoot == null || (!forBuild && Application.isPlaying)) return;
+            var point = FindChildRecursive(target.EasyCarrySystemRoot, pointName);
+            var constraint = FindVrcScaleConstraint(point);
+            if (constraint == null) return;
+
+            Transform source = null;
+            if (!UsesBoneProxy(target, pointName))
+            {
+                var owner = FindSourceItem(GetAttachPointReference(target, pointName));
+                if (owner != null && owner != target && owner.gameObject.scene == target.gameObject.scene
+                    && owner.GeneratedEasyCarrySystem != null
+                    && GetEditorOnlyState(owner) == EasyCarrySystemEditorOnlyState.None
+                    && !HasScaleDependency(owner, target, new HashSet<int>()))
                 {
-                    SetConstraintSourceTransform(
-                        scaleConstraint,
-                        GetAttachPointReference(targets, attachPointName),
-                        recordUndo);
+                    source = FindChildRecursive(owner.EasyCarrySystemRoot, "CI_Root");
                 }
             }
+
+            var serialized = new SerializedObject(constraint);
+            var wasEnabled = serialized.FindProperty("m_Enabled")?.boolValue == true;
+            SetConstraintSourceTransform(constraint, source, recordUndo);
+            SetComponentEnabled(constraint, source != null, recordUndo);
+            if (wasEnabled && source == null && point.localScale != Vector3.one)
+            {
+                if (recordUndo) Undo.RecordObject(point, "Reset AP Scale");
+                point.localScale = Vector3.one;
+                PrefabUtility.RecordPrefabInstancePropertyModifications(point);
+                EditorUtility.SetDirty(point);
+            }
+        }
+
+        private static EasyCarrySystemItemReference FindSourceItem(Transform source)
+        {
+            return source != null ? source.GetComponentInParent<EasyCarrySystemItemReference>(true) : null;
+        }
+
+        private static bool HasScaleDependency(EasyCarrySystemItemReference item,
+            EasyCarrySystemItemReference destination, HashSet<int> visited)
+        {
+            if (item == destination) return true;
+            if (item == null || !visited.Add(item.GetInstanceID())) return false;
+            foreach (var pointName in NumberedAttachPointNames)
+            {
+                if (UsesBoneProxy(item, pointName)) continue;
+                var owner = FindSourceItem(GetAttachPointReference(item, pointName));
+                if (HasScaleDependency(owner, destination, visited)) return true;
+            }
+            return false;
         }
 
         internal static bool EnsureMenuObjectReferences(EasyCarrySystemItemReference targets)

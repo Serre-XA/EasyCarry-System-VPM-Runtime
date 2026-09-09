@@ -109,7 +109,21 @@ namespace Serre.EasyCarrySystem.Editor
                     "AP_00",
                     false);
                 EasyCarrySystemEditorSharedUtility.PrepareForAvatarBuild(target);
-                Object.DestroyImmediate(target);
+            }
+
+            // Re-resolve after all settings have been restored, including Play Mode builds.
+            foreach (var target in targets)
+            {
+                var error = EasyCarrySystemEditorSharedUtility.RepairAndValidateScaleLinksForBuild(target);
+                if (error == null) continue;
+                ReportBuildError(error, target);
+                return;
+            }
+
+            // Keep all item ownership references alive until every scale link is resolved.
+            foreach (var target in targets)
+            {
+                if (target != null) Object.DestroyImmediate(target);
             }
 
             foreach (var settings in gestureSettings)

@@ -330,6 +330,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
+            EasyCarrySystemEditorSharedUtility.SyncAllAttachmentMethodComponents(targets, true);
             targets.SetItemSettings(CaptureSnapshot(targets));
             PrefabUtility.RecordPrefabInstancePropertyModifications(targets);
             EditorUtility.SetDirty(targets);
@@ -477,6 +478,7 @@ namespace Serre.EasyCarrySystem.Editor
             RestoreMainConstraintWeights(FindParentConstraint(mainConst), snapshot.MainWeights);
             RestoreMainConstraintWeights(FindScaleConstraint(mainConst), snapshot.MainWeights);
 
+            EasyCarrySystemEditorSharedUtility.SyncAllAttachmentMethodComponents(targets, true);
             targets.SetItemSettings(CaptureSnapshot(targets));
             PrefabUtility.RecordPrefabInstancePropertyModifications(targets);
             EditorUtility.SetDirty(targets);
@@ -648,7 +650,7 @@ namespace Serre.EasyCarrySystem.Editor
                 || attachmentMethod == EasyCarrySystemAttachPointMethod.BoneProxy;
             SetComponentEnabled(attachPoint.GetComponent<ModularAvatarBoneProxy>(), usesBoneProxy);
             SetComponentEnabled(FindParentConstraint(attachPoint), !usesBoneProxy);
-            SetComponentEnabled(FindScaleConstraint(attachPoint), !usesBoneProxy);
+            // Scale linking is resolved from the ECS owner after settings are restored.
         }
 
         private static void SetComponentEnabled(Component component, bool enabled)
@@ -691,20 +693,6 @@ namespace Serre.EasyCarrySystem.Editor
                 EditorUtility.SetDirty(parentConstraint);
             }
 
-            var scaleConstraint = FindScaleConstraint(attachPoint);
-            if (scaleConstraint != null)
-            {
-                var serializedScaleConstraint = new SerializedObject(scaleConstraint);
-                var scaleSourceProperty = serializedScaleConstraint.FindProperty(SourceTransformPath);
-                if (scaleSourceProperty != null)
-                {
-                    Undo.RecordObject(scaleConstraint, "Restore Attach Point Scale Source");
-                    scaleSourceProperty.objectReferenceValue = snapshot.SourceTransform;
-                    serializedScaleConstraint.ApplyModifiedProperties();
-                    PrefabUtility.RecordPrefabInstancePropertyModifications(scaleConstraint);
-                    EditorUtility.SetDirty(scaleConstraint);
-                }
-            }
         }
 
         private static Transform GetAttachPointSource(EasyCarrySystemItemReference targets, string attachPointName)

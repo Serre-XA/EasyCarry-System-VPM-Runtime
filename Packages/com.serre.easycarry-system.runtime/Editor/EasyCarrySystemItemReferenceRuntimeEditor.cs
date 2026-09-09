@@ -32,6 +32,7 @@ namespace Serre.EasyCarrySystem.Editor
             {
                 EasyCarrySystemEditorSharedUtility.EnsureNumberedAttachPointListInitialized(targets);
                 EasyCarrySystemEditorSharedUtility.SyncNumberedAttachPointAvailability(targets, false);
+                EasyCarrySystemEditorSharedUtility.SyncAllAttachmentMethodComponents(targets, false);
             }
         }
 
