@@ -66,3 +66,6 @@ Assets/PackageMakerWindowData.asset*
 # EasyCarry System package documentation is authoring-only.
 /Packages/com.serre.easycarry-system.runtime/README.md
 /Packages/com.serre.easycarry-system.runtime/README.md.meta
+
+# Local release preparation notes.
+/RELEASE_PREPARATION.md
