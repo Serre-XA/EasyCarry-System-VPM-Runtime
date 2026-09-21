@@ -671,11 +671,21 @@ namespace Serre.EasyCarrySystem.Editor
             EditorUtility.SetDirty(targets);
         }
 
+        internal static string GetNumberedAttachPointDisplayName(
+            EasyCarrySystemItemReference target, int attachPointIndex)
+        {
+            if (target == null || attachPointIndex < 0 || attachPointIndex >= NumberedAttachPointNames.Length)
+                return GetNumberedAttachPointDisplayName(attachPointIndex);
+            var customName = target.ItemSettings.AttachPoints[attachPointIndex + 2].DisplayName;
+            if (string.IsNullOrWhiteSpace(customName)) return GetNumberedAttachPointDisplayName(attachPointIndex);
+            return attachPointIndex == 0 ? $"{customName.Trim()}（初期）" : customName.Trim();
+        }
+
         internal static string GetNumberedAttachPointDisplayName(int attachPointIndex)
         {
             return attachPointIndex == 0
-                ? "装備位置00（初期位置）"
-                : $"装備位置 {attachPointIndex:00}";
+                ? "初期装備位置"
+                : $"追加装備位置{attachPointIndex}";
         }
 
         internal static void SyncNumberedAttachPointAvailability(EasyCarrySystemItemReference targets, bool recordUndo)

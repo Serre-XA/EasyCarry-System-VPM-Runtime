@@ -278,7 +278,7 @@ namespace Serre.EasyCarrySystem.Editor
             var attachPointIndex = System.Array.IndexOf(
                 EasyCarrySystemEditorSharedUtility.NumberedAttachPointNames, attachPointName);
             var label = attachPointIndex >= 0
-                ? EasyCarrySystemEditorSharedUtility.GetNumberedAttachPointDisplayName(attachPointIndex)
+                ? EasyCarrySystemEditorSharedUtility.GetNumberedAttachPointDisplayName(targets, attachPointIndex)
                 : attachPointName;
 
             using (new EasyCarrySystemEditorSharedUtility.HorizontalMarginScope())

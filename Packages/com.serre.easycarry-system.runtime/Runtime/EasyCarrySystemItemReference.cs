@@ -10,6 +10,7 @@ namespace Serre.EasyCarrySystem
     [Serializable]
     public sealed class EasyCarrySystemAttachPointSettings
     {
+        public string DisplayName = string.Empty;
         public string AdjustmentGuide = string.Empty;
         public Transform SourceTransform;
         public Vector3 PositionOffset;
