@@ -372,6 +372,7 @@ namespace Serre.EasyCarrySystem.Editor
                 var attachPointTransform = FindChildRecursive(targets.EasyCarrySystemRoot, attachPointName);
                 var attachPointSnapshot = new EasyCarrySystemAttachPointSettings
                 {
+                    AdjustmentGuide = targets.ItemSettings.AttachPoints[i].AdjustmentGuide ?? string.Empty,
                     SourceTransform = GetAttachPointSource(targets, attachPointName),
                     PositionOffset = targets.GetAttachPointPositionOffset(attachPointName),
                     RotationOffset = targets.GetAttachPointRotationOffset(attachPointName),
@@ -439,6 +440,7 @@ namespace Serre.EasyCarrySystem.Editor
             for (var i = 0; i < AttachPointNames.Length; i++)
             {
                 targets.SetAttachPointMethod(AttachPointNames[i], snapshot.AttachPoints[i].AttachmentMethod);
+                targets.ItemSettings.AttachPoints[i].AdjustmentGuide = snapshot.AttachPoints[i].AdjustmentGuide ?? string.Empty;
             }
 
             var serializedTargets = new SerializedObject(targets);

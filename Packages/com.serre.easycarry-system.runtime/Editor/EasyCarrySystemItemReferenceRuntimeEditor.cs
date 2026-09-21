@@ -190,9 +190,9 @@ namespace Serre.EasyCarrySystem.Editor
                 }
 
                 EditorGUILayout.Space(3f);
-                DrawLocalTransformFields(targets.CIItemSize);
                 DrawContactShapeFields(
                     EasyCarrySystemEditorSharedUtility.FindContactComponent(targets.CIItemSize, "ContactSender"));
+                DrawLocalTransformFields(targets.CIItemSize);
             }
         }
 
@@ -305,8 +305,9 @@ namespace Serre.EasyCarrySystem.Editor
                         return;
                     }
 
-                    using (new EditorGUI.IndentLevelScope())
+                    using (new EasyCarrySystemEditorSharedUtility.AttachPointContentScope())
                     {
+                        EasyCarrySystemEditorSharedUtility.DrawAttachPointAdjustmentGuide(targets, attachPointName);
                         DrawReadOnlyReference("参照先オブジェクト",
                             ResolveAttachPointReference(targets, attachPointName));
                         if (!EasyCarrySystemEditorSharedUtility.IsAttachPointAssigned(targets, attachPointName))
@@ -316,10 +317,14 @@ namespace Serre.EasyCarrySystem.Editor
                         }
 
                         var editing = targets.GetAttachPointEditing(attachPointName);
-                        if (DrawEditButton("位置調整", editing, "Scene上のギズモで装備位置を調整します。"))
+                        using (new EditorGUILayout.HorizontalScope())
                         {
-                            ToggleAttachPointEdit(targets, attachPointName);
-                            GUIUtility.ExitGUI();
+                            GUILayout.Space(15f);
+                            if (DrawEditButton("位置調整", editing, "Scene上のギズモで装備位置を調整します。"))
+                            {
+                                ToggleAttachPointEdit(targets, attachPointName);
+                                GUIUtility.ExitGUI();
+                            }
                         }
 
                         if (editing)

@@ -10,6 +10,7 @@ namespace Serre.EasyCarrySystem
     [Serializable]
     public sealed class EasyCarrySystemAttachPointSettings
     {
+        public string AdjustmentGuide = string.Empty;
         public Transform SourceTransform;
         public Vector3 PositionOffset;
         public Vector3 RotationOffset;
@@ -123,6 +124,15 @@ namespace Serre.EasyCarrySystem
         public void SetGeneratedEasyCarrySystem(GameObject value)
         {
             generatedEasyCarrySystem = value;
+        }
+
+        public string GetAttachPointAdjustmentGuide(string attachPointName)
+        {
+            // Snapshot indices 0 and 1 are reserved for the left and right hands.
+            if (attachPointName == null || !attachPointName.StartsWith("AP_", StringComparison.Ordinal)
+                || !int.TryParse(attachPointName.Substring(3), out var index) || index < 0 || index > 6)
+                return string.Empty;
+            return ItemSettings.AttachPoints[index + 2].AdjustmentGuide ?? string.Empty;
         }
 
         public void SetItemSettings(EasyCarrySystemItemSettings value)

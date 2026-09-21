@@ -92,6 +92,27 @@ namespace Serre.EasyCarrySystem.Editor
             Undo.undoRedoPerformed += QueueScaleLinkRefresh;
         }
 
+        internal sealed class AttachPointContentScope : GUI.Scope
+        {
+            private readonly int previousIndent;
+
+            internal AttachPointContentScope()
+            {
+                previousIndent = EditorGUI.indentLevel;
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(15f);
+                GUILayout.BeginVertical();
+                EditorGUI.indentLevel = 0;
+            }
+
+            protected override void CloseScope()
+            {
+                EditorGUI.indentLevel = previousIndent;
+                GUILayout.EndVertical();
+                GUILayout.EndHorizontal();
+            }
+        }
+
         internal sealed class HorizontalMarginScope : GUI.Scope
         {
             private readonly float margin;
@@ -573,6 +594,24 @@ namespace Serre.EasyCarrySystem.Editor
                 contactTransform.localRotation = primary.localRotation;
                 PrefabUtility.RecordPrefabInstancePropertyModifications(contactTransform);
                 EditorUtility.SetDirty(contactTransform);
+            }
+        }
+
+        internal static void DrawAttachPointAdjustmentGuide(EasyCarrySystemItemReference target, string pointName)
+        {
+            var guide = target.GetAttachPointAdjustmentGuide(pointName);
+            if (string.IsNullOrWhiteSpace(guide)) return;
+            EditorGUILayout.LabelField("装備位置の調整ガイド", new GUIStyle(EditorStyles.label) { fontStyle = FontStyle.Bold });
+            using (new AttachPointContentScope())
+            {
+                GUILayout.Label(guide, new GUIStyle(EditorStyles.helpBox)
+                {
+                    font = EditorStyles.label.font,
+                    fontSize = EditorStyles.label.fontSize,
+                    fontStyle = FontStyle.Bold,
+                    wordWrap = true,
+                    richText = false,
+                });
             }
         }
 
