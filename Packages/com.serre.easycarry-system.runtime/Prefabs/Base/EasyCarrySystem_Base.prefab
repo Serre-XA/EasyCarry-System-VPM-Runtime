@@ -1240,8 +1240,8 @@ MonoBehaviour:
     remapTo: 
     internalParameter: 0
     isPrefix: 0
-    syncType: 0
-    localOnly: 0
+    syncType: 3
+    localOnly: 1
     defaultValue: 0
     saved: 0
     hasExplicitDefaultValue: 1
@@ -1250,8 +1250,8 @@ MonoBehaviour:
     remapTo: 
     internalParameter: 0
     isPrefix: 0
-    syncType: 0
-    localOnly: 0
+    syncType: 3
+    localOnly: 1
     defaultValue: 0
     saved: 0
     hasExplicitDefaultValue: 1
