@@ -370,6 +370,7 @@ namespace Serre.EasyCarrySystem.Editor
             {
                 var attachPointName = AttachPointNames[i];
                 var attachPointTransform = FindChildRecursive(targets.EasyCarrySystemRoot, attachPointName);
+                var previous = targets.ItemSettings.AttachPoints[i];
                 var attachPointSnapshot = new EasyCarrySystemAttachPointSettings
                 {
                     DisplayName = targets.ItemSettings.AttachPoints[i].DisplayName ?? string.Empty,
@@ -378,6 +379,10 @@ namespace Serre.EasyCarrySystem.Editor
                     PositionOffset = targets.GetAttachPointPositionOffset(attachPointName),
                     RotationOffset = targets.GetAttachPointRotationOffset(attachPointName),
                     AttachmentMethod = targets.GetAttachPointMethod(attachPointName),
+                    HasBoneProxyTransform = previous.HasBoneProxyTransform,
+                    BoneProxyLocalPosition = previous.BoneProxyLocalPosition,
+                    BoneProxyLocalRotation = previous.BoneProxyLocalRotation,
+                    BoneProxyLocalScale = previous.BoneProxyLocalScale,
                 };
 
                 if (attachPointTransform != null)
@@ -386,6 +391,14 @@ namespace Serre.EasyCarrySystem.Editor
                     attachPointSnapshot.LocalPosition = attachPointTransform.localPosition;
                     attachPointSnapshot.LocalRotation = attachPointTransform.localRotation;
                     attachPointSnapshot.LocalScale = attachPointTransform.localScale;
+                    if (EasyCarrySystemEditorSharedUtility.UsesBoneProxy(targets, attachPointName))
+                    {
+                        attachPointSnapshot.HasBoneProxyTransform = true;
+                        attachPointSnapshot.BoneProxyLocalPosition = attachPointTransform.localPosition;
+                        attachPointSnapshot.BoneProxyLocalRotation = attachPointTransform.localRotation;
+                        attachPointSnapshot.BoneProxyLocalScale = attachPointTransform.localScale;
+                    }
+
 
                     var boneProxy = attachPointTransform.GetComponent<ModularAvatarBoneProxy>();
                     if (boneProxy != null)
@@ -443,6 +456,12 @@ namespace Serre.EasyCarrySystem.Editor
                 targets.SetAttachPointMethod(AttachPointNames[i], snapshot.AttachPoints[i].AttachmentMethod);
                 targets.ItemSettings.AttachPoints[i].DisplayName = snapshot.AttachPoints[i].DisplayName ?? string.Empty;
                 targets.ItemSettings.AttachPoints[i].AdjustmentGuide = snapshot.AttachPoints[i].AdjustmentGuide ?? string.Empty;
+                var saved = snapshot.AttachPoints[i];
+                var destination = targets.ItemSettings.AttachPoints[i];
+                destination.HasBoneProxyTransform = saved.HasBoneProxyTransform;
+                destination.BoneProxyLocalPosition = saved.BoneProxyLocalPosition;
+                destination.BoneProxyLocalRotation = saved.BoneProxyLocalRotation;
+                destination.BoneProxyLocalScale = saved.BoneProxyLocalScale;
             }
 
             var serializedTargets = new SerializedObject(targets);

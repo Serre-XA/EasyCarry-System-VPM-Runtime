@@ -205,8 +205,8 @@ namespace Serre.EasyCarrySystem.Editor
                 EasyCarrySystemEditorSharedUtility.DrawSectionDescription(
                     "左右の手で持ったときの位置を調整します。");
 
-                DrawHandCard(targets, "AP_Hand_L", "左手", "右手へ反転コピー");
-                DrawHandCard(targets, "AP_Hand_R", "右手", "左手へ反転コピー");
+                DrawHandCard(targets, "AP_Hand_L", "左手", "右手から反転コピー");
+                DrawHandCard(targets, "AP_Hand_R", "右手", "左手から反転コピー");
             }
         }
 
@@ -221,10 +221,19 @@ namespace Serre.EasyCarrySystem.Editor
                     var mirrorButtonStyle = EasyCarrySystemEditorSharedUtility.CreateReadableStyle(
                         EditorStyles.miniButton);
                     if (GUILayout.Button(new GUIContent(mirrorLabel,
-                            "位置と回転をアバターRoot基準で反転し、反対側の手へコピーします。"),
+                            "反対側の手の位置と回転をアバターRoot基準で反転し、この手へコピーします。"),
                             mirrorButtonStyle, GUILayout.Width(128f)))
                     {
-                        MirrorHandPosition(targets, attachPointName);
+                        var sourceName = attachPointName == "AP_Hand_L" ? "AP_Hand_R" : "AP_Hand_L";
+                        var sourceLabel = sourceName == "AP_Hand_L" ? "左手" : "右手";
+                        if (EditorUtility.DisplayDialog(
+                                "反転コピーの確認",
+                                $"{sourceLabel}から{label}へ反転コピーします。\n\n"
+                                + $"{label}の手持ち位置・回転が上書きされます。実行しますか？",
+                                "上書きしてコピー", "キャンセル"))
+                        {
+                            MirrorHandPosition(targets, sourceName);
+                        }
                     }
                 }
 

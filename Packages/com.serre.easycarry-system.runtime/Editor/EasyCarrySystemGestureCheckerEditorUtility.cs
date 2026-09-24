@@ -268,11 +268,11 @@ namespace Serre.EasyCarrySystem.Editor
                 EditorGUILayout.LabelField("握り判定", EditorStyles.boldLabel);
                 if (GUILayout.Button(
                         new GUIContent(
-                            $"{otherHandLabel}にジェスチャー設定をコピー",
-                            $"{handLabel}の握り判定設定を{otherHandLabel}へコピーします。"),
+                            $"{otherHandLabel}からジェスチャー設定をコピー",
+                            $"{otherHandLabel}の握り判定設定を{handLabel}へコピーします。"),
                         GUILayout.ExpandWidth(false)))
                 {
-                    otherGrabProperty.intValue = grabProperty.intValue;
+                    grabProperty.intValue = otherGrabProperty.intValue;
                 }
             }
 

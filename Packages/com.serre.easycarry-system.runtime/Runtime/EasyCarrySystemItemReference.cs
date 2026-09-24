@@ -20,6 +20,11 @@ namespace Serre.EasyCarrySystem
         public Vector3 LocalPosition;
         public Quaternion LocalRotation = Quaternion.identity;
         public Vector3 LocalScale = Vector3.one;
+        // Kept separately because a Parent Constraint overwrites the live AP transform.
+        public bool HasBoneProxyTransform;
+        public Vector3 BoneProxyLocalPosition;
+        public Quaternion BoneProxyLocalRotation = Quaternion.identity;
+        public Vector3 BoneProxyLocalScale = Vector3.one;
         public bool HasBoneProxy;
         public int BoneReference;
         public string BoneSubPath;

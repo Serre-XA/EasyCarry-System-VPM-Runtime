@@ -96,11 +96,11 @@ namespace Serre.EasyCarrySystem.Editor
         {
             private readonly int previousIndent;
 
-            internal AttachPointContentScope()
+            internal AttachPointContentScope(float leftMargin = 15f)
             {
                 previousIndent = EditorGUI.indentLevel;
                 GUILayout.BeginHorizontal();
-                GUILayout.Space(15f);
+                GUILayout.Space(leftMargin);
                 GUILayout.BeginVertical();
                 EditorGUI.indentLevel = 0;
             }
@@ -597,21 +597,22 @@ namespace Serre.EasyCarrySystem.Editor
             }
         }
 
-        internal static void DrawAttachPointAdjustmentGuide(EasyCarrySystemItemReference target, string pointName)
+        internal static void DrawAttachPointAdjustmentGuide(EasyCarrySystemItemReference target, string pointName,
+            bool drawHeader = true)
         {
+            if (drawHeader)
+                EditorGUILayout.LabelField("装備位置の調整ガイド", new GUIStyle(EditorStyles.label) { fontStyle = FontStyle.Normal });
             var guide = target.GetAttachPointAdjustmentGuide(pointName);
-            if (string.IsNullOrWhiteSpace(guide)) return;
-            EditorGUILayout.LabelField("装備位置の調整ガイド", new GUIStyle(EditorStyles.label) { fontStyle = FontStyle.Bold });
             using (new AttachPointContentScope())
             {
-                GUILayout.Label(guide, new GUIStyle(EditorStyles.helpBox)
+                GUILayout.Label(string.IsNullOrEmpty(guide) ? " " : guide, new GUIStyle(EditorStyles.helpBox)
                 {
                     font = EditorStyles.label.font,
                     fontSize = EditorStyles.label.fontSize,
-                    fontStyle = FontStyle.Bold,
+                    fontStyle = FontStyle.Normal,
                     wordWrap = true,
                     richText = false,
-                });
+                }, GUILayout.ExpandWidth(true));
             }
         }
 
@@ -684,8 +685,8 @@ namespace Serre.EasyCarrySystem.Editor
         internal static string GetNumberedAttachPointDisplayName(int attachPointIndex)
         {
             return attachPointIndex == 0
-                ? "初期装備位置"
-                : $"追加装備位置{attachPointIndex}";
+                ? "初期位置"
+                : $"追加位置{attachPointIndex}";
         }
 
         internal static void SyncNumberedAttachPointAvailability(EasyCarrySystemItemReference targets, bool recordUndo)
