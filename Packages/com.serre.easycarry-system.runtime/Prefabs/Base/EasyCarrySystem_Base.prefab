@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _modularAvatarVersionTag:
-    UpdatedAtVersion: 
-    MinimumVersion: 
+    UpdatedAtVersion: 1.18.7
+    MinimumVersion: 1.18.0
   Control:
     name: 
-    icon: {fileID: 2800000, guid: cb2b299b794ec3d4a99538a2991ce047, type: 3}
+    icon: {fileID: 2800000, guid: 48d736556f8fe254a914d0a8610b9459, type: 3}
     type: 101
     parameter:
       name: Item/IsReset
@@ -1406,11 +1406,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _modularAvatarVersionTag:
-    UpdatedAtVersion: 
-    MinimumVersion: 
+    UpdatedAtVersion: 1.18.7
+    MinimumVersion: 1.18.0
   Control:
     name: 
-    icon: {fileID: 2800000, guid: f6bb7955dc3dc25488ec3e67ce908983, type: 3}
+    icon: {fileID: 2800000, guid: 5acca5d9b1a37724880f1a1dc1bc54d3, type: 3}
     type: 102
     parameter:
       name: Item/CanSwitchHands
@@ -2839,7 +2839,7 @@ MonoBehaviour:
     MinimumVersion: 1.18.0
   Control:
     name: 
-    icon: {fileID: 2800000, guid: dabe0867de3e32e4ca4c72c162d8ef69, type: 3}
+    icon: {fileID: 2800000, guid: cc4c13c05f8c4e943885903095b7474a, type: 3}
     type: 102
     parameter:
       name: Item/IsDisabled
@@ -3871,11 +3871,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _modularAvatarVersionTag:
-    UpdatedAtVersion: 
-    MinimumVersion: 
+    UpdatedAtVersion: 1.18.7
+    MinimumVersion: 1.18.0
   Control:
     name: 
-    icon: {fileID: 2800000, guid: 76219de1a6be74c40ac3e917bb132009, type: 3}
+    icon: {fileID: 2800000, guid: 16e0846165acaa1429417e757c53ef9b, type: 3}
     type: 102
     parameter:
       name: Item/CanFreeze
@@ -4223,11 +4223,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _modularAvatarVersionTag:
-    UpdatedAtVersion: 
-    MinimumVersion: 
+    UpdatedAtVersion: 1.18.7
+    MinimumVersion: 1.18.0
   Control:
     name: 
-    icon: {fileID: 2800000, guid: fe5d72845649dbc42999d64d7df3ce6c, type: 3}
+    icon: {fileID: 2800000, guid: a06282136d558c54aa15d533f163ff59, type: 3}
     type: 103
     parameter:
       name: 
@@ -4760,8 +4760,8 @@ MonoBehaviour:
       ParentRotationOffset: {x: 0, y: 0, z: 0}
     totalLength: 9
     overflowList: []
-  cachedExecutionGroupIndex: 0
-  latestValidExecutionGroupIndex: 0
+  cachedExecutionGroupIndex: 1
+  latestValidExecutionGroupIndex: 1
   PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
@@ -4872,8 +4872,8 @@ MonoBehaviour:
       ParentRotationOffset: {x: 0, y: 0, z: 0}
     totalLength: 9
     overflowList: []
-  cachedExecutionGroupIndex: 1
-  latestValidExecutionGroupIndex: 1
+  cachedExecutionGroupIndex: 0
+  latestValidExecutionGroupIndex: 0
   ScaleAtRest: {x: 1, y: 1, z: 1}
   ScaleOffset: {x: 1, y: 1, z: 1}
   AffectsScaleX: 1

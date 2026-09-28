@@ -19,7 +19,7 @@ namespace Serre.EasyCarrySystem.Editor
     internal static class EasyCarrySystemEditorSharedUtility
     {
         private const string RuntimeLogoRelativePath = "Editor/Images/EasyCarrySystem_Logo_Runtime.png";
-        private const string AuthoringLogoRelativePath = "Editor/Authoring/EasyCarrySystem_Logo_Authoring.png";
+        private const string AuthoringLogoRelativePath = "Editor/Images/EasyCarrySystem_Logo_Authoring.png";
         private const string FallbackLogoRelativePath = "Editor/Images/EasyCarrySystem_Logo.png";
         private const string ComponentIconRelativePath = "Editor/Images/EasyCarrySystem_Icon.png";
         private const string ItemReferenceScriptRelativePath = "Runtime/EasyCarrySystemItemReference.cs";
@@ -605,11 +605,11 @@ namespace Serre.EasyCarrySystem.Editor
             var guide = target.GetAttachPointAdjustmentGuide(pointName);
             using (new AttachPointContentScope())
             {
-                GUILayout.Label(string.IsNullOrEmpty(guide) ? " " : guide, new GUIStyle(EditorStyles.helpBox)
+                GUILayout.Label(string.IsNullOrWhiteSpace(guide) ? "空欄" : guide, new GUIStyle(EditorStyles.helpBox)
                 {
                     font = EditorStyles.label.font,
                     fontSize = EditorStyles.label.fontSize,
-                    fontStyle = FontStyle.Normal,
+                    fontStyle = FontStyle.Bold,
                     wordWrap = true,
                     richText = false,
                 }, GUILayout.ExpandWidth(true));
