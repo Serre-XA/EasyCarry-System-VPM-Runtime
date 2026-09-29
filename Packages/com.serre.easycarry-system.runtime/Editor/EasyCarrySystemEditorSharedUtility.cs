@@ -39,8 +39,11 @@ namespace Serre.EasyCarrySystem.Editor
         internal const string ContactRadiusPath = "radius";
         internal const string ContactHeightPath = "height";
         internal const string ContactSizePath = "size";
-        private static bool inspectorWasLocked;
-        private static bool inspectorLockedByEasyCarrySystem;
+        private static readonly Dictionary<EditorWindow, bool> inspectorLockStates = new Dictionary<EditorWindow, bool>();
+        private static readonly Type InspectorWindowType =
+            typeof(EditorWindow).Assembly.GetType("UnityEditor.InspectorWindow");
+        private static readonly PropertyInfo InspectorIsLockedProperty =
+            InspectorWindowType?.GetProperty("isLocked", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         private static readonly Type SceneHierarchyWindowType =
             typeof(EditorWindow).Assembly.GetType("UnityEditor.SceneHierarchyWindow");
         private static readonly MethodInfo SetExpandedRecursiveMethod =
@@ -90,6 +93,7 @@ namespace Serre.EasyCarrySystem.Editor
             EditorApplication.playModeStateChanged += ResetAllAttachPointsToAP00OnPlayMode;
             EditorApplication.hierarchyChanged += QueueScaleLinkRefresh;
             Undo.undoRedoPerformed += QueueScaleLinkRefresh;
+            AssemblyReloadEvents.beforeAssemblyReload += UnlockInspector;
         }
 
         internal sealed class AttachPointContentScope : GUI.Scope
@@ -618,29 +622,50 @@ namespace Serre.EasyCarrySystem.Editor
 
         internal static void LockInspector()
         {
-            if (inspectorLockedByEasyCarrySystem)
+            // Buttons invoke this before changing Selection. Each Inspector has its own tracker;
+            // sharedTracker can belong to a different Inspector than the one receiving input.
+            var inspector = EditorWindow.focusedWindow;
+            if (inspector == null || InspectorWindowType == null
+                || !InspectorWindowType.IsInstanceOfType(inspector)
+                || InspectorIsLockedProperty == null)
             {
+                Debug.LogWarning("EasyCarry System: 操作中のInspectorを取得できないため、自動ロックできませんでした。");
                 return;
             }
 
-            var tracker = ActiveEditorTracker.sharedTracker;
-            inspectorWasLocked = tracker.isLocked;
-            tracker.isLocked = true;
-            tracker.ForceRebuild();
-            inspectorLockedByEasyCarrySystem = true;
+            try
+            {
+                if (!inspectorLockStates.ContainsKey(inspector))
+                {
+                    inspectorLockStates.Add(inspector, (bool)InspectorIsLockedProperty.GetValue(inspector));
+                }
+
+                InspectorIsLockedProperty.SetValue(inspector, true);
+                inspector.Repaint();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"EasyCarry System: Inspectorのロックに失敗しました。{exception.Message}");
+            }
         }
 
         internal static void UnlockInspector()
         {
-            if (!inspectorLockedByEasyCarrySystem)
+            // Restore the windows captured at edit start, even when focus has moved to the Scene view.
+            foreach (var entry in inspectorLockStates)
             {
-                return;
+                if (entry.Key == null) continue;
+                try
+                {
+                    InspectorIsLockedProperty.SetValue(entry.Key, entry.Value);
+                    entry.Key.Repaint();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogWarning($"EasyCarry System: Inspectorのロック状態を復元できませんでした。{exception.Message}");
+                }
             }
-
-            var tracker = ActiveEditorTracker.sharedTracker;
-            tracker.isLocked = inspectorWasLocked;
-            tracker.ForceRebuild();
-            inspectorLockedByEasyCarrySystem = false;
+            inspectorLockStates.Clear();
         }
 
         internal static void EnsureNumberedAttachPointListInitialized(EasyCarrySystemItemReference targets)

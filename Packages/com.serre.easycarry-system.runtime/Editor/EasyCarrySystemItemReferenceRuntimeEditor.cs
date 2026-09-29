@@ -126,7 +126,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            EditorGUILayout.HelpBox("Authoring版Inspectorを生成できませんでした。", MessageType.Error);
+            EditorGUILayout.HelpBox("Advanced版Inspectorを生成できませんでした。", MessageType.Error);
         }
 
         private void DrawRuntimePreviewSection()
@@ -134,13 +134,13 @@ namespace Serre.EasyCarrySystem.Editor
             EditorGUILayout.Space(8f);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
-                EasyCarrySystemEditorSharedUtility.DrawSectionHeader("Runtime版プレビュー");
+                EasyCarrySystemEditorSharedUtility.DrawSectionHeader("Basic版プレビュー");
                 EasyCarrySystemEditorSharedUtility.DrawSectionDescription(
-                    "Runtime版のみを導入した環境でのコンポーネント表示を一時的に確認します。");
+                    "Basic版のみを導入した環境でのコンポーネント表示を一時的に確認します。");
 
                 var buttonLabel = runtimePreviewEnabled
-                    ? "Authoring版に戻る"
-                    : "Runtime版をプレビュー";
+                    ? "Advanced版に戻る"
+                    : "Basic版プレビュー";
                 if (GUILayout.Button(buttonLabel))
                 {
                     runtimePreviewEnabled = !runtimePreviewEnabled;
@@ -550,8 +550,9 @@ namespace Serre.EasyCarrySystem.Editor
                 else
                 {
                     EasyCarrySystemEditorSharedUtility.SetCIEditRootOriginConstraintEnabled(targets, true);
-                    UnlockInspectorIfIdle(targets);
+                    // Return to the inspected object before unlocking to avoid an intermediate Inspector rebuild.
                     Selection.activeObject = targets.gameObject;
+                    UnlockInspectorIfIdle(targets);
                     EasyCarrySystemEditorSharedUtility.CollapseEasyCarrySystemHierarchy(targets);
                 }
             }
@@ -575,8 +576,9 @@ namespace Serre.EasyCarrySystem.Editor
                 if (!next)
                 {
                     DeleteEditObjects(targets, attachPointName);
-                    UnlockInspectorIfIdle(targets);
+                    // Return to the inspected object before unlocking to avoid an intermediate Inspector rebuild.
                     Selection.activeObject = targets.gameObject;
+                    UnlockInspectorIfIdle(targets);
                     EasyCarrySystemEditorSharedUtility.CollapseEasyCarrySystemHierarchy(targets);
                     return;
                 }
