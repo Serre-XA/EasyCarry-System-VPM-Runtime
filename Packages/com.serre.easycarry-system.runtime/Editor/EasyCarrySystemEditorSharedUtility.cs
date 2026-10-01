@@ -247,9 +247,13 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
+            var underAvatar = EasyCarrySystemSetupEditorUtility.IsUnderAvatar(targets.gameObject);
             EditorGUILayout.HelpBox(
-                "このアバターにEasyCarry Systemの共有メニューがありません。ビルド前に生成してください。",
+                underAvatar
+                    ? "このアバターにEasyCarry Systemの共有メニューがありません。ビルド前に生成してください。"
+                    : "共有メニューを生成するには、アイテムをVRC Avatar Descriptorが付いたアバターの子階層に配置してください。",
                 MessageType.Warning);
+            using (new EditorGUI.DisabledScope(Application.isPlaying || !underAvatar))
             using (new HorizontalMarginScope())
             {
                 if (!GUILayout.Button("共有メニューを生成"))

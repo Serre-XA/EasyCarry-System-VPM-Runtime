@@ -78,7 +78,10 @@ namespace Serre.EasyCarrySystem.Editor
             if (targets.EasyCarrySystemRoot == null)
             {
                 EditorGUILayout.HelpBox("生成されたEasyCarry Systemがありません。EasyCarry System Setupを実行してください。", MessageType.Warning);
-                using (new EditorGUI.DisabledScope(Application.isPlaying))
+                var underAvatar = EasyCarrySystemSetupEditorUtility.IsUnderAvatar(targets.gameObject);
+                if (!underAvatar)
+                    EditorGUILayout.HelpBox(EasyCarrySystemSetupEditorUtility.AvatarRequiredMessage, MessageType.Warning);
+                using (new EditorGUI.DisabledScope(Application.isPlaying || !underAvatar))
                 {
                     if (GUILayout.Button("EasyCarry System Setup"))
                     {

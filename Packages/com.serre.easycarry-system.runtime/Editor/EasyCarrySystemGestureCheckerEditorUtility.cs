@@ -95,7 +95,8 @@ namespace Serre.EasyCarrySystem.Editor
         internal static GameObject EnsureMenuRootFor(EasyCarrySystemItemReference targets)
         {
             if (targets == null || Application.isPlaying || EditorUtility.IsPersistent(targets)
-                || !targets.gameObject.scene.IsValid())
+                || !targets.gameObject.scene.IsValid()
+                || !EasyCarrySystemSetupEditorUtility.IsUnderAvatar(targets.gameObject))
             {
                 return null;
             }

@@ -15,6 +15,23 @@ namespace Serre.EasyCarrySystem.Editor
         private const string GeneratedObjectNamePrefix = "ECS_";
         private const int SlotCount = 16;
 
+        internal const string AvatarRequiredMessage =
+            "Setupするアイテムを、VRC Avatar Descriptorが付いたアバターの子階層に配置してください。";
+
+        internal static bool IsUnderAvatar(GameObject itemObject)
+        {
+#if VRC_SDK_VRCSDK3
+            if (itemObject == null
+                || itemObject.GetComponent<VRC.SDK3.Avatars.Components.VRCAvatarDescriptor>() != null)
+                return false;
+            var parent = itemObject.transform.parent;
+            return parent != null
+                && parent.GetComponentInParent<VRC.SDK3.Avatars.Components.VRCAvatarDescriptor>(true) != null;
+#else
+            return false;
+#endif
+        }
+
         internal static void Setup(GameObject itemObject)
         {
             if (itemObject == null)
@@ -32,6 +49,12 @@ namespace Serre.EasyCarrySystem.Editor
 
             if (RejectSetupInProtectedHierarchy(itemObject))
             {
+                return;
+            }
+
+            if (!IsUnderAvatar(itemObject))
+            {
+                Debug.LogError(AvatarRequiredMessage, itemObject);
                 return;
             }
 
