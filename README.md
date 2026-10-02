@@ -4,9 +4,6 @@ Easy Carry Systemで作成されたアイテムを利用し、基本的な調整
 
 本READMEでは、Unityの基本的な操作や用語の説明は省略しています。
 
-> [!NOTE]
-> 現在は公開準備中です。導入方法や仕様は正式リリースまでに変更される場合があります。
-
 ## 概要
 
 Easy Carry Systemは、VRChatアバター向けの持ち運び・装備ギミックを導入するためのシステムです。
@@ -33,7 +30,7 @@ Easy Carry Systemは、VRChatアバター向けの持ち運び・装備ギミッ
 
 ### VCCから導入する場合
 
-[![Add to VCC](https://img.shields.io/badge/Add%20to%20VCC-EasyCarry%20System%20Basic-2BACEA?style=for-the-badge)](https://serre-xa.github.io/EasyCarry-System-VPM-Runtime/)
+[![Add to VCC](https://img.shields.io/badge/Add%20to%20VCC-Easy%20Carry%20System%20Basic-2BACEA?style=for-the-badge)](https://serre-xa.github.io/EasyCarry-System-VPM-Runtime/)
 
 上のボタンで配布ページを開き、ページ内の`Add to VCC`を押してください。VCCが起動し、Easy Carry SystemのVPMリポジトリを追加する確認画面が表示されます。
 
