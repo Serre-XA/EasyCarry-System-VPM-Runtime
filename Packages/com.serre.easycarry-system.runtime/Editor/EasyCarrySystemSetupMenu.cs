@@ -5,7 +5,7 @@ namespace Serre.EasyCarrySystem.Editor
 {
     internal static class EasyCarrySystemSetupMenu
     {
-        private const string MenuPath = "GameObject/EasyCarry System/Setup";
+        private const string MenuPath = "GameObject/Easy Carry System/Setup";
 
         [MenuItem(MenuPath, false, 10)]
         private static void SetupSelectedObject(MenuCommand command)

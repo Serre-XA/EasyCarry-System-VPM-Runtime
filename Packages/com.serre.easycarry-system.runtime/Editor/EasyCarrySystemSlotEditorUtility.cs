@@ -145,7 +145,7 @@ namespace Serre.EasyCarrySystem.Editor
 
             if (isUsed)
             {
-                Debug.LogWarning($"EasyCarry System スロット {slot} は同じアバター内で使用済みです。", targets);
+                Debug.LogWarning($"Easy Carry System スロット {slot} は同じアバター内で使用済みです。", targets);
                 return;
             }
 
@@ -223,7 +223,7 @@ namespace Serre.EasyCarrySystem.Editor
             var oldRoot = itemReference.GeneratedEasyCarrySystem;
             if (oldRoot == null)
             {
-                Debug.LogError("The generated EasyCarry System is missing.", itemReference);
+                Debug.LogError("The generated Easy Carry System is missing.", itemReference);
                 return;
             }
 
@@ -232,13 +232,13 @@ namespace Serre.EasyCarrySystem.Editor
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (prefab == null)
             {
-                Debug.LogError($"EasyCarry System prefab was not found: {prefabPath}", itemReference);
+                Debug.LogError($"Easy Carry System prefab was not found: {prefabPath}", itemReference);
                 return;
             }
 
             Undo.IncrementCurrentGroup();
             var undoGroup = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName($"Switch EasyCarry System Slot To {newSlot}");
+            Undo.SetCurrentGroupName($"Switch Easy Carry System Slot To {newSlot}");
             EasyCarrySystemEditorSharedUtility.PrepareForSlotReplacement(itemReference);
             var settings = CaptureSnapshot(itemReference);
 
@@ -248,12 +248,12 @@ namespace Serre.EasyCarrySystem.Editor
                 : PrefabUtility.InstantiatePrefab(prefab, oldRoot.scene)) as GameObject;
             if (newRoot == null)
             {
-                Debug.LogError($"Failed to instantiate EasyCarry System prefab: {prefabPath}", itemReference);
+                Debug.LogError($"Failed to instantiate Easy Carry System prefab: {prefabPath}", itemReference);
                 Undo.RevertAllDownToGroup(undoGroup);
                 return;
             }
 
-            Undo.RegisterCreatedObjectUndo(newRoot, "Create Replacement EasyCarry System");
+            Undo.RegisterCreatedObjectUndo(newRoot, "Create Replacement Easy Carry System");
             newRoot.name = oldRoot.name;
             newRoot.tag = oldRoot.tag;
             newRoot.layer = oldRoot.layer;
@@ -267,12 +267,12 @@ namespace Serre.EasyCarrySystem.Editor
             var newCIRoot = FindChildRecursive(newTransform, "CI_Root");
             if (newCIRoot == null)
             {
-                Debug.LogError("CI_Root was not found in the replacement EasyCarry System prefab.", itemReference);
+                Debug.LogError("CI_Root was not found in the replacement Easy Carry System prefab.", itemReference);
                 Undo.RevertAllDownToGroup(undoGroup);
                 return;
             }
 
-            Undo.RecordObject(itemReference, "Switch EasyCarry System Slot");
+            Undo.RecordObject(itemReference, "Switch Easy Carry System Slot");
             itemReference.SetGeneratedEasyCarrySystem(newRoot);
             itemReference.SetCISlot(newSlot);
             RestoreSnapshot(itemReference, settings, true);
@@ -305,7 +305,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            Undo.RecordObject(constraint, "Retarget EasyCarry System Constraint");
+            Undo.RecordObject(constraint, "Retarget Easy Carry System Constraint");
             if (constraint.Sources.Count == 0)
             {
                 constraint.Sources.Add(new VRCConstraintSource(source, 1f));
@@ -556,7 +556,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            Undo.RecordObject(parametersComponent, "Restore EasyCarry System Option Defaults");
+            Undo.RecordObject(parametersComponent, "Restore Easy Carry System Option Defaults");
             var changed = false;
             for (var parameterIndex = 0; parameterIndex < parametersComponent.parameters.Count; parameterIndex++)
             {

@@ -64,10 +64,10 @@ namespace Serre.EasyCarrySystem.Editor
 
             SessionState.SetBool(sessionKey, true);
             var message = CreateVersionMismatchMessage(runtimeVersionLabel);
-            Debug.LogError("[EasyCarry System] " + message.Replace('\n', ' '));
+            Debug.LogError("[Easy Carry System] " + message.Replace('\n', ' '));
             if (!Application.isBatchMode)
             {
-                EditorUtility.DisplayDialog("EasyCarry System バージョン不一致", message, "OK");
+                EditorUtility.DisplayDialog("Easy Carry System バージョン不一致", message, "OK");
             }
         }
 
@@ -180,7 +180,7 @@ namespace Serre.EasyCarrySystem.Editor
 
         private static string CreateVersionMismatchMessage(string runtimeVersionLabel)
         {
-            return "EasyCarry Systemのバージョンが一致していません。\n"
+            return "Easy Carry Systemのバージョンが一致していません。\n"
                 + $"Basic: {runtimeVersionLabel} / Advanced: {advancedVersion}\n"
                 + "BasicとAdvancedを同じバージョンへ更新してください。";
         }

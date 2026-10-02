@@ -117,18 +117,18 @@ namespace Serre.EasyCarrySystem.Editor
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (prefab == null)
             {
-                Debug.LogError($"EasyCarry System menu root prefab was not found: {prefabPath}", targets);
+                Debug.LogError($"Easy Carry System menu root prefab was not found: {prefabPath}", targets);
                 return null;
             }
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, avatarRoot) as GameObject;
             if (instance == null)
             {
-                Debug.LogError("Failed to instantiate the shared EasyCarry System menu root.", targets);
+                Debug.LogError("Failed to instantiate the shared Easy Carry System menu root.", targets);
                 return null;
             }
 
-            Undo.RegisterCreatedObjectUndo(instance, "Create EasyCarry System Menu Root");
+            Undo.RegisterCreatedObjectUndo(instance, "Create Easy Carry System Menu Root");
             instance.name = MenuRootObjectName;
             instance.transform.localPosition = Vector3.zero;
             instance.transform.localRotation = Quaternion.identity;
@@ -154,8 +154,8 @@ namespace Serre.EasyCarrySystem.Editor
 
             Debug.LogError(
                 menuRootCount == 0
-                    ? "EasyCarry System is present, but the shared menu root was not found."
-                    : "Multiple shared EasyCarry System menu roots were found. Keep exactly one within the avatar hierarchy.",
+                    ? "Easy Carry System is present, but the shared menu root was not found."
+                    : "Multiple shared Easy Carry System menu roots were found. Keep exactly one within the avatar hierarchy.",
                 avatarGameObject);
             return false;
         }

@@ -18,12 +18,12 @@ namespace Serre.EasyCarrySystem.Editor
         private const string ModularAvatarPluginName = "nadena.dev.modular-avatar";
 
         public override string QualifiedName => "com.serre.easycarry-system";
-        public override string DisplayName => "EasyCarry System";
+        public override string DisplayName => "Easy Carry System";
 
         protected override void Configure()
         {
             InPhase(BuildPhase.Resolving)
-                .Run("EasyCarry Systemの検証とビルド準備", Execute)
+                .Run("Easy Carry Systemの検証とビルド準備", Execute)
                 .BeforePass(RemoveEditorOnlyPass.Instance)
                 .BeforePlugin(ModularAvatarPluginName);
         }
@@ -74,7 +74,7 @@ namespace Serre.EasyCarrySystem.Editor
                     targets.Length))
             {
                 ReportBuildError(
-                    "EasyCarry Systemの共有メニューが見つからないか、複数存在しています。\n"
+                    "Easy Carry Systemの共有メニューが見つからないか、複数存在しています。\n"
                     + "アバターの子階層に共有メニューを1つだけ配置してから、再度ビルドしてください。",
                     avatarGameObject);
                 return;
@@ -159,8 +159,8 @@ namespace Serre.EasyCarrySystem.Editor
                     target.transform,
                     avatarGameObject.transform);
                 var detail = state == EasyCarrySystemEditorOnlyState.ItemOnly
-                    ? "制御対象アイテムだけがEditorOnlyです。生成されたEasyCarry SystemもEditorOnlyにしてください"
-                    : "生成されたEasyCarry SystemだけがEditorOnlyです。制御対象アイテムもEditorOnlyにするか、両方からEditorOnlyを外してください";
+                    ? "制御対象アイテムだけがEditorOnlyです。生成されたEasy Carry SystemもEditorOnlyにしてください"
+                    : "生成されたEasy Carry SystemだけがEditorOnlyです。制御対象アイテムもEditorOnlyにするか、両方からEditorOnlyを外してください";
                 invalidPaths.Add($"{itemPath}: {detail}");
                 firstInvalidTarget ??= target;
             }
@@ -171,8 +171,8 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             ReportBuildError(
-                "EasyCarry System のビルドを中止しました。\n\n"
-                + "制御対象アイテムと生成されたEasyCarry SystemのEditorOnly設定が一致していません。\n"
+                "Easy Carry System のビルドを中止しました。\n\n"
+                + "制御対象アイテムと生成されたEasy Carry SystemのEditorOnly設定が一致していません。\n"
                 + "両方をEditorOnlyにするか、両方からEditorOnlyを外してから再度ビルドしてください。\n\n"
                 + string.Join("\n", invalidPaths),
                 firstInvalidTarget != null ? firstInvalidTarget : avatarGameObject);
@@ -227,7 +227,7 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             ReportBuildError(
-                "EasyCarry System のビルドを中止しました。\n\n"
+                "Easy Carry System のビルドを中止しました。\n\n"
                 + "同じアバター内でアイテムスロットが重複しています。"
                 + "各アイテムに異なるスロットを指定してから、再度ビルドしてください。\n\n"
                 + string.Join("\n", duplicateMessages),
@@ -254,7 +254,7 @@ namespace Serre.EasyCarrySystem.Editor
                     var itemPath = AnimationUtility.CalculateTransformPath(
                         target.transform,
                         avatarGameObject.transform);
-                    invalidPaths.Add($"{itemPath}: 生成されたEasyCarry Systemがありません");
+                    invalidPaths.Add($"{itemPath}: 生成されたEasy Carry Systemがありません");
                     continue;
                 }
 
@@ -300,9 +300,9 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             var message =
-                "EasyCarry System のビルドを中止しました。\n\n"
-                + "EasyCarry Systemが未生成、追従用Constraintが不正、または制御対象アイテムにMA Bone Proxyが含まれています。\n"
-                + "EasyCarry System Setupとアイテム階層を確認してから、再度ビルドしてください。\n\n"
+                "Easy Carry System のビルドを中止しました。\n\n"
+                + "Easy Carry Systemが未生成、追従用Constraintが不正、または制御対象アイテムにMA Bone Proxyが含まれています。\n"
+                + "Easy Carry System Setupとアイテム階層を確認してから、再度ビルドしてください。\n\n"
                 + string.Join("\n", invalidPaths);
 
             ReportBuildError(message, firstBoneProxy != null ? firstBoneProxy : avatarGameObject);
@@ -376,7 +376,7 @@ namespace Serre.EasyCarrySystem.Editor
 
         public override string FormatTitle()
         {
-            return "EasyCarry System ビルドエラー";
+            return "Easy Carry System ビルドエラー";
         }
 
         public override string FormatDetails()
@@ -386,7 +386,7 @@ namespace Serre.EasyCarrySystem.Editor
 
         public override string FormatHint()
         {
-            return "EasyCarry SystemのInspectorと、エラーに表示されたオブジェクトを確認してください。";
+            return "Easy Carry SystemのInspectorと、エラーに表示されたオブジェクトを確認してください。";
         }
     }
 }

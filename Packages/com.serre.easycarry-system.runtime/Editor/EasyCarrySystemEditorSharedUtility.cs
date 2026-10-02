@@ -197,7 +197,7 @@ namespace Serre.EasyCarrySystem.Editor
             using (new HorizontalMarginScope())
             using (new EditorGUILayout.VerticalScope())
             {
-                EditorGUILayout.LabelField("EasyCarry System", titleStyle, GUILayout.Height(28f));
+                EditorGUILayout.LabelField("Easy Carry System", titleStyle, GUILayout.Height(28f));
                 EditorGUILayout.LabelField(editionLabel, editionStyle, GUILayout.Height(18f));
             }
 
@@ -211,8 +211,8 @@ namespace Serre.EasyCarrySystem.Editor
             {
                 var rect = EditorGUILayout.GetControlRect();
                 var label = new GUIContent(
-                    "参照中のEasyCarry System",
-                    "現在このアイテムが参照しているEasyCarry Systemです。クリックするとHierarchyで選択します。");
+                    "参照中のEasy Carry System",
+                    "現在このアイテムが参照しているEasy Carry Systemです。クリックするとHierarchyで選択します。");
                 using (new EditorGUI.DisabledScope(true))
                 {
                     EditorGUI.ObjectField(rect, label, easyCarrySystemObject, typeof(GameObject), true);
@@ -250,7 +250,7 @@ namespace Serre.EasyCarrySystem.Editor
             var underAvatar = EasyCarrySystemSetupEditorUtility.IsUnderAvatar(targets.gameObject);
             EditorGUILayout.HelpBox(
                 underAvatar
-                    ? "このアバターにEasyCarry Systemの共有メニューがありません。ビルド前に生成してください。"
+                    ? "このアバターにEasy Carry Systemの共有メニューがありません。ビルド前に生成してください。"
                     : "共有メニューを生成するには、アイテムをVRC Avatar Descriptorが付いたアバターの子階層に配置してください。",
                 MessageType.Warning);
             using (new EditorGUI.DisabledScope(Application.isPlaying || !underAvatar))
@@ -264,11 +264,11 @@ namespace Serre.EasyCarrySystem.Editor
                 var menuRoot = EasyCarrySystemGestureCheckerEditorUtility.EnsureMenuRootFor(targets);
                 if (menuRoot == null)
                 {
-                    Debug.LogError("EasyCarry Systemの共有メニューを生成できませんでした。", targets);
+                    Debug.LogError("Easy Carry Systemの共有メニューを生成できませんでした。", targets);
                 }
                 else
                 {
-                    Debug.Log("EasyCarry Systemの共有メニューを生成しました。", menuRoot);
+                    Debug.Log("Easy Carry Systemの共有メニューを生成しました。", menuRoot);
                 }
 
                 GUIUtility.ExitGUI();
@@ -325,11 +325,11 @@ namespace Serre.EasyCarrySystem.Editor
                 case EasyCarrySystemEditorOnlyState.ItemOnly:
                     DrawInspectorError(
                         "エラー: 制御対象アイテムだけがEditorOnlyです。"
-                        + "生成されたEasyCarry SystemもEditorOnlyにしてください。");
+                        + "生成されたEasy Carry SystemもEditorOnlyにしてください。");
                     break;
                 case EasyCarrySystemEditorOnlyState.GeneratedSystemOnly:
                     DrawInspectorError(
-                        "エラー: 生成されたEasyCarry SystemだけがEditorOnlyです。"
+                        "エラー: 生成されたEasy Carry SystemだけがEditorOnlyです。"
                         + "制御対象アイテムもEditorOnlyにするか、両方からEditorOnlyを外してください。");
                     break;
             }
@@ -484,7 +484,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return;
             }
 
-            Undo.RecordObject(targets, "Prepare EasyCarry System Slot Replacement");
+            Undo.RecordObject(targets, "Prepare Easy Carry System Slot Replacement");
             foreach (var attachPointName in AttachPointNames)
             {
                 targets.SetAttachPointEditing(attachPointName, false);
@@ -596,8 +596,8 @@ namespace Serre.EasyCarrySystem.Editor
                 }
 
                 Undo.RecordObject(contactTransform, input
-                    ? "Sync EasyCarry System Input Contact Transform"
-                    : "Sync EasyCarry System Output Contact Transform");
+                    ? "Sync Easy Carry System Input Contact Transform"
+                    : "Sync Easy Carry System Output Contact Transform");
                 contactTransform.localPosition = primary.localPosition;
                 contactTransform.localRotation = primary.localRotation;
                 PrefabUtility.RecordPrefabInstancePropertyModifications(contactTransform);
@@ -633,7 +633,7 @@ namespace Serre.EasyCarrySystem.Editor
                 || !InspectorWindowType.IsInstanceOfType(inspector)
                 || InspectorIsLockedProperty == null)
             {
-                Debug.LogWarning("EasyCarry System: 操作中のInspectorを取得できないため、自動ロックできませんでした。");
+                Debug.LogWarning("Easy Carry System: 操作中のInspectorを取得できないため、自動ロックできませんでした。");
                 return;
             }
 
@@ -649,7 +649,7 @@ namespace Serre.EasyCarrySystem.Editor
             }
             catch (Exception exception)
             {
-                Debug.LogWarning($"EasyCarry System: Inspectorのロックに失敗しました。{exception.Message}");
+                Debug.LogWarning($"Easy Carry System: Inspectorのロックに失敗しました。{exception.Message}");
             }
         }
 
@@ -666,7 +666,7 @@ namespace Serre.EasyCarrySystem.Editor
                 }
                 catch (Exception exception)
                 {
-                    Debug.LogWarning($"EasyCarry System: Inspectorのロック状態を復元できませんでした。{exception.Message}");
+                    Debug.LogWarning($"Easy Carry System: Inspectorのロック状態を復元できませんでした。{exception.Message}");
                 }
             }
             inspectorLockStates.Clear();
@@ -928,7 +928,7 @@ namespace Serre.EasyCarrySystem.Editor
                 return true;
             }
 
-            Undo.RecordObject(menuSettingsRoot.gameObject, "Reset EasyCarry System Menu Display Name");
+            Undo.RecordObject(menuSettingsRoot.gameObject, "Reset Easy Carry System Menu Display Name");
             menuSettingsRoot.name = itemObjectName;
             PrefabUtility.RecordPrefabInstancePropertyModifications(menuSettingsRoot.gameObject);
             EditorUtility.SetDirty(menuSettingsRoot.gameObject);
@@ -1343,7 +1343,7 @@ namespace Serre.EasyCarrySystem.Editor
 
             var targets = Resources.FindObjectsOfTypeAll<EasyCarrySystemItemReference>();
             var undoGroup = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName("Reset EasyCarry System Attach Points To AP 00");
+            Undo.SetCurrentGroupName("Reset Easy Carry System Attach Points To AP 00");
 
             foreach (var target in targets)
             {

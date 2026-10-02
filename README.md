@@ -1,6 +1,6 @@
-# EasyCarry System Basic
+# Easy Carry System Basic
 
-EasyCarry Systemで作成されたアイテムを利用し、基本的な調整を行うための無料パッケージです。
+Easy Carry Systemで作成されたアイテムを利用し、基本的な調整を行うための無料パッケージです。
 
 本READMEでは、Unityの基本的な操作や用語の説明は省略しています。
 
@@ -9,19 +9,19 @@ EasyCarry Systemで作成されたアイテムを利用し、基本的な調整�
 
 ## 概要
 
-EasyCarry Systemは、VRChatアバター向けの持ち運び・装備ギミックを導入するためのシステムです。
+Easy Carry Systemは、VRChatアバター向けの持ち運び・装備ギミックを導入するためのシステムです。
 
 | エディション | 用途 |
 | --- | --- |
-| EasyCarry System Basic | 対応アイテムの利用と基本的な調整 |
-| EasyCarry System Advanced | 対応アイテムの制作と詳細な設定 |
+| Easy Carry System Basic | 対応アイテムの利用と基本的な調整 |
+| Easy Carry System Advanced | 対応アイテムの制作と詳細な設定 |
 
 ## 主な機能
 
 - アイテムスロットの変更
 - アイテムの当たり判定調整
 - 手持ち位置と装備位置の調整
-- EasyCarry System対応アイテムのセットアップ
+- Easy Carry System対応アイテムのセットアップ
 
 ## 動作環境
 
@@ -35,14 +35,14 @@ EasyCarry Systemは、VRChatアバター向けの持ち運び・装備ギミッ�
 
 [![Add to VCC](https://img.shields.io/badge/Add%20to%20VCC-EasyCarry%20System%20Basic-2BACEA?style=for-the-badge)](https://serre-xa.github.io/EasyCarry-System-VPM-Runtime/)
 
-上のボタンで配布ページを開き、ページ内の`Add to VCC`を押してください。VCCが起動し、EasyCarry SystemのVPMリポジトリを追加する確認画面が表示されます。
+上のボタンで配布ページを開き、ページ内の`Add to VCC`を押してください。VCCが起動し、Easy Carry SystemのVPMリポジトリを追加する確認画面が表示されます。
 
 ボタンが反応しない場合は、VCCの`Settings`、`Packages`、`Add Repository`の順に開き、次のURLを追加してください。
 
 `https://serre-xa.github.io/EasyCarry-System-VPM-Runtime/index.json`
 
 1. 対象プロジェクトの`Manage Project`を開きます。
-2. `EasyCarry System Basic`を追加します。
+2. `Easy Carry System Basic`を追加します。
 
 ### UnityPackageから導入する場合
 
@@ -51,7 +51,7 @@ EasyCarry Systemは、VRChatアバター向けの持ち運び・装備ギミッ�
 ## 基本的な使い方
 
 1. セットアップしたいPrefabまたはGameObjectをアバター内へ配置します。
-2. 対象PrefabまたはGameObjectを右クリックし、`EasyCarry System`から`Setup`を実行します。
+2. 対象PrefabまたはGameObjectを右クリックし、`Easy Carry System`から`Setup`を実行します。
 3. Inspectorからスロット、位置、当たり判定を調整します。
 
 > [!NOTE]
@@ -60,10 +60,10 @@ EasyCarry Systemは、VRChatアバター向けの持ち運び・装備ギミッ�
 ## 配布された対応アイテムを導入する
 
 1. 導入したいアイテムのPrefabをアバター内へ配置します。
-2. Prefabの`Easy Carry System Item Reference`コンポーネントにある`EasyCarry System Setup`ボタンを押します。
-    <br>対象アイテムの右クリックメニューから`EasyCarry System`、`Setup`の順に選択することもできます。
+2. Prefabの`Easy Carry System Item Reference`コンポーネントにある`Easy Carry System Setup`ボタンを押します。
+    <br>対象アイテムの右クリックメニューから`Easy Carry System`、`Setup`の順に選択することもできます。
 3. 必要に応じて、アイテムスロットやアバターに合わせた位置を調整します。
-4. 一度プレイモードへ移行し、EasyCarry Systemに関するエラーが発生しないことを確認します。
+4. 一度プレイモードへ移行し、Easy Carry Systemに関するエラーが発生しないことを確認します。
 5. VRChatへアップロードし、実機で動作を確認します。
 
 ## 注意事項

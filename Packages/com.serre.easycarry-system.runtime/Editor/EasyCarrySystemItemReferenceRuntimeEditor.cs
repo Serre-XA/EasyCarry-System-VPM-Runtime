@@ -77,13 +77,13 @@ namespace Serre.EasyCarrySystem.Editor
             EasyCarrySystemEditorSharedUtility.DrawEasyCarrySystemReference(targets);
             if (targets.EasyCarrySystemRoot == null)
             {
-                EditorGUILayout.HelpBox("生成されたEasyCarry Systemがありません。EasyCarry System Setupを実行してください。", MessageType.Warning);
+                EditorGUILayout.HelpBox("生成されたEasy Carry Systemがありません。Easy Carry System Setupを実行してください。", MessageType.Warning);
                 var underAvatar = EasyCarrySystemSetupEditorUtility.IsUnderAvatar(targets.gameObject);
                 if (!underAvatar)
                     EditorGUILayout.HelpBox(EasyCarrySystemSetupEditorUtility.AvatarRequiredMessage, MessageType.Warning);
                 using (new EditorGUI.DisabledScope(Application.isPlaying || !underAvatar))
                 {
-                    if (GUILayout.Button("EasyCarry System Setup"))
+                    if (GUILayout.Button("Easy Carry System Setup"))
                     {
                         EasyCarrySystemSetupEditorUtility.Setup(targets.gameObject);
                         GUIUtility.ExitGUI();
@@ -437,7 +437,7 @@ namespace Serre.EasyCarrySystem.Editor
                     return;
                 }
 
-                Undo.RecordObject(value, "Edit EasyCarry System Transform");
+                Undo.RecordObject(value, "Edit Easy Carry System Transform");
                 value.localPosition = localPosition;
                 value.localRotation = Quaternion.Euler(localRotation);
                 PrefabUtility.RecordPrefabInstancePropertyModifications(value);
@@ -870,7 +870,7 @@ namespace Serre.EasyCarrySystem.Editor
                     continue;
                 }
 
-                Undo.RecordObject(targets, "Turn Off EasyCarry System Edit");
+                Undo.RecordObject(targets, "Turn Off Easy Carry System Edit");
                 EndAllEditModes(targets, true);
                 EasyCarrySystemEditorSharedUtility.CollapseEasyCarrySystemHierarchy(targets);
             }

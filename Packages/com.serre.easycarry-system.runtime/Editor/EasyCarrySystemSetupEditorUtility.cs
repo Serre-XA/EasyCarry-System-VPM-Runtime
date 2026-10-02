@@ -42,7 +42,7 @@ namespace Serre.EasyCarrySystem.Editor
             if (EditorUtility.IsPersistent(itemObject) || !itemObject.scene.IsValid())
             {
                 Debug.LogWarning(
-                    "EasyCarry System Setupを中止しました。HierarchyまたはPrefab Mode内のオブジェクトを選択してください。",
+                    "Easy Carry System Setupを中止しました。HierarchyまたはPrefab Mode内のオブジェクトを選択してください。",
                     itemObject);
                 return;
             }
@@ -62,7 +62,7 @@ namespace Serre.EasyCarrySystem.Editor
             if (boneProxy != null)
             {
                 Debug.LogError(
-                    $"EasyCarry System setup cannot be applied because MA Bone Proxy is attached to {boneProxy.gameObject.name} within the item hierarchy. Remove it before setup.",
+                    $"Easy Carry System setup cannot be applied because MA Bone Proxy is attached to {boneProxy.gameObject.name} within the item hierarchy. Remove it before setup.",
                     boneProxy);
                 return;
             }
@@ -72,7 +72,7 @@ namespace Serre.EasyCarrySystem.Editor
             var slot = FindFirstAvailableSlot(itemObject.transform, preferredSlot, itemReference);
             if (slot < 0)
             {
-                Debug.LogError("No available EasyCarry System slot was found in this avatar.", itemObject);
+                Debug.LogError("No available Easy Carry System slot was found in this avatar.", itemObject);
                 return;
             }
 
@@ -94,7 +94,7 @@ namespace Serre.EasyCarrySystem.Editor
             var itemReference = itemObject.GetComponent<EasyCarrySystemItemReference>();
             if (itemReference != null && itemReference.GeneratedEasyCarrySystem != null)
             {
-                Debug.LogWarning("EasyCarry System Setup was canceled because the selected object is already set up.", itemObject);
+                Debug.LogWarning("Easy Carry System Setup was canceled because the selected object is already set up.", itemObject);
                 return;
             }
 
@@ -106,7 +106,7 @@ namespace Serre.EasyCarrySystem.Editor
                     || itemObject.GetComponent<VRCScaleConstraint>() != null))
             {
                 Debug.LogError(
-                    "EasyCarry System Setupを中止しました。選択したオブジェクトには既存のVRC Parent ConstraintまたはVRC Scale Constraintがあります。",
+                    "Easy Carry System Setupを中止しました。選択したオブジェクトには既存のVRC Parent ConstraintまたはVRC Scale Constraintがあります。",
                     itemObject);
                 return;
             }
@@ -125,26 +125,26 @@ namespace Serre.EasyCarrySystem.Editor
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (prefab == null)
             {
-                Debug.LogError($"EasyCarry System prefab was not found: {prefabPath}", itemObject);
+                Debug.LogError($"Easy Carry System prefab was not found: {prefabPath}", itemObject);
                 return;
             }
 
             Undo.IncrementCurrentGroup();
             var undoGroup = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName("Setup EasyCarry System");
+            Undo.SetCurrentGroupName("Setup Easy Carry System");
 
             var instanceObject = (installParent != null
                 ? PrefabUtility.InstantiatePrefab(prefab, installParent)
                 : PrefabUtility.InstantiatePrefab(prefab, itemObject.scene)) as GameObject;
             if (instanceObject == null)
             {
-                Debug.LogError($"Failed to instantiate EasyCarry System prefab: {prefabPath}", itemObject);
+                Debug.LogError($"Failed to instantiate Easy Carry System prefab: {prefabPath}", itemObject);
                 return;
             }
 
             var instanceTransform = instanceObject.transform;
             instanceObject.name = GetGeneratedObjectName(instanceTransform.parent, itemName);
-            Undo.RegisterCreatedObjectUndo(instanceObject, "Create EasyCarry System");
+            Undo.RegisterCreatedObjectUndo(instanceObject, "Create Easy Carry System");
             instanceTransform.localPosition = Vector3.zero;
             instanceTransform.localRotation = Quaternion.identity;
             instanceTransform.localScale = Vector3.one;
@@ -152,7 +152,7 @@ namespace Serre.EasyCarrySystem.Editor
             var ciRoot = FindChildRecursive(instanceTransform, "CI_Root");
             if (ciRoot == null)
             {
-                Debug.LogError("CI_Root was not found in the instantiated EasyCarry System prefab.", instanceObject);
+                Debug.LogError("CI_Root was not found in the instantiated Easy Carry System prefab.", instanceObject);
                 Undo.RevertAllDownToGroup(undoGroup);
                 return;
             }
@@ -160,7 +160,7 @@ namespace Serre.EasyCarrySystem.Editor
             var ciItemSize = FindChildRecursive(instanceTransform, "CI_ItemSize");
             if (ciItemSize == null)
             {
-                Debug.LogError("CI_ItemSize was not found in the instantiated EasyCarry System prefab.", instanceObject);
+                Debug.LogError("CI_ItemSize was not found in the instantiated Easy Carry System prefab.", instanceObject);
                 Undo.RevertAllDownToGroup(undoGroup);
                 return;
             }
@@ -171,7 +171,7 @@ namespace Serre.EasyCarrySystem.Editor
             }
             else
             {
-                Undo.RecordObject(itemReference, "Setup EasyCarry System Item Reference");
+                Undo.RecordObject(itemReference, "Setup Easy Carry System Item Reference");
             }
 
             itemReference.SetGeneratedEasyCarrySystem(instanceObject);
@@ -184,7 +184,7 @@ namespace Serre.EasyCarrySystem.Editor
 #if VRC_SDK_VRCSDK3
             SetupItemConstraints(itemObject, ciRoot);
 #else
-            Debug.LogError("VRC SDK was not found, so the EasyCarry System constraints could not be created.", itemObject);
+            Debug.LogError("VRC SDK was not found, so the Easy Carry System constraints could not be created.", itemObject);
             Undo.RevertAllDownToGroup(undoGroup);
             return;
 #endif
@@ -195,7 +195,7 @@ namespace Serre.EasyCarrySystem.Editor
                 || !EasyCarrySystemGestureCheckerEditorUtility.ApplyParameterDefaults(gestureSettings))
             {
                 Debug.LogError(
-                    "EasyCarry System内の握り判定設定またはMA Parametersが正しくありません。Prefab構成を確認してください。",
+                    "Easy Carry System内の握り判定設定またはMA Parametersが正しくありません。Prefab構成を確認してください。",
                     instanceObject);
                 Undo.RevertAllDownToGroup(undoGroup);
                 return;
@@ -268,7 +268,7 @@ namespace Serre.EasyCarrySystem.Editor
 
             Undo.IncrementCurrentGroup();
             var group = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName("Restore EasyCarry System Constraints");
+            Undo.SetCurrentGroupName("Restore Easy Carry System Constraints");
             // Capture scale before adding a constraint can evaluate the item transform.
             var scale = target.transform.localScale;
             try
@@ -305,7 +305,7 @@ namespace Serre.EasyCarrySystem.Editor
             var itemTransform = itemObject.transform;
             var originalLocalScale = itemTransform.localScale;
 
-            Undo.RecordObject(itemTransform, "Reset EasyCarry System Item Transform");
+            Undo.RecordObject(itemTransform, "Reset Easy Carry System Item Transform");
             itemTransform.localPosition = Vector3.zero;
             itemTransform.localRotation = Quaternion.identity;
             itemTransform.localScale = originalLocalScale;
@@ -322,7 +322,7 @@ namespace Serre.EasyCarrySystem.Editor
 
         private static void ConfigureItemParentConstraint(VRCParentConstraint parentConstraint, Transform ciRoot)
         {
-            Undo.RecordObject(parentConstraint, "Configure EasyCarry System Parent Constraint");
+            Undo.RecordObject(parentConstraint, "Configure Easy Carry System Parent Constraint");
             ConfigureConstraintSource(parentConstraint, ciRoot);
             parentConstraint.PositionAtRest = Vector3.zero;
             parentConstraint.RotationAtRest = Vector3.zero;
@@ -340,7 +340,7 @@ namespace Serre.EasyCarrySystem.Editor
         private static void ConfigureItemScaleConstraint(VRCScaleConstraint scaleConstraint, Transform ciRoot,
             Vector3 originalLocalScale)
         {
-            Undo.RecordObject(scaleConstraint, "Configure EasyCarry System Scale Constraint");
+            Undo.RecordObject(scaleConstraint, "Configure Easy Carry System Scale Constraint");
             ConfigureConstraintSource(scaleConstraint, ciRoot);
             scaleConstraint.ScaleAtRest = originalLocalScale;
             scaleConstraint.ScaleOffset = originalLocalScale;
@@ -397,7 +397,7 @@ namespace Serre.EasyCarrySystem.Editor
                 && EasyCarrySystemGestureCheckerEditorUtility.IsMenuRootHierarchy(itemObject.transform))
             {
                 Debug.LogWarning(
-                    "EasyCarry System Setupを中止しました。共有メニューとその子階層にはSetupできません。",
+                    "Easy Carry System Setupを中止しました。共有メニューとその子階層にはSetupできません。",
                     itemObject);
                 return true;
             }
@@ -408,7 +408,7 @@ namespace Serre.EasyCarrySystem.Editor
                 if (current.GetComponent<EasyCarrySystemGestureSettings>() != null)
                 {
                     Debug.LogWarning(
-                        "EasyCarry System Setupを中止しました。握り判定用の内部オブジェクトとその子階層にはSetupできません。",
+                        "Easy Carry System Setupを中止しました。握り判定用の内部オブジェクトとその子階層にはSetupできません。",
                         itemObject);
                     return true;
                 }
@@ -418,8 +418,8 @@ namespace Serre.EasyCarrySystem.Editor
                     && (current.gameObject != itemObject || itemReference.GeneratedEasyCarrySystem != null))
                 {
                     var message = current.gameObject == itemObject
-                        ? "EasyCarry System Setupを中止しました。選択したオブジェクトには既にEasyCarry Systemが設定されています。"
-                        : $"EasyCarry System Setupを中止しました。選択したオブジェクトはEasyCarry Systemアイテム「{current.name}」の子階層にあります。";
+                        ? "Easy Carry System Setupを中止しました。選択したオブジェクトには既にEasy Carry Systemが設定されています。"
+                        : $"Easy Carry System Setupを中止しました。選択したオブジェクトはEasy Carry Systemアイテム「{current.name}」の子階層にあります。";
                     Debug.LogWarning(message, itemObject);
                     return true;
                 }
@@ -439,7 +439,7 @@ namespace Serre.EasyCarrySystem.Editor
                 if (IsChildOf(itemObject.transform, itemReference.GeneratedEasyCarrySystem.transform))
                 {
                     Debug.LogWarning(
-                        $"EasyCarry System Setupを中止しました。選択したオブジェクトは生成済みEasyCarry System「{itemReference.GeneratedEasyCarrySystem.name}」の子階層にあります。",
+                        $"Easy Carry System Setupを中止しました。選択したオブジェクトは生成済みEasy Carry System「{itemReference.GeneratedEasyCarrySystem.name}」の子階層にあります。",
                         itemObject);
                     return true;
                 }

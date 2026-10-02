@@ -24,20 +24,20 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             var message = missingTargets.Count == 1
-                ? $"{EasyCarrySystemGestureCheckerEditorUtility.GetAvatarName(missingTargets[0])} にEasyCarry Systemの共有メニューがありません。\n\n"
+                ? $"{EasyCarrySystemGestureCheckerEditorUtility.GetAvatarName(missingTargets[0])} にEasy Carry Systemの共有メニューがありません。\n\n"
                     + "ビルド開始前に生成してもよいですか？"
-                : $"EasyCarry Systemを使用している {missingTargets.Count} 体のアバターに共有メニューがありません。\n\n"
+                : $"Easy Carry Systemを使用している {missingTargets.Count} 体のアバターに共有メニューがありません。\n\n"
                     + "ビルド開始前に生成してもよいですか？";
 
             if (Application.isBatchMode
                 || !EditorUtility.DisplayDialog(
-                    "EasyCarry System",
+                    "Easy Carry System",
                     message,
                     "生成してビルド",
                     "ビルドを中止"))
             {
                 Debug.LogError(
-                    "共有メニューがないため、EasyCarry Systemのビルドを中止しました。",
+                    "共有メニューがないため、Easy Carry Systemのビルドを中止しました。",
                     missingTargets[0]);
                 return false;
             }
@@ -53,12 +53,12 @@ namespace Serre.EasyCarrySystem.Editor
                 }
 
                 Debug.LogError(
-                    "共有メニューを生成できなかったため、EasyCarry Systemのビルドを中止しました。",
+                    "共有メニューを生成できなかったため、Easy Carry Systemのビルドを中止しました。",
                     targets);
                 return false;
             }
 
-            Debug.Log("EasyCarry Systemの共有メニューを生成しました。ビルドを続行します。",
+            Debug.Log("Easy Carry Systemの共有メニューを生成しました。ビルドを続行します。",
                 missingTargets[0]);
             return true;
         }

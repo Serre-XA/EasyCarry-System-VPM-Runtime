@@ -1,9 +1,9 @@
 {
   "name": "com.serre.easycarry-system.runtime",
-  "displayName": "EasyCarry System Basic",
-  "version": "0.7.2",
+  "displayName": "Easy Carry System Basic",
+  "version": "1.0.0",
   "unity": "2022.3",
-  "description": "Basic components and editor support for EasyCarry System.",
+  "description": "Basic components and editor support for Easy Carry System.",
   "license": "MIT",
   "author": {
     "name": "Serre-XA",

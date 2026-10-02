@@ -26,13 +26,13 @@ namespace Serre.EasyCarrySystem.Editor
             }
 
             var message = missingTargets.Count == 1
-                ? $"{EasyCarrySystemGestureCheckerEditorUtility.GetAvatarName(missingTargets[0])} にEasyCarry Systemの共有メニューがありません。\n\n"
+                ? $"{EasyCarrySystemGestureCheckerEditorUtility.GetAvatarName(missingTargets[0])} にEasy Carry Systemの共有メニューがありません。\n\n"
                     + "プレイモード開始前に自動生成してもよいですか？"
-                : $"EasyCarry Systemを使用している {missingTargets.Count} 体のアバターに共有メニューがありません。\n\n"
+                : $"Easy Carry Systemを使用している {missingTargets.Count} 体のアバターに共有メニューがありません。\n\n"
                     + "プレイモード開始前に自動生成してもよいですか？";
 
             if (Application.isBatchMode
-                || !EditorUtility.DisplayDialog("EasyCarry System", message, "生成する", "キャンセル"))
+                || !EditorUtility.DisplayDialog("Easy Carry System", message, "生成する", "キャンセル"))
             {
                 CancelPlayMode(
                     "共有メニューがないため、プレイモードへの移行を中止しました。",
